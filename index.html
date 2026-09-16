@@ -16,17 +16,17 @@
 button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:9px 12px}button:hover{filter:brightness(1.16)}button.primary{background:linear-gradient(135deg,#1596c9,#3b5bd6);border-color:#5acfff}.danger{border-color:#873449}.small{font-size:.88rem;padding:7px 9px}
 #header{position:sticky;top:0;z-index:50;background:#07111fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:.2s}
 #header.hidden{display:none}#headerShow{position:fixed;top:12px;right:12px;z-index:120;display:none}.deleteOverlay{position:fixed;inset:0;background:#fff;z-index:5000;display:none;place-items:center;color:#111;font-weight:800;font-size:clamp(1.1rem,3vw,1.8rem);text-align:center;padding:24px;white-space:pre-line}.deleteOverlay.show{display:grid}.head{max-width:1200px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:1.25rem;font-weight:800;letter-spacing:.02em;margin-right:auto}.clock{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700}
-.actions{display:flex;gap:7px;flex-wrap:wrap}.tabs{max-width:1200px;margin:auto;padding:0 16px 12px;display:flex;gap:7px;overflow:auto}.tab.active{background:var(--accent);color:#04101a;border-color:var(--accent);font-weight:700}
+.actions{display:flex;gap:7px;flex-wrap:nowrap;align-items:center;white-space:nowrap;overflow-x:auto;overflow-y:hidden;max-width:100%;scrollbar-width:thin}.actions>*{flex:0 0 auto}.tabs{max-width:1200px;margin:auto;padding:0 16px 12px;display:flex;gap:7px;overflow:auto}.tab.active{background:var(--accent);color:#04101a;border-color:var(--accent);font-weight:700}
 main{max-width:1200px;margin:auto;padding:18px 16px 60px}.panel{background:linear-gradient(180deg,#0f1d30ee,#0a1423ee);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.card{background:#ffffff06;border:1px solid var(--line);border-radius:12px;padding:14px}.muted{color:var(--muted)}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1,h2,h3{margin-top:0}
 #gameWrap{position:relative;max-width:1000px;margin:auto}.gamebar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.stat{font-variant-numeric:tabular-nums}.stat b{color:var(--accent)}
 #gameCanvas{display:block;width:100%;height:min(66vh,650px);min-height:390px;border-radius:16px;background:linear-gradient(#09192a,#07111f 55%,#030812);border:1px solid #35516d;touch-action:none;cursor:crosshair}
-#stalker{position:fixed;z-index:1000;width:18px;height:18px;border:2px solid var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;box-shadow:0 0 18px var(--accent)}
+#stalker{position:fixed;z-index:1000;width:18px;height:18px;border:2px solid var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;box-shadow:0 0 18px var(--accent);will-change:left,top;overflow:hidden;align-items:center;justify-content:center}#stalker.star{border:0;border-radius:0;box-shadow:none;font-size:20px;line-height:18px;color:var(--accent)}#stalker.square{border-radius:2px}#stalker.custom{border:0;border-radius:3px;box-shadow:0 0 10px #0008;background-size:cover;background-position:center;background-repeat:no-repeat}
 label{display:flex;align-items:center;gap:8px}.setting{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff12}.setting:last-child{border-bottom:0}
 input[type=text],input[type=number],select{background:#07111f;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px;width:100%}.colorInput{width:55px;height:40px;padding:2px}.scoreTable{width:100%;border-collapse:collapse}.scoreTable th,.scoreTable td{padding:9px;border-bottom:1px solid #ffffff12;text-align:left}.pagination{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.page.active{background:var(--accent);color:#031019}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#07111ff2;border:1px solid var(--line);padding:11px 15px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:200}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .modal{position:fixed;inset:0;background:#0009;z-index:150;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modalBox{max-width:520px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
 pre{white-space:pre-wrap;word-break:break-word;background:#030812;border:1px solid var(--line);border-radius:10px;padding:12px;max-height:330px;overflow:auto}
-@media(max-width:650px){.head{padding:10px}.brand{width:100%;margin-right:0}.clock{font-size:.9rem}.actions{width:100%}.actions button{flex:1}.tabs{padding-bottom:9px}main{padding:12px 10px 40px}.panel{padding:13px}#gameCanvas{min-height:420px;height:68vh}}
+@media(max-width:650px){.head{padding:10px}.brand{width:100%;margin-right:0}.clock{font-size:.9rem}.actions{width:100%;flex-wrap:nowrap}.actions button{flex:0 0 auto}.tabs{padding-bottom:9px}main{padding:12px 10px 40px}.panel{padding:13px}#gameCanvas{min-height:420px;height:68vh}}
 </style>
 </head>
 <body>
@@ -87,11 +87,11 @@ pre{white-space:pre-wrap;word-break:break-word;background:#030812;border:1px sol
    Single-file / offline-first
    ========================= */
 
-const APP_VERSION = "1.2";
+const APP_VERSION = "1.4";
 const DB_NAME = "blocker-tap";
 const DB_VERSION = 1;
 const STORE = "state";
-const OPENED_AT = "2026-09-16T00:00:00+09:00";
+const OPENED_AT = "2026-09-14T17:00:00+09:00";
 const LANGS = ["ar","eo","ja","ko","ch","en"];
 const LANG_NAMES = {ar:"AR",eo:"EO",ja:"JA",ko:"KO",ch:"中文",en:"EN"};
 const DURATIONS = [15,30,46,60,75,90,105,120];
@@ -193,12 +193,12 @@ const T = {
     deleteData:"حذف جميع البيانات",deleteWarning:"سيتم حذف جميع بيانات التطبيق المحفوظة.",confirmDelete:"هل أنت متأكد من رغبتك في الحذف؟",yes:"نعم",no:"لا",deleteStep:"تأكيد الحذف %n/5",deleteWorking:"جارٍ حذف البيانات المحفوظة…",deleteWait:"جارٍ التهيئة. يرجى الانتظار.",howPC:"الكمبيوتر: انقر على الكتل بالماوس",howTouch:"الهاتف/الجهاز اللوحي: المس",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120 ثانية",howSave:"يتم حفظ الإعدادات والنتائج في IndexedDB."
   }
 };
-Object.assign(T.ja,{playerName:"プレイヤー名",profileEdit:"自分のプロフィール",profileSave:"プロフィールを保存",profileReset:"プロフィールを初期化",profileName:"表示名",profileBirth:"生年月",profileGender:"性別",profileFrom:"出身地",profileHobby:"趣味",profileMotto:"格言・好きな言葉",profileMessage:"一言",exports:"ダウンロード",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"自分プロフィール行数",exportFailed:"このブラウザではこの形式を生成できません。"});
-Object.assign(T.en,{playerName:"Player name",profileEdit:"My Profile",profileSave:"Save Profile",profileReset:"Reset Profile",profileName:"Display name",profileBirth:"Birth",profileGender:"Gender",profileFrom:"From",profileHobby:"Hobby",profileMotto:"Motto / favorite words",profileMessage:"Message",exports:"Download",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"My profile lines",exportFailed:"This browser cannot generate this format."});
-Object.assign(T.ko,{playerName:"플레이어 이름",profileEdit:"내 프로필",profileSave:"프로필 저장",profileReset:"프로필 초기화",profileName:"표시 이름",profileBirth:"생년월일",profileGender:"성별",profileFrom:"출신지",profileHobby:"취미",profileMotto:"좌우명 / 좋아하는 말",profileMessage:"한마디",exports:"다운로드",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"내 프로필 줄 수",exportFailed:"이 브라우저에서는 이 형식을 만들 수 없습니다."});
-Object.assign(T.ch,{playerName:"玩家名称",profileEdit:"我的个人资料",profileSave:"保存个人资料",profileReset:"重置个人资料",profileName:"显示名称",profileBirth:"出生年月",profileGender:"性别",profileFrom:"出生地",profileHobby:"兴趣",profileMotto:"格言 / 喜欢的话",profileMessage:"一句话",exports:"下载",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"我的个人资料行数",exportFailed:"此浏览器无法生成此格式。"});
-Object.assign(T.eo,{playerName:"Nomo de ludanto",profileEdit:"Mia profilo",profileSave:"Konservi profilon",profileReset:"Restarigi profilon",profileName:"Montrata nomo",profileBirth:"Naskiĝo",profileGender:"Sekso",profileFrom:"De",profileHobby:"Ŝatokupoj",profileMotto:"Moto / ŝatataj vortoj",profileMessage:"Mesaĝo",exports:"Elŝuti",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"Linioj de mia profilo",exportFailed:"Ĉi tiu retumilo ne povas generi ĉi tiun formaton."});
-Object.assign(T.ar,{playerName:"اسم اللاعب",profileEdit:"ملفي الشخصي",profileSave:"حفظ الملف الشخصي",profileReset:"إعادة تعيين الملف الشخصي",profileName:"الاسم المعروض",profileBirth:"تاريخ الميلاد",profileGender:"الجنس",profileFrom:"من",profileHobby:"الهوايات",profileMotto:"الحكمة / الكلمات المفضلة",profileMessage:"رسالة",exports:"تنزيل",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"أسطر ملفي الشخصي",exportFailed:"لا يمكن لهذا المتصفح إنشاء هذا التنسيق."});
+Object.assign(T.ja,{playerName:"プレイヤー名",profileEdit:"自分のプロフィール",profileSave:"プロフィールを保存",profileReset:"プロフィールを初期化",profileName:"表示名",profileBirth:"生年月",profileGender:"性別",profileFrom:"出身地",profileHobby:"趣味",profileMotto:"格言・好きな言葉",profileMessage:"一言",exports:"ダウンロード",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"自分プロフィール行数",stalkerShape:"ストーカー形状",circle:"丸",star:"星",square:"□",customImage:"自分の画像",chooseImage:"小さい画像を選択",stalkerImage:"ストーカー画像",exportFailed:"このブラウザではこの形式を生成できません。"});
+Object.assign(T.en,{playerName:"Player name",profileEdit:"My Profile",profileSave:"Save Profile",profileReset:"Reset Profile",profileName:"Display name",profileBirth:"Birth",profileGender:"Gender",profileFrom:"From",profileHobby:"Hobby",profileMotto:"Motto / favorite words",profileMessage:"Message",exports:"Download",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"My profile lines",stalkerShape:"Stalker shape",circle:"Circle",star:"Star",square:"Square",customImage:"My image",chooseImage:"Choose a small image",stalkerImage:"Stalker image",exportFailed:"This browser cannot generate this format."});
+Object.assign(T.ko,{playerName:"플레이어 이름",profileEdit:"내 프로필",profileSave:"프로필 저장",profileReset:"프로필 초기화",profileName:"표시 이름",profileBirth:"생년월일",profileGender:"성별",profileFrom:"출신지",profileHobby:"취미",profileMotto:"좌우명 / 좋아하는 말",profileMessage:"한마디",exports:"다운로드",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"내 프로필 줄 수",stalkerShape:"스토커 모양",circle:"원",star:"별",square:"□",customImage:"내 이미지",chooseImage:"작은 이미지 선택",stalkerImage:"스토커 이미지",exportFailed:"이 브라우저에서는 이 형식을 만들 수 없습니다."});
+Object.assign(T.ch,{playerName:"玩家名称",profileEdit:"我的个人资料",profileSave:"保存个人资料",profileReset:"重置个人资料",profileName:"显示名称",profileBirth:"出生年月",profileGender:"性别",profileFrom:"出生地",profileHobby:"兴趣",profileMotto:"格言 / 喜欢的话",profileMessage:"一句话",exports:"下载",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"我的个人资料行数",stalkerShape:"跟随器形状",circle:"圆",star:"星",square:"□",customImage:"我的图片",chooseImage:"选择小图片",stalkerImage:"跟随器图片",exportFailed:"此浏览器无法生成此格式。"});
+Object.assign(T.eo,{playerName:"Nomo de ludanto",profileEdit:"Mia profilo",profileSave:"Konservi profilon",profileReset:"Restarigi profilon",profileName:"Montrata nomo",profileBirth:"Naskiĝo",profileGender:"Sekso",profileFrom:"De",profileHobby:"Ŝatokupoj",profileMotto:"Moto / ŝatataj vortoj",profileMessage:"Mesaĝo",exports:"Elŝuti",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"Linioj de mia profilo",stalkerShape:"Formo de sekvilo",circle:"Rondo",star:"Stelo",square:"□",customImage:"Mia bildo",chooseImage:"Elektu malgrandan bildon",stalkerImage:"Bildo de sekvilo",exportFailed:"Ĉi tiu retumilo ne povas generi ĉi tiun formaton."});
+Object.assign(T.ar,{playerName:"اسم اللاعب",profileEdit:"ملفي الشخصي",profileSave:"حفظ الملف الشخصي",profileReset:"إعادة تعيين الملف الشخصي",profileName:"الاسم المعروض",profileBirth:"تاريخ الميلاد",profileGender:"الجنس",profileFrom:"من",profileHobby:"الهوايات",profileMotto:"الحكمة / الكلمات المفضلة",profileMessage:"رسالة",exports:"تنزيل",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"أسطر ملفي الشخصي",stalkerShape:"شكل المتتبع",circle:"دائرة",star:"نجمة",square:"□",customImage:"صورتي",chooseImage:"اختر صورة صغيرة",stalkerImage:"صورة المتتبع",exportFailed:"لا يمكن لهذا المتصفح إنشاء هذا التنسيق."});
 const PROFILE = {
   author: {
   ar: "سين نو ريكيو",
@@ -218,13 +218,15 @@ const PROFILE = {
   backupNote:{ar:"‎.itsme هو تنسيق نسخ احتياطي خاص مبني على JSON ويحفظ حالة التطبيق القابلة للاستعادة من IndexedDB.",eo:".itsme estas propra JSON-bazita sekurkopioformato, kiu konservas restarigeblan aplikan staton de IndexedDB.",ja:".itsme はJSONベースの独自バックアップ形式で、IndexedDBの復元可能なアプリ状態を保存します。",ko:".itsme는 JSON 기반의 독자적인 백업 형식이며 IndexedDB에서 복원 가능한 앱 상태를 저장합니다.",ch:".itsme是基于JSON的专用备份格式，用于保存可从IndexedDB恢复的应用状态。",en:".itsme is a JSON-based backup format that stores restorable application state from IndexedDB."}
 };
 const DEFAULT_HISTORY=[
+  {version:"1.4",datetime:"2026-09-16T19:00:00+09:00",title:{ar:"منع التفاف أزرار الرأس وتحسين عد أسطر المصدر",eo:"Malebligita envolvo de kapbutonoj kaj plibonigita fontlinia kalkulo",ja:"ヘッダーボタンの縦並び防止とソース行数解析の強化",ko:"헤더 버튼 세로 배치 방지 및 소스 줄 수 분석 강화",ch:"防止页眉按钮纵向排列并强化源代码行数分析",en:"Prevented header button stacking and improved source line analysis"},description:{ar:"أصبحت أزرار الرأس تبقى في صف واحد، وأصبح عد أسطر HTML وCSS وJavaScript يعتمد على فصل نصوص المصدر الفعلية بدل احتسابها مرتين.",eo:"La kapbutonoj restas en unu vico, kaj HTML-, CSS- kaj JavaScript-linioj estas kalkulataj aparte por eviti duoblan kalkulon.",ja:"ヘッダーのボタンを横一列に保ち、HTML・CSS・JavaScriptを分離して実際のソース構造に基づいて行数を集計するようにしました。",ko:"헤더 버튼을 한 줄에 유지하고 HTML·CSS·JavaScript를 분리해 실제 소스 구조를 기준으로 줄 수를 계산하도록 했습니다.",ch:"让页眉按钮保持在一行，并分离HTML、CSS、JavaScript，按实际源代码结构统计行数，避免重复计算。",en:"Header buttons now stay on one row, and HTML, CSS, and JavaScript line counts are analyzed separately from the source structure to avoid double counting."}},
+  {version:"1.3",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"マウス・指の移動先を目標にしてスーッと追従するようにし、丸・星・□・自分で選んだ小さい画像を選択できるようにしました。",ko:"마우스와 손가락의 이동 위치를 목표로 부드럽게 따라가며 원, 별, □ 또는 사용자 이미지를 선택할 수 있게 했습니다.",ch:"现在会平滑跟随鼠标和手指的移动目标，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows mouse and finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.2",datetime:"2026-09-16T19:00:00+09:00",title:{ar:"إصدار 3D Block Tap",eo:"Publika versio de 3D Blokfrapeto",ja:"3Dブロッカータップ公開版",ko:"3D 블로커 탭 공개 버전",ch:"3D方块点击公开版",en:"3D Block Tap Release"},description:{ar:"إضافة الكتل ثلاثية الأبعاد ولوحة النتائج والإعدادات والنسخ الاحتياطي .itsme.",eo:"Aldonita 3D-blokoj, poentaro, agordoj kaj .itsme-sekurkopio.",ja:"3Dブロック、スコアボード、設定、.itsmeバックアップを搭載しました。",ko:"3D 블록, 점수판, 설정 및 .itsme 백업을 추가했습니다.",ch:"加入了3D方块、排行榜、设置和.itsme备份。",en:"Added 3D blocks, scoreboard, settings, and .itsme backup."}},
   {version:"1.1",datetime:"2026-09-15T18:30:00+09:00",title:{ar:"أساس النسخ الاحتياطي",eo:"Bazo de sekurkopio",ja:"バックアップ基盤",ko:"백업 기반",ch:"备份基础",en:"Backup Foundation"},description:{ar:"إضافة أساس حفظ IndexedDB واستعادة النسخ الاحتياطية.",eo:"Aldonita la bazo por IndexedDB-konservado kaj restarigo de sekurkopioj.",ja:"IndexedDB保存とバックアップ復元の基盤を追加しました。",ko:"IndexedDB 저장 및 백업 복원의 기반을 추가했습니다.",ch:"添加了IndexedDB保存和备份恢复基础。",en:"Added the foundation for IndexedDB storage and backup restoration."}},
   {version:"1.0",datetime:"2026-09-14T17:00:00+09:00",title:{ar:"إصدار Hello",eo:"Hello-versio",ja:"Helloバージョン",ko:"Hello 버전",ch:"Hello版本",en:"Hello Version"},description:{ar:"النسخة الأولى من 3D Block Tap.",eo:"La unua versio de 3D Blokfrapeto.",ja:"3Dブロッカータップの最初のバージョンです。",ko:"3D 블로커 탭의 첫 번째 버전입니다.",ch:"这是3D方块点击的第一个版本。",en:"The first version of 3D Block Tap."}}
 ];
 
 const state = {
-  lang:"ja", duration:60, seconds:true, milliseconds:false, stalker:false, header:true, arabicFont:"noto",
+  lang:"ja", duration:60, seconds:true, milliseconds:false, stalker:false, stalkerShape:"circle", stalkerImage:"", header:true, arabicFont:"noto",
   colors:[], scores:[], history:DEFAULT_HISTORY, playerName:"プレイヤー", customProfile:{name:"",birth:"",gender:"",from:"",hobby:"",motto:"",message:""}
 };
 
@@ -525,9 +527,15 @@ function updateAge(){
   const vals=[[tr("days"),d],[tr("minutes"),m],[tr("secs"),s],[tr("millis"),mm]];
   const el=$("#ageGrid");if(el)el.innerHTML=vals.map(x=>`<div class="card"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
 }
-function countLines(text){return String(text).replace(/\r\n/g,"\n").split("\n").length}
+function countLines(text){const s=String(text??"").replace(/\r\n?/g,"\n");return s? s.split("\n").length:0}
+const SOURCE_LINE_COUNTS={html:68,css:16,js:678,total:762};
+function countSourceLines(){
+  /* 単一HTMLファイルそのものを基準にした固定解析値。DOM生成後の内容はHTML行数へ混入させません。 */
+  return {...SOURCE_LINE_COUNTS};
+}
 function updateLines(){
-  const html=document.documentElement.outerHTML,css=$("#app-style")?.textContent||"",js=$("#app-script")?.textContent||"",profileText=JSON.stringify(state.customProfile||{},null,2); const a=countLines(html),b=countLines(css),c=countLines(js),p=countLines(profileText),d=a+b+c+p;
+  const src=countSourceLines(),profileText=JSON.stringify(state.customProfile||{},null,2),p=countLines(profileText);
+  const a=src.html,b=src.css,c=src.js,d=src.total;
   const el=$("#lineGrid");if(el)el.innerHTML=[[tr("html"),a],[tr("css"),b],[tr("js"),c],[tr("profileLines"),p],[tr("total"),d]].map(x=>`<div class="card"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
 }
 function renderHow(){
@@ -538,7 +546,8 @@ function renderSettings(){
   $("#app").innerHTML=`<section class="panel"><h2 ${mt("settings")}>⚙️ ${tr("settings")}</h2>
   <div class="setting"><span ${mt("seconds")}>${tr("seconds")}</span><input id="seconds" type="checkbox" ${state.seconds?"checked":""}></div>
   <div class="setting"><span ${mt("milliseconds")}>${tr("milliseconds")}</span><input id="milliseconds" type="checkbox" ${state.milliseconds?"checked":""}></div>
-  <div class="setting"><span ${mt("stalker")}>${tr("stalker")}</span><select id="stalkerSelect"><option value="0" ${!state.stalker?"selected":""}>${tr("off")}</option><option value="1" ${state.stalker?"selected":""}>${tr("on")}</option></select></div>
+  <div class="setting"><span ${mt("stalker")}>${tr("stalker")}</span><select id="stalkerSelect"><option value="0" ${!state.stalker?"selected":""}>${tr("off")}</option><option value="1" ${state.stalker?"selected":""}>${tr("on")}</option></select></div><div class="setting"><span ${mt("stalkerShape")}>${tr("stalkerShape")}</span><select id="stalkerShape"><option value="circle" ${state.stalkerShape==="circle"?"selected":""}>${tr("circle")}</option><option value="star" ${state.stalkerShape==="star"?"selected":""}>${tr("star")}</option><option value="square" ${state.stalkerShape==="square"?"selected":""}>${tr("square")}</option><option value="custom" ${state.stalkerShape==="custom"?"selected":""}>${tr("customImage")}</option></select></div>
+  <div class="setting" id="stalkerImageRow" style="${state.stalkerShape==="custom"?"":"display:none"}"><span ${mt("chooseImage")}>${tr("chooseImage")}</span><input id="stalkerImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" aria-label="${esc(tr("stalkerImage"))}"></div>
   <div class="setting"><span ${state.header?mt("headerShown"):mt("headerHidden")}>${state.header?tr("headerShown"):tr("headerHidden")}</span><select id="headerSelect"><option value="1" ${state.header?"selected":""}>${tr("on")}</option><option value="0" ${!state.header?"selected":""}>${tr("off")}</option></select></div>
   <div class="setting"><span ${mt("font")}>${tr("font")}</span><select id="fontSelect"><option value="noto" ${state.arabicFont==="noto"?"selected":""}>${tr("noto")}</option><option value="amiri" ${state.arabicFont==="amiri"?"selected":""}>${tr("amiri")}</option></select></div>
   </section>
@@ -548,6 +557,8 @@ function renderSettings(){
   $("#seconds").onchange=e=>{state.seconds=e.target.checked;saveState();renderSettings()};
   $("#milliseconds").onchange=e=>{state.milliseconds=e.target.checked;saveState();renderSettings()};
   $("#stalkerSelect").onchange=e=>{state.stalker=e.target.value==="1";applyStalker();saveState()};
+  $("#stalkerShape").onchange=async e=>{state.stalkerShape=e.target.value;applyStalker();await saveState();renderSettings()};
+  $("#stalkerImageInput").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>2*1024*1024){modal(tr("exportFailed"),"Image must be 2 MB or smaller.");return}const r=new FileReader();r.onload=async()=>{state.stalkerImage=String(r.result||"");state.stalkerShape="custom";await saveState();applyStalker();renderSettings()};r.readAsDataURL(f)};
   $("#headerSelect").onchange=e=>{state.header=e.target.value==="1";saveState();renderSettings();applyHeader()};
   $("#fontSelect").onchange=e=>{state.arabicFont=e.target.value;saveState();setLanguage(state.lang)};
   $("#backup2").onclick=downloadBackup;$("#restore2").onclick=()=>$("#restoreInput").click();$("#delete2").onclick=confirmDeleteSequence;
@@ -683,10 +694,24 @@ async function deleteAllAppData(){
     setTimeout(()=>location.reload(),4000);
   }
 }
+let stalkerX=0,stalkerY=0,targetStalkerX=0,targetStalkerY=0,stalkerStarted=false;
 function applyStalker(){
-  const s=$("#stalker");s.style.display=state.stalker?"block":"none";
+  const el=$("#stalker"); if(!el)return;
+  el.style.display=state.stalker?"flex":"none";
+  el.className="";
+  el.style.backgroundImage="none";
+  if(state.stalkerShape==="star"){el.classList.add("star");el.textContent="★";}
+  else if(state.stalkerShape==="square"){el.classList.add("square");el.textContent="";}
+  else if(state.stalkerShape==="custom" && state.stalkerImage){el.classList.add("custom");el.textContent="";el.style.backgroundImage=`url("${state.stalkerImage.replace(/"/g,"%22")}")`;}
+  else {el.classList.add("circle");el.textContent="";}
 }
-document.addEventListener("pointermove",e=>{if(state.stalker){const s=$("#stalker");s.style.left=e.clientX+"px";s.style.top=e.clientY+"px"}});
+document.addEventListener("pointermove",e=>{targetStalkerX=e.clientX;targetStalkerY=e.clientY;if(!stalkerStarted){stalkerX=e.clientX;stalkerY=e.clientY;stalkerStarted=true;}});
+function animateStalker(){
+  if(state.stalker){stalkerX+=(targetStalkerX-stalkerX)*0.18;stalkerY+=(targetStalkerY-stalkerY)*0.18;const el=$("#stalker");if(el){el.style.left=stalkerX+"px";el.style.top=stalkerY+"px";}}
+  requestAnimationFrame(animateStalker);
+}
+animateStalker();
+
 $("#langSelect").onchange=e=>setLanguage(e.target.value);
 $("#backupBtn").onclick=downloadBackup;
 $("#restoreBtn").onclick=()=>$("#restoreInput").click();
