@@ -89,7 +89,7 @@ html[data-theme="dark"] .toast{color:#f5f9ff}
   html[data-theme="auto"] .toast{color:#17202a}
   html[data-theme="auto"] input::placeholder,html[data-theme="auto"] textarea::placeholder{color:#687789}
 }
-</style>
+.scoreTable{min-width:760px}.scoreTable th,.scoreTable td{white-space:nowrap}</style>
 <template id="duration-options-template">
   <option value="15">15</option>
   <option value="30">30</option>
@@ -164,7 +164,7 @@ html[data-theme="dark"] .toast{color:#f5f9ff}
    Single-file / offline-first
    ========================= */
 
-const APP_VERSION = "1.9";
+const APP_VERSION = "1.10";
 const DB_NAME = "blocker-tap";
 const DB_VERSION = 1;
 const STORE = "state";
@@ -188,7 +188,7 @@ const T = {
     title:"3Dブロッカータップ",game:"ゲーム",scores:"スコアボード",colors:"カラー",profile:"プロフィール",
     history:"更新履歴",how:"使い方",settings:"設定",start:"ゲーム開始",restart:"もう一度",duration:"制限時間",difficulty:"難易度",difficultyBreakfast:"朝飯前",difficultyEasy:"楽勝",difficultyNormal:"ふつう",difficultyLittleHard:"ちょっと難しい",difficultyHard:"結構難しい",difficultyDemon:"オニ",difficulty100:"辛酸レベル100",durationUnit:"秒間",
     score:"スコア",time:"残り時間",ready:"クリック/タップでブロックを消そう！",gameover:"ゲーム終了",
-    noScores:"まだスコアがありません。",rank:"順位",name:"名前",date:"日時",points:"点",page:"ページ",
+    noScores:"まだスコアがありません。",rank:"順位",name:"名前",date:"日時",points:"点",page:"ページ",selectedDifficulty:"選択難易度",selectedDuration:"選択制限時間",unrecorded:"未記録",
     search:"更新履歴を検索",newest:"最新順",oldest:"古い順",txt:"TXT出力",copy:"一括コピー",
     seconds:"秒を表示",milliseconds:"ミリ秒を表示",stalker:"マウスストーカー",header:"ヘッダー",
     on:"ON",off:"OFF",font:"アラビア語フォント",amiri:"Amiri",noto:"Noto Sans Arabic",
@@ -207,7 +207,7 @@ const T = {
     title:"3D Block Tap",game:"Game",scores:"Scoreboard",colors:"Colors",profile:"Profile",
     history:"Changelog",how:"How to play",settings:"Settings",start:"Start game",restart:"Play again",duration:"Time limit",difficulty:"Difficulty",difficultyBreakfast:"Piece of cake",difficultyEasy:"Easy",difficultyNormal:"Normal",difficultyLittleHard:"A little hard",difficultyHard:"Quite hard",difficultyDemon:"Demon",difficulty100:"Bitterness level 100",durationUnit:" seconds",
     score:"Score",time:"Time left",ready:"Click/tap the blocks!",gameover:"Game over",
-    noScores:"No scores yet.",rank:"Rank",name:"Name",date:"Date",points:"pts",page:"Page",
+    noScores:"No scores yet.",rank:"Rank",name:"Name",date:"Date",points:"pts",page:"Page",selectedDifficulty:"Selected difficulty",selectedDuration:"Selected time limit",unrecorded:"Unrecorded",
     search:"Search changelog",newest:"Newest",oldest:"Oldest",txt:"Export TXT",copy:"Copy all",
     seconds:"Show seconds",milliseconds:"Show milliseconds",stalker:"Mouse stalker",header:"Header",
     on:"ON",off:"OFF",font:"Arabic font",amiri:"Amiri",noto:"Noto Sans Arabic",
@@ -224,7 +224,7 @@ const T = {
   ko:{
     title:"3D 블로커 탭",game:"게임",scores:"점수판",colors:"색상",profile:"프로필",history:"업데이트 기록",how:"사용법",settings:"설정",
     start:"게임 시작",restart:"다시 하기",difficulty:"난이도",difficultyBreakfast:"누워서 떡 먹기",difficultyEasy:"아주 쉬움",difficultyNormal:"보통",difficultyLittleHard:"조금 어려움",difficultyHard:"꽤 어려움",difficultyDemon:"오니",difficulty100:"고생 레벨 100",duration:"제한 시간",durationUnit:"초간",score:"점수",time:"남은 시간",ready:"블록을 클릭/탭하세요!",gameover:"게임 종료",
-    noScores:"아직 점수가 없습니다.",rank:"순위",name:"이름",date:"날짜",points:"점",page:"페이지",search:"업데이트 기록 검색",
+    noScores:"아직 점수가 없습니다.",rank:"순위",name:"이름",date:"날짜",points:"점",page:"페이지",selectedDifficulty:"선택 난이도",selectedDuration:"선택 시간 제한",unrecorded:"기록 없음",search:"업데이트 기록 검색",
     newest:"최신순",oldest:"오래된순",txt:"TXT 저장",copy:"전체 복사",seconds:"초 표시",milliseconds:"밀리초 표시",
     stalker:"마우스 스토커",header:"헤더",on:"ON",off:"OFF",font:"아랍어 글꼴",amiri:"Amiri",noto:"Noto Sans Arabic",
     colorsAuto:"색을 비워두면 자동 생성됩니다.",addColor:"색상 추가",remove:"삭제",save:"저장",opened:"사이트 개설 기간",
@@ -239,7 +239,7 @@ const T = {
   ch:{
     title:"3D方块点击",game:"游戏",scores:"排行榜",colors:"颜色",profile:"个人资料",history:"更新记录",how:"使用方法",settings:"设置",
     start:"开始游戏",restart:"再玩一次",difficulty:"难度",difficultyBreakfast:"小菜一碟",difficultyEasy:"轻松",difficultyNormal:"普通",difficultyLittleHard:"有点难",difficultyHard:"相当难",difficultyDemon:"鬼级",difficulty100:"辛酸等级100",duration:"时间限制",durationUnit:"秒",score:"分数",time:"剩余时间",ready:"点击/轻触方块！",gameover:"游戏结束",
-    noScores:"还没有分数。",rank:"排名",name:"名称",date:"日期",points:"分",page:"页",search:"搜索更新记录",
+    noScores:"还没有分数。",rank:"排名",name:"名称",date:"日期",points:"分",page:"页",selectedDifficulty:"选择难度",selectedDuration:"选择时间限制",unrecorded:"未记录",search:"搜索更新记录",
     newest:"最新",oldest:"最旧",txt:"导出TXT",copy:"全部复制",seconds:"显示秒",milliseconds:"显示毫秒",
     stalker:"鼠标跟随",header:"页眉",on:"开",off:"关",font:"阿拉伯语字体",amiri:"Amiri",noto:"Noto Sans Arabic",
     colorsAuto:"不设置颜色时自动生成",addColor:"添加颜色",remove:"删除",save:"保存",opened:"网站运行时间",
@@ -253,7 +253,7 @@ const T = {
   eo:{
     title:"3D Blokfrapeto",game:"Ludo",scores:"Poentaro",colors:"Koloroj",profile:"Profilo",history:"Ĝisdatigoj",how:"Kiel ludi",settings:"Agordoj",
     start:"Komenci",restart:"Reludi",difficulty:"Malfacileco",difficultyBreakfast:"Matenmanĝo-ŝerco",difficultyEasy:"Facila",difficultyNormal:"Normala",difficultyLittleHard:"Iom malfacila",difficultyHard:"Sufiĉe malfacila",difficultyDemon:"Demona",difficulty100:"Malfacila nivelo 100",duration:"Tempolimo",durationUnit:" sekundoj",score:"Poentoj",time:"Restanta tempo",ready:"Alklaku/frapetu la blokojn!",gameover:"Ludo finiĝis",
-    noScores:"Ankoraŭ neniuj poentoj.",rank:"Rango",name:"Nomo",date:"Dato",points:"poentoj",page:"Paĝo",search:"Serĉi ĝisdatigojn",
+    noScores:"Ankoraŭ neniuj poentoj.",rank:"Rango",name:"Nomo",date:"Dato",points:"poentoj",page:"Paĝo",selectedDifficulty:"Elektita malfacileco",selectedDuration:"Elektita tempolimo",unrecorded:"Ne registrita",search:"Serĉi ĝisdatigojn",
     newest:"Plej novaj",oldest:"Plej malnovaj",txt:"Elporti TXT",copy:"Kopii ĉion",seconds:"Montri sekundojn",milliseconds:"Montri milisekundojn",
     stalker:"Musa sekvilo",header:"Kapo",on:"ŜALTITA",off:"MALŜALTITA",font:"Araba tiparo",amiri:"Amiri",noto:"Noto Sans Arabic",
     colorsAuto:"Se koloroj estas malplenaj, ili estos aŭtomate kreitaj.",addColor:"Aldoni koloron",remove:"Forigi",save:"Konservi",
@@ -268,7 +268,7 @@ const T = {
   ar:{
     title:"نقر الكتل ثلاثية الأبعاد",game:"اللعبة",scores:"لوحة النتائج",colors:"الألوان",profile:"الملف الشخصي",history:"سجل التحديثات",how:"طريقة اللعب",settings:"الإعدادات",
     start:"بدء اللعبة",restart:"العب مجدداً",difficulty:"الصعوبة",difficultyBreakfast:"سهل جدًا",difficultyEasy:"سهل",difficultyNormal:"عادي",difficultyLittleHard:"صعب قليلًا",difficultyHard:"صعب جدًا",difficultyDemon:"شيطاني",difficulty100:"مستوى العناء 100",duration:"المدة",score:"النقاط",time:"الوقت المتبقي",ready:"انقر/المس الكتل!",gameover:"انتهت اللعبة",
-    noScores:"لا توجد نتائج بعد.",rank:"الترتيب",name:"الاسم",date:"التاريخ",points:"نقطة",page:"صفحة",search:"بحث في سجل التحديثات",
+    noScores:"لا توجد نتائج بعد.",rank:"الترتيب",name:"الاسم",date:"التاريخ",points:"نقطة",page:"صفحة",selectedDifficulty:"الصعوبة المختارة",selectedDuration:"المدة المختارة",unrecorded:"غير مسجل",search:"بحث في سجل التحديثات",
     newest:"الأحدث",oldest:"الأقدم",txt:"تصدير TXT",copy:"نسخ الكل",seconds:"إظهار الثواني",milliseconds:"إظهار المللي ثانية",
     stalker:"متتبع الفأرة",header:"الرأس",on:"تشغيل",off:"إيقاف",font:"خط العربية",amiri:"Amiri",noto:"Noto Sans Arabic",
     colorsAuto:"اترك الألوان فارغة ليتم إنشاؤها تلقائياً",addColor:"إضافة لون",remove:"حذف",save:"حفظ",opened:"مدة افتتاح الموقع",
@@ -321,10 +321,11 @@ const PROFILE = {
   backupNote:{ar:"‎.itsme هو تنسيق نسخ احتياطي خاص مبني على JSON ويحفظ حالة التطبيق القابلة للاستعادة من IndexedDB.",eo:".itsme estas propra JSON-bazita sekurkopioformato, kiu konservas restarigeblan aplikan staton de IndexedDB.",ja:".itsme はJSONベースの独自バックアップ形式で、IndexedDBの復元可能なアプリ状態を保存します。",ko:".itsme는 JSON 기반의 독자적인 백업 형식이며 IndexedDB에서 복원 가능한 앱 상태를 저장합니다.",ch:".itsme是基于JSON的专用备份格式，用于保存可从IndexedDB恢复的应用状态。",en:".itsme is a JSON-based backup format that stores restorable application state from IndexedDB."}
 };
 const DEFAULT_HISTORY=[
+  {version:"2.0",datetime:"2026-09-18T06:18:00+09:00",title:{ar:"إضافة أعمدة الصعوبة والمدة إلى لوحة النتائج",eo:"Aldonitaj kolumnoj por malfacileco kaj tempolimo",ja:"スコアボードに選択難易度・選択制限時間を追加",ko:"점수판에 선택 난이도·선택 시간 제한 추가",ch:"在排行榜中添加选择难度和选择时间限制列",en:"Added selected difficulty and selected time-limit columns to the scoreboard"},description:{ar:"تمت إضافة عمودي الصعوبة المختارة والمدة المختارة إلى لوحة النتائج، مع ترحيل السجلات القديمة تلقائيًا.",eo:"La elektita malfacileco kaj elektita tempolimo nun aperas en la poentaro, kaj malnovaj rekordoj estas aŭtomate normaligitaj.",ja:"スコアボードに「選択難易度」「選択制限時間」の列を追加しました。新しい列が追加される前の既存記録も自動的に補完・正規化して表示します。",ko:"점수판에 선택 난이도와 선택 시간 제한 열을 추가했습니다. 새 열이 추가되기 전의 기존 기록도 자동으로 보완·정규화하여 표시합니다.",ch:"在排行榜中添加“选择难度”和“选择时间限制”列，并自动补全和规范化新增列之前的旧记录。",en:"Added selected difficulty and selected time-limit columns to the scoreboard. Older records are automatically normalized so the new columns also display safely."}},
   {version:"1.9",datetime:"2026-09-17T17:03:00+09:00",title:{ar:"مشاركة الحالة عبر URL وعدّ الأسطر لحظيًا",eo:"URL-kunhavigo de stato kaj realtempa linikalkulo",ja:"現在状態のURL共有・ソースコード行数をリアルタイム化",ko:"현재 상태 URL 공유 및 소스 코드 줄 수 실시간화",ch:"当前状态URL分享及源代码行数实时统计",en:"Added URL state sharing and real-time source line counting"},description:{ar:"تمت إضافة رابط يحتوي على معرّف مشاركة وحالة مضغوطة، ويمكن فتحه على جهاز آخر لاستعادة الإعدادات، كما أصبحت أعداد أسطر HTML وCSS وJavaScript تُحدّث لحظيًا. كما تم استخدام الذكاء الاصطناعي لكتابة جزء من الكود.",eo:"Aldonita URL kun unika kunhaviga ID kaj kunpremita stato, kiu povas esti malfermita ĉe alia aparato por restarigi agordojn. HTML-, CSS- kaj JavaScript-liniokalkuloj nun ĝisdatigas sin realtempe. Parto de la kodo estis verkita kun helpo de AI.",ja:"共有IDと圧縮した現在状態をURLに含め、別の端末で開くと設定・言語・カラー・プロフィール・スコアなどを復元できるようにしました。また、HTML・CSS・JavaScriptのソースコード行数をリアルタイム集計するようにしました。一部のコード作成にはAIを使用しています。",ko:"고유 공유 ID와 압축된 현재 상태를 URL에 포함하여 다른 기기에서 열면 설정·언어·색상·프로필·점수 등을 복원할 수 있게 했습니다. HTML·CSS·JavaScript 소스 코드 줄 수도 실시간으로 집계합니다. 코드 일부는 AI의 도움을 받아 작성했습니다.",ch:"在URL中加入唯一分享ID和压缩后的当前状态，在另一台设备打开即可恢复设置、语言、颜色、个人资料和分数等。同时实时统计HTML、CSS和JavaScript源代码行数。部分代码使用AI辅助编写。",en:"The URL now contains a unique share ID and compressed current state, so opening it on another device restores settings, language, colors, profile, scores, and more. HTML, CSS, and JavaScript source line counts are also updated in real time. Part of the code was written with AI assistance."}},
   {version:"1.8",datetime:"2026-09-17T17:00:00+09:00",title:{ar:"ضبط مستويات الصعوبة وإصلاح الاتجاه العمودي",eo:"Fajnaĝigo de malfacileco kaj riparo de vertikala teksto",ja:"難易度を大幅調整・日本語の縦表示を修正",ko:"난이도 대폭 조정 및 일본어 세로 표시 수정",ch:"大幅调整难度并修复日文纵向显示",en:"Major difficulty tuning and Japanese vertical-text fix"},description:{ar:"تمت إعادة ضبط سرعة السقوط وحجم الكتل وكثافة الظهور وحد الكتل المتزامنة لكل مستوى، مع إصلاح عرض الأزرار وعناصر اللعبة أفقيًا باليابانية.",eo:"La falrapideco, grandeco, aperdenseco kaj samtempaj bloklimoj estis forte agorditaj por ĉiu nivelo, kaj japanaj butonoj kaj ludkontroloj nun restas horizontalaj.",ja:"7段階それぞれで落下速度・ブロックサイズ・出現圧・同時存在数を大幅に調整しました。また、日本語のボタンやゲームタブの文字が縦にならないよう、横書き表示と横並びを強制しました。",ko:"각 난이도의 낙하 속도·블록 크기·생성 압력·동시 블록 수를 크게 조정했으며 일본어 버튼과 게임 탭의 세로 표시 문제를 수정했습니다.",ch:"大幅调整七个难度的下落速度、方块大小、出现压力和同时存在数量，并修复日文按钮与游戏标签纵向显示的问题。",en:"Greatly retuned falling speed, block size, spawn pressure, and simultaneous-block caps for all seven levels. Japanese buttons and game controls are also forced to remain horizontal."}},
   {version:"1.7",datetime:"2026-09-17T16:30:00+09:00",title:{ar:"إضافة مستويات الصعوبة",eo:"Aldono de malfacilecaj niveloj",ja:"難易度を追加",ko:"난이도 추가",ch:"添加难度",en:"Added difficulty levels"},description:{ar:"تمت إضافة سبعة مستويات صعوبة، من السهل جدًا إلى مستوى العناء 100، مع دعم متعدد اللغات وحفظ الإعداد.",eo:"Aldonitaj sep malfacilecniveloj, de tre facila ĝis nivelo 100, kun plurlingva subteno kaj konservado de la elekto.",ja:"朝飯前・楽勝・ふつう・ちょっと難しい・結構難しい・オニ・辛酸レベル100の7段階の難易度を追加し、6言語に対応しました。選択した難易度は保存されます。",ko:"누워서 떡 먹기·아주 쉬움·보통·조금 어려움·꽤 어려움·오니·고생 레벨 100의 7단계 난이도를 추가하고 6개 언어를 지원합니다. 선택한 난이도는 저장됩니다.",ch:"新增小菜一碟、轻松、普通、有点难、相当难、鬼级、辛酸等级100七个难度，并支持六种语言。所选难度会被保存。",en:"Added seven difficulty levels from Piece of cake to Bitterness level 100, with support for six languages. The selected difficulty is saved."}},
-  {version:"1.6",datetime:"2026-09-17T12:03:00:09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
+  {version:"1.6",datetime:"2026-09-17T12:03:00+09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
   {version:"1.5",datetime:"2026-09-17T08:10:00+09:00",title:{ar:"إصلاح أزرار الهاتف المحمول",eo:"Riparo de butonoj ĉe poŝtelefonoj",ja:"スマホでボタンが縦になる問題を修正",ko:"스마트폰에서 버튼이 세로로 표시되는 문제 수정",ch:"修复手机按钮纵向排列问题",en:"Fixed buttons becoming vertical on smartphones"},description:{ar:"تم إصلاح مشكلة ظهور الأزرار بشكل عمودي على الهواتف الذكية.",eo:"Riparita problemo, pro kiu la butonoj aperis vertikale ĉe poŝtelefonoj.",ja:"スマホ画面でボタンが1個ずつ縦に並んでしまう問題を修正し、横並びで表示されるようにしました。",ko:"스마트폰 화면에서 버튼이 하나씩 세로로 표시되는 문제를 수정하여 가로로 배치되도록 했습니다.",ch:"修复了手机屏幕上按钮逐个纵向排列的问题，使按钮能够横向排列。",en:"Fixed an issue where buttons appeared one per line on smartphones, so they now stay arranged horizontally."}},
   {version:"1.4",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"指・マウスを動かすと、その位置を目標にしてストーカーがスーッと追いかけるようにしました。丸・星・□・自分で選んだ小さい画像から形状を選べます。",ko:"마우스와 손가락의 이동 위치를 목표로 스토커가 부드럽게 따라가며 원, 별, □ 또는 사용자가 선택한 작은 이미지를 고를 수 있게 했습니다.",ch:"移动鼠标或手指时，跟随器会以目标位置平滑追踪，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows the target position of mouse or finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.3",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"マウス・指の移動先を目標にしてスーッと追従するようにし、丸・星・□・自分で選んだ小さい画像を選択できるようにしました。",ko:"마우스와 손가락의 이동 위치를 목표로 부드럽게 따라가며 원, 별, □ 또는 사용자 이미지를 선택할 수 있게 했습니다.",ch:"现在会平滑跟随鼠标和手指的移动目标，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows mouse and finger movement, with circle, star, square, or custom small image choices."}},
@@ -361,6 +362,8 @@ async function loadState(){
     if(!["dark","light","auto"].includes(state.theme))state.theme=DEFAULT_THEME;
     if(!Array.isArray(state.colors))state.colors=[];
     if(!Array.isArray(state.scores))state.scores=[];
+    normalizeScores();
+    if(data) await saveState();
   }catch(e){console.warn("IndexedDB unavailable",e)}
 }
 async function saveState(){
@@ -655,8 +658,8 @@ function loop(now=performance.now()){
 }
 async function finishGame(){
   if(!game)return;game.running=false;cancelAnimationFrame(game.raf);
-  const entry={score:game.score,date:new Date().toISOString(),duration:state.duration,difficulty:DIFFICULTIES.find(d=>d.id===state.difficulty)||DIFFICULTIES[2],name:(state.playerName||"プレイヤー").trim()||"プレイヤー"};
-  state.scores.push(entry);state.scores.sort((a,b)=>b.score-a.score||a.date.localeCompare(b.date));state.scores=state.scores.slice(0,1000);await saveState();
+  const entry={score:game.score,date:new Date().toISOString(),duration:DURATIONS.includes(Number(state.duration))?Number(state.duration):60,difficulty:DIFFICULTIES.some(d=>d.id===state.difficulty)?state.difficulty:"normal",name:(state.playerName||"プレイヤー").trim()||"プレイヤー"};
+  state.scores.push(normalizeScoreEntry(entry));state.scores.sort((a,b)=>b.score-a.score||a.date.localeCompare(b.date));state.scores=state.scores.slice(0,1000);await saveState();
   $("#gameMessage").textContent=tr("gameover")+" — "+tr("score")+": "+game.score;
   toast(tr("gameover"));
 }
@@ -700,14 +703,42 @@ function safePage(value,pages){
   return Math.min(Math.floor(n),Math.max(1,pages));
 }
 
+function normalizeScoreEntry(entry){
+  const x=(entry&&typeof entry==="object")?{...entry}:{};
+  const duration=Number(x.duration);
+  x.duration=DURATIONS.includes(duration)?duration:60;
+  let did="";
+  if(typeof x.difficulty==="string") did=x.difficulty;
+  else if(x.difficulty&&typeof x.difficulty==="object"&&typeof x.difficulty.id==="string") did=x.difficulty.id;
+  if(!DIFFICULTIES.some(d=>d.id===did)) did="normal";
+  x.difficulty=did;
+  x.score=Number.isFinite(Number(x.score))?Number(x.score):0;
+  x.name=typeof x.name==="string"?x.name:"プレイヤー";
+  return x;
+}
+function normalizeScores(){
+  if(!Array.isArray(state.scores)) state.scores=[];
+  state.scores=state.scores.map(normalizeScoreEntry);
+}
+function difficultyLabel(id){
+  const d=DIFFICULTIES.find(x=>x.id===id);
+  return d?tr(d.key):tr("unrecorded");
+}
+function durationLabel(value){
+  const n=Number(value);
+  return DURATIONS.includes(n)?`${n}${tr("durationUnit")}`:tr("unrecorded");
+}
+
 function renderScores(){
+  normalizeScores();
   const pages=Math.max(1,Math.ceil(state.scores.length/10)); let page=safePage(safeSessionGet("scorePage","1"),pages); safeSessionSet("scorePage",page);
   const slice=state.scores.slice((page-1)*10,page*10), recordsLabel=state.lang==="ja"?"件":state.lang==="en"?"records":state.lang==="ko"?"개":state.lang==="ch"?"条":state.lang==="eo"?"ierak":"سجل";
   $("#app").innerHTML=`<section class="panel"><div class="between"><h2 ${mt("scores")}>🏆 ${tr("scores")}</h2><span class="muted">${state.scores.length} ${esc(recordsLabel)}</span></div><div class="row" style="margin:8px 0" id="scoreExports"><span ${mt("exports")}>${tr("exports")}</span>${exportButtonHtml("score")}</div>
-  <table class="scoreTable" id="scoreExportTable"><thead><tr><th ${mt("rank")}>${tr("rank")}</th><th ${mt("name")}>${tr("name")}</th><th ${mt("score")}>${tr("score")}</th><th ${mt("date")}>${tr("date")}</th></tr></thead><tbody>${slice.length?slice.map((x,i)=>`<tr><td>${(page-1)*10+i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0} ${tr("points")}</td><td>${esc(formatDate(x.date))}</td></tr>`).join(""):`<tr><td colspan="4">${tr("noScores")}</td></tr>`}</tbody></table>
+  <div class="tableWrap"><table class="scoreTable" id="scoreExportTable"><thead><tr><th ${mt("rank")}>${tr("rank")}</th><th ${mt("name")}>${tr("name")}</th><th ${mt("score")}>${tr("score")}</th><th ${mt("selectedDifficulty")}>${tr("selectedDifficulty")}</th><th ${mt("selectedDuration")}>${tr("selectedDuration")}</th><th ${mt("date")}>${tr("date")}</th></tr></thead><tbody>${slice.length?slice.map((x,i)=>`<tr><td>${(page-1)*10+i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0} ${tr("points")}</td><td>${esc(difficultyLabel(x.difficulty))}</td><td>${esc(durationLabel(x.duration))}</td><td>${esc(formatDate(x.date))}</td></tr>`).join(""):`<tr><td colspan="6">${tr("noScores")}</td></tr>`}</tbody></table></div>
   <div class="pagination">${Array.from({length:pages},(_,i)=>`<button class="page ${i+1===page?"active":""}" data-p="${i+1}" ${ma("page")}>${i+1}</button>`).join("")}</div></section>`;
   document.querySelectorAll(".page").forEach(b=>b.onclick=()=>{safeSessionSet("scorePage",safePage(b.dataset.p,Math.max(1,Math.ceil(state.scores.length/10))));renderScores()}); document.querySelectorAll("#scoreExports [data-export]").forEach(b=>b.onclick=()=>exportScore(b.dataset.export)); applyI18nAttributes($("#app"));
 }
+
 function formatDate(value){
   const d=new Date(value);
   if(Number.isNaN(d.getTime()))return String(value??"");
@@ -833,7 +864,20 @@ function renderHistory(){
 }
 
 function exportButtonHtml(kind){return [["png","png"],["avif","avif"],["webp","webp"],["jpg","jpg"],["gif","gif"],["htmlExport","html"]].map(([k,v])=>`<button type="button" data-export="${v}" ${mt(k)}>${tr(k)}</button>`).join("");}
-function exportScore(format){const rows=state.scores.slice(0,100),title=tr("scores");if(format==="html"){const html=`<!doctype html><html lang="${document.documentElement.lang}"><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:system-ui,sans-serif;margin:30px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:8px;text-align:left}</style><h1>${esc(title)}</h1><table><thead><tr><th>${esc(tr("rank"))}</th><th>${esc(tr("name"))}</th><th>${esc(tr("score"))}</th><th>${esc(tr("date"))}</th></tr></thead><tbody>${rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0}</td><td>${esc(formatDate(x.date))}</td></tr>`).join("")}</tbody></table></html>`;downloadBlob(html,"3d-block-tap-scoreboard.html","text/html;charset=utf-8");return;}const c=document.createElement("canvas"),w=1200,rowH=58,h=130+Math.max(1,Math.min(rows.length,100))*rowH;c.width=w;c.height=h;const x=c.getContext("2d");x.font="bold 34px system-ui";x.fillText(title,40,55);x.font="20px system-ui";x.fillText(`${tr("name")} / ${tr("score")} / ${tr("date")}`,40,100);rows.forEach((r,i)=>x.fillText(`${i+1}. ${(r.name||"").slice(0,25)}   ${Number(r.score)||0}   ${formatDate(r.date)}`,40,130+i*rowH));exportCanvas(c,format,"3d-block-tap-scoreboard");}
+function exportScore(format){
+  normalizeScores();
+  const rows=state.scores.slice(0,100),title=tr("scores");
+  const headers=[tr("rank"),tr("name"),tr("score"),tr("selectedDifficulty"),tr("selectedDuration"),tr("date")];
+  if(format==="html"){
+    const html=`<!doctype html><html lang="${document.documentElement.lang}"><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:system-ui,sans-serif;margin:30px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:8px;text-align:left}</style><h1>${esc(title)}</h1><table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0}</td><td>${esc(difficultyLabel(x.difficulty))}</td><td>${esc(durationLabel(x.duration))}</td><td>${esc(formatDate(x.date))}</td></tr>`).join("")}</tbody></table></html>`;
+    downloadBlob(html,"3d-block-tap-scoreboard.html","text/html;charset=utf-8");return;
+  }
+  const c=document.createElement("canvas"),w=1800,rowH=58,h=150+Math.max(1,Math.min(rows.length,100))*rowH;c.width=w;c.height=h;const x=c.getContext("2d");
+  x.font="bold 34px system-ui";x.fillText(title,40,55);x.font="20px system-ui";x.fillText(headers.join(" / "),40,100);
+  rows.forEach((r,i)=>x.fillText(`${i+1}. ${(r.name||"").slice(0,20)}   ${Number(r.score)||0}   ${difficultyLabel(r.difficulty)}   ${durationLabel(r.duration)}   ${formatDate(r.date)}`,40,140+i*rowH));
+  exportCanvas(c,format,"3d-block-tap-scoreboard");
+}
+
 function exportProfile(format){const c=state.customProfile||{},title=c.name||state.playerName||tr("profileName");if(format==="html"){const labels=["profileName","profileBirth","profileGender","profileFrom","profileHobby","profileMotto","profileMessage"],keys=["name","birth","gender","from","hobby","motto","message"];const html=`<!doctype html><html lang="${document.documentElement.lang}"><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:system-ui,sans-serif;margin:30px}.card{border:1px solid #aaa;border-radius:12px;padding:14px;margin:10px 0}</style><h1>${esc(title)}</h1>${keys.map((k,i)=>`<div class="card"><b>${esc(tr(labels[i]))}</b><div>${esc(c[k]||"")}</div></div>`).join("")}</html>`;downloadBlob(html,"my-profile.html","text/html;charset=utf-8");return;}const fields=[[tr("profileName"),c.name],[tr("profileBirth"),c.birth],[tr("profileGender"),c.gender],[tr("profileFrom"),c.from],[tr("profileHobby"),c.hobby],[tr("profileMotto"),c.motto],[tr("profileMessage"),c.message]];const canvas=document.createElement("canvas");canvas.width=1200;canvas.height=180+fields.length*105;const x=canvas.getContext("2d");x.font="bold 40px system-ui";x.fillText(title,50,65);fields.forEach((f,i)=>{x.font="bold 22px system-ui";x.fillText(f[0],50,120+i*105);x.font="24px system-ui";x.fillText(String(f[1]||"").slice(0,70),50,155+i*105)});exportCanvas(canvas,format,"my-profile");}
 async function exportCanvas(canvas,format,base){if(format==="gif"){try{downloadBlob(encodeGIF(canvas),base+".gif","image/gif");toast(tr("saved"))}catch(e){toast(tr("exportFailed"))}return;}const mime={png:"image/png",avif:"image/avif",webp:"image/webp",jpg:"image/jpeg"}[format];if(!mime)return;const blob=await new Promise(resolve=>canvas.toBlob(resolve,mime,0.92));if(!blob||(format==="avif"&&blob.type!=="image/avif")){toast(tr("exportFailed"));return}downloadBlob(blob,base+"."+format,mime);toast(tr("saved"));}
 function encodeGIF(canvas){const w=Math.min(640,canvas.width),h=Math.min(640,Math.round(canvas.height*w/canvas.width)),tmp=document.createElement("canvas");tmp.width=w;tmp.height=h;const ctx=tmp.getContext("2d");ctx.drawImage(canvas,0,0,w,h);const d=ctx.getImageData(0,0,w,h).data,pal=new Uint8Array(256*3);for(let i=0;i<256;i++){pal[i*3]=((i>>5)&7)*255/7;pal[i*3+1]=((i>>2)&7)*255/7;pal[i*3+2]=(i&3)*255/3}const idx=new Uint8Array(w*h);for(let i=0,j=0;i<d.length;i+=4,j++)idx[j]=((d[i]*7/255)<<5)|((d[i+1]*7/255)<<2)|(d[i+2]*3/255);return gifBytes(w,h,pal,idx);}
@@ -893,7 +937,7 @@ async function importShareFromUrl(){
     const d=migration({...data.state,version:data.version||APP_VERSION});Object.assign(state,d);state.history=normalizeHistory(DEFAULT_HISTORY);
     importedShareTab=normalizeTab(data.tab||"game");
     if(!LANGS.includes(state.lang))state.lang="ja";if(!DIFFICULTIES.some(x=>x.id===state.difficulty))state.difficulty="normal";if(!["dark","light","auto"].includes(state.theme))state.theme=DEFAULT_THEME;
-    if(!Array.isArray(state.colors))state.colors=[];if(!Array.isArray(state.scores))state.scores=[];state.colors=state.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
+    if(!Array.isArray(state.colors))state.colors=[];if(!Array.isArray(state.scores))state.scores=[];normalizeScores();state.colors=state.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
     await saveState();return true;
   }catch(e){console.warn("share import failed",e);toast(tr("shareInvalid"));return false;}
 }
@@ -913,6 +957,7 @@ function migration(data){
   return out;
 }
 function backupData(){
+  normalizeScores();
   return {
     format:"itsme",version:APP_VERSION,createdAt:new Date().toISOString(),
     settings:{duration:state.duration,difficulty:state.difficulty,seconds:state.seconds,milliseconds:state.milliseconds,stalker:state.stalker,header:state.header,arabicFont:state.arabicFont,theme:state.theme},
@@ -934,7 +979,7 @@ async function restoreFile(file){
     if(s.arabicFont)state.arabicFont=s.arabicFont;if(["dark","light","auto"].includes(s.theme))state.theme=s.theme;
     if(d.language?.current)state.lang=LANGS.includes(d.language.current)?d.language.current:"ja";
     if(Array.isArray(d.colors))state.colors=d.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
-    if(Array.isArray(d.scores))state.scores=d.scores;
+    if(Array.isArray(d.scores))state.scores=d.scores.map(normalizeScoreEntry);
     if(typeof d.playerName==="string")state.playerName=d.playerName.slice(0,40);
     if(d.customProfile&&typeof d.customProfile==="object")state.customProfile={...state.customProfile,...Object.fromEntries(["name","birth","gender","from","hobby","motto","message"].map(k=>[k,String(d.customProfile[k]??"").slice(0,300)]))};
     if(Array.isArray(d.history))state.history=normalizeHistory(d.history);
