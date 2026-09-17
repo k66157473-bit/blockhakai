@@ -11,13 +11,13 @@
 <meta name="google-site-verification" content="Tl1tFRofhR-fsrAnyrPTElIwM4koTMHllqWg9yGyvMI" />
 <title ar="3Dブロッカータップ" eo="3D Blokfrapeto" ja="3Dブロッカータップ" ko="3D 블로커 탭" ch="3D方块点击" en="3D Block Tap">3Dブロッカータップ</title>
 <style id="app-style">
-:root{--bg:#07111f;--panel:#0e1a2b;--panel2:#13243a;--text:#edf5ff;--muted:#9fb2c9;--accent:#55d6ff;--danger:#ff667d;--line:#29405a;--shadow:0 16px 45px #0007}
+:root{--bg:#07111f;--panel:#0e1a2b;--panel2:#13243a;--text:#f5f9ff;--muted:#c6d3e2;--accent:#67e8ff;--danger:#ff8093;--line:#38516d;--shadow:0 16px 45px #0007}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#17304b 0,#07111f 45%,#030811 100%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}body{overflow-x:hidden}
-button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:9px 12px}button:hover{filter:brightness(1.16)}button.primary{background:linear-gradient(135deg,#1596c9,#3b5bd6);border-color:#5acfff}.danger{border-color:#873449}.small{font-size:.88rem;padding:7px 9px}
+button,input,select{font:inherit}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:9px 12px}button:hover{filter:brightness(1.16)}button.primary{background:linear-gradient(135deg,#1596c9,#3b5bd6);border-color:#5acfff}.danger{border-color:#873449}.small{font-size:.88rem;padding:7px 9px}
 #header{position:sticky;top:0;z-index:50;background:#07111fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:.2s}
 #header.hidden{display:none}#headerShow{position:fixed;top:12px;right:12px;z-index:120;display:none}.deleteOverlay{position:fixed;inset:0;background:#fff;z-index:5000;display:none;place-items:center;color:#111;font-weight:800;font-size:clamp(1.1rem,3vw,1.8rem);text-align:center;padding:24px;white-space:pre-line}.deleteOverlay.show{display:grid}.head{max-width:1200px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:1.25rem;font-weight:800;letter-spacing:.02em;margin-right:auto}.clock{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700}
 .actions{display:flex;gap:7px;flex-wrap:nowrap;align-items:center;white-space:nowrap;overflow-x:auto;overflow-y:hidden;max-width:100%;scrollbar-width:thin}.actions>*{flex:0 0 auto}.tabs{max-width:1200px;margin:auto;padding:0 16px 12px;display:flex;gap:7px;overflow:auto}.tab.active{background:var(--accent);color:#04101a;border-color:var(--accent);font-weight:700}
-main{max-width:1200px;margin:auto;padding:18px 16px 60px}.panel{background:linear-gradient(180deg,#0f1d30ee,#0a1423ee);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.card{background:#ffffff06;border:1px solid var(--line);border-radius:12px;padding:14px}.muted{color:var(--muted)}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1,h2,h3{margin-top:0}
+main{max-width:1200px;margin:auto;padding:18px 16px 60px}.panel{background:linear-gradient(180deg,#0f1d30ee,#0a1423ee);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.card{background:#ffffff06;border:1px solid var(--line);border-radius:12px;padding:14px}.muted{color:var(--muted)}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1,h2,h3{margin-top:0;color:var(--text)}label{color:var(--text)}.card{color:var(--text)}.muted{color:var(--muted)}.scoreTable th{color:#ffffff;font-weight:800}.scoreTable td{color:#e9f1fa}.setting{color:#e9f1fa}input::placeholder,textarea::placeholder{color:#9fb0c2;opacity:1}a{color:#7be9ff}button{color:#f5f9ff}button.primary{color:#ffffff}.tab.active,.page.active{color:#06131d}.toast{color:#f5f9ff}
 #gameWrap{position:relative;max-width:1000px;margin:auto}.gamebar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.stat{font-variant-numeric:tabular-nums}.stat b{color:var(--accent)}
 #gameCanvas{display:block;width:100%;height:min(66vh,650px);min-height:390px;border-radius:16px;background:linear-gradient(#09192a,#07111f 55%,#030812);border:1px solid #35516d;touch-action:none;cursor:crosshair}
 #stalker{position:fixed;z-index:1000;width:18px;height:18px;border:2px solid var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;box-shadow:0 0 18px var(--accent);will-change:left,top;overflow:hidden;align-items:center;justify-content:center}#stalker.star{border:0;border-radius:0;box-shadow:none;font-size:20px;line-height:18px;color:var(--accent)}#stalker.square{border-radius:2px}#stalker.custom{border:0;border-radius:3px;box-shadow:0 0 10px #0008;background-size:cover;background-position:center;background-repeat:no-repeat}
@@ -26,8 +26,79 @@ input[type=text],input[type=number],select{background:#07111f;color:var(--text);
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#07111ff2;border:1px solid var(--line);padding:11px 15px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:200}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .modal{position:fixed;inset:0;background:#0009;z-index:150;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modalBox{max-width:520px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
 pre{white-space:pre-wrap;word-break:break-word;background:#030812;border:1px solid var(--line);border-radius:10px;padding:12px;max-height:330px;overflow:auto}
-@media(max-width:650px){.head{padding:10px}.brand{width:100%;margin-right:0}.clock{font-size:.9rem}.actions{width:100%;flex-wrap:nowrap}.actions button{flex:0 0 auto}.tabs{padding-bottom:9px}main{padding:12px 10px 40px}.panel{padding:13px}#gameCanvas{min-height:420px;height:68vh}}
+html[data-theme="light"]{--bg:#f4f7fb;--panel:#ffffff;--panel2:#eef3f8;--text:#17202a;--muted:#526273;--accent:#087ea4;--danger:#b4233c;--line:#c7d2de;--shadow:0 12px 32px #20304022}
+html[data-theme="light"] body{background:radial-gradient(circle at 50% 0,#ffffff 0,#f3f7fb 52%,#e7edf4 100%);color:var(--text)}
+html[data-theme="light"] #header{background:#ffffffee}
+html[data-theme="light"] .panel{background:linear-gradient(180deg,#ffffffee,#f7fafdEE)}
+html[data-theme="light"] .card{background:#00000005}
+html[data-theme="light"] #gameCanvas{background:linear-gradient(#dceefa,#edf5fb 55%,#d9e5ef);border-color:#9bb1c5}
+html[data-theme="light"] input[type=text],html[data-theme="light"] input[type=number],html[data-theme="light"] select{background:#ffffff;color:var(--text)}
+html[data-theme="light"] pre{background:#f3f6f9}
+html[data-theme="light"] .toast{background:#ffffffee}
+html[data-theme="light"] .modalBox{background:#ffffff}
+html[data-theme="light"] a{color:#006b8f}
+@media (prefers-color-scheme: light){
+  html[data-theme="auto"]{--bg:#f4f7fb;--panel:#ffffff;--panel2:#eef3f8;--text:#17202a;--muted:#526273;--accent:#087ea4;--danger:#b4233c;--line:#c7d2de;--shadow:0 12px 32px #20304022}
+  html[data-theme="auto"] body{background:radial-gradient(circle at 50% 0,#ffffff 0,#f3f7fb 52%,#e7edf4 100%);color:var(--text)}
+  html[data-theme="auto"] #header{background:#ffffffee}
+  html[data-theme="auto"] .panel{background:linear-gradient(180deg,#ffffffee,#f7fafdEE)}
+  html[data-theme="auto"] .card{background:#00000005}
+  html[data-theme="auto"] #gameCanvas{background:linear-gradient(#dceefa,#edf5fb 55%,#d9e5ef);border-color:#9bb1c5}
+  html[data-theme="auto"] input[type=text],html[data-theme="auto"] input[type=number],html[data-theme="auto"] select{background:#ffffff;color:var(--text)}
+  html[data-theme="auto"] pre{background:#f3f6f9}
+  html[data-theme="auto"] .toast{background:#ffffffee}
+  html[data-theme="auto"] .modalBox{background:#ffffff}
+  html[data-theme="auto"] a{color:#006b8f}
+}
+@media(max-width:650px){.head{padding:10px}.brand{width:100%;margin-right:0}.clock{font-size:.9rem}.actions{width:100%;flex-wrap:nowrap}.actions button{flex:0 0 auto}.tabs{padding-bottom:9px}main{padding:12px 10px 40px}.panel{padding:13px}#gameCanvas{min-height:420px;height:68vh}
+/* スマホでもボタンを縦1列にせず、横並び＋必要時は横スクロール */
+.row{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.row::-webkit-scrollbar{display:none}
+.row>button{flex:0 0 auto;width:auto;min-width:max-content;white-space:nowrap}
+.between>.row{max-width:100%}
+}
+
+/* テーマ別の文字色コントラスト修正 */
+html[data-theme="light"] .scoreTable th{color:#17202a}
+html[data-theme="light"] .scoreTable td{color:#26313d}
+html[data-theme="light"] .setting{color:#17202a}
+html[data-theme="light"] label{color:#17202a}
+html[data-theme="light"] .card{color:#17202a}
+html[data-theme="light"] button{color:#17202a}
+html[data-theme="light"] button.primary{color:#fff}
+html[data-theme="light"] .toast{color:#17202a}
+html[data-theme="light"] input::placeholder,html[data-theme="light"] textarea::placeholder{color:#687789}
+
+html[data-theme="dark"] .scoreTable th{color:#fff}
+html[data-theme="dark"] .scoreTable td{color:#e9f1fa}
+html[data-theme="dark"] .setting{color:#f5f9ff}
+html[data-theme="dark"] label{color:#f5f9ff}
+html[data-theme="dark"] .card{color:#f5f9ff}
+html[data-theme="dark"] button{color:#f5f9ff}
+html[data-theme="dark"] .toast{color:#f5f9ff}
+
+@media (prefers-color-scheme: light){
+  html[data-theme="auto"] .scoreTable th{color:#17202a}
+  html[data-theme="auto"] .scoreTable td{color:#26313d}
+  html[data-theme="auto"] .setting{color:#17202a}
+  html[data-theme="auto"] label{color:#17202a}
+  html[data-theme="auto"] .card{color:#17202a}
+  html[data-theme="auto"] button{color:#17202a}
+  html[data-theme="auto"] button.primary{color:#fff}
+  html[data-theme="auto"] .toast{color:#17202a}
+  html[data-theme="auto"] input::placeholder,html[data-theme="auto"] textarea::placeholder{color:#687789}
+}
 </style>
+<template id="duration-options-template">
+  <option value="15">15</option>
+  <option value="30">30</option>
+  <option value="46">46</option>
+  <option value="60">60</option>
+  <option value="75">75</option>
+  <option value="90">90</option>
+  <option value="105">105</option>
+  <option value="120">120</option>
+</template>
 </head>
 <body>
 <div id="stalker"></div>
@@ -78,6 +149,11 @@ pre{white-space:pre-wrap;word-break:break-word;background:#030812;border:1px sol
 </div>
 <div class="deleteOverlay" id="deleteOverlay"><div id="deleteOverlayText"></div></div>
 
+
+<template id="durationOptionsTemplate">
+  <option value="15">15</option><option value="30">30</option><option value="46">46</option><option value="60">60</option>
+  <option value="75">75</option><option value="90">90</option><option value="105">105</option><option value="120">120</option>
+</template>
 <script id="app-script">
 (() => {
 "use strict";
@@ -87,7 +163,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#030812;border:1px sol
    Single-file / offline-first
    ========================= */
 
-const APP_VERSION = "1.4";
+const APP_VERSION = "1.7";
 const DB_NAME = "blocker-tap";
 const DB_VERSION = 1;
 const STORE = "state";
@@ -95,11 +171,20 @@ const OPENED_AT = "2026-09-14T17:00:00+09:00";
 const LANGS = ["ar","eo","ja","ko","ch","en"];
 const LANG_NAMES = {ar:"AR",eo:"EO",ja:"JA",ko:"KO",ch:"中文",en:"EN"};
 const DURATIONS = [15,30,46,60,75,90,105,120];
+const DIFFICULTIES = [
+  {id:"breakfast",key:"difficultyBreakfast",speed:0.72,spawn:0.78,size:1.28},
+  {id:"easy",key:"difficultyEasy",speed:0.86,spawn:0.90,size:1.16},
+  {id:"normal",key:"difficultyNormal",speed:1.00,spawn:1.00,size:1.00},
+  {id:"littleHard",key:"difficultyLittleHard",speed:1.15,spawn:1.10,size:0.94},
+  {id:"hard",key:"difficultyHard",speed:1.32,spawn:1.22,size:0.88},
+  {id:"demon",key:"difficultyDemon",speed:1.55,spawn:1.38,size:0.82},
+  {id:"level100",key:"difficulty100",speed:1.85,spawn:1.65,size:0.74}
+];
 
 const T = {
   ja:{
     title:"3Dブロッカータップ",game:"ゲーム",scores:"スコアボード",colors:"カラー",profile:"プロフィール",
-    history:"更新履歴",how:"使い方",settings:"設定",start:"ゲーム開始",restart:"もう一度",duration:"制限時間",
+    history:"更新履歴",how:"使い方",settings:"設定",start:"ゲーム開始",restart:"もう一度",duration:"制限時間",difficulty:"難易度",difficultyBreakfast:"朝飯前",difficultyEasy:"楽勝",difficultyNormal:"ふつう",difficultyLittleHard:"ちょっと難しい",difficultyHard:"結構難しい",difficultyDemon:"オニ",difficulty100:"辛酸レベル100",durationUnit:"秒間",
     score:"スコア",time:"残り時間",ready:"クリック/タップでブロックを消そう！",gameover:"ゲーム終了",
     noScores:"まだスコアがありません。",rank:"順位",name:"名前",date:"日時",points:"点",page:"ページ",
     search:"更新履歴を検索",newest:"最新順",oldest:"古い順",txt:"TXT出力",copy:"一括コピー",
@@ -114,11 +199,11 @@ const T = {
     headerHidden:"ヘッダーを表示",headerShown:"ヘッダーを非表示",future:"このバックアップは現在のアプリより新しいため復元できません。",
     invalid:"バックアップ形式が不正です。",restored:"バックアップを復元しました。",saved:"保存しました。",
     copied:"コピーしました。",downloaded:"TXTを出力しました。",noHistory:"該当する更新履歴がありません。",
-    deleteData:"データ全削除",deleteWarning:"保存されているアプリデータをすべて削除します。",confirmDelete:"本当に削除しますか？",yes:"Yes",no:"No",deleteStep:"削除確認 %n/5",deleteWorking:"保存データを削除しています…",deleteWait:"初期化しています。しばらくお待ちください。",howPC:"PC: マウスでブロックをクリック",howTouch:"スマホ/タブレット: タップ",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120秒",howSave:"設定とスコアはIndexedDBに保存されます。"
+    deleteData:"データ全削除",deleteWarning:"保存されているアプリデータをすべて削除します。",confirmDelete:"本当に削除しますか？",yes:"Yes",no:"No",deleteStep:"削除確認 %n/5",deleteWorking:"保存データを削除しています…",deleteWait:"初期化しています。しばらくお待ちください。",howPC:"PC: マウスでブロックをクリック",howTouch:"スマホ/タブレット: タップ",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120秒間",howSave:"設定とスコアはIndexedDBに保存されます。"
   },
   en:{
     title:"3D Block Tap",game:"Game",scores:"Scoreboard",colors:"Colors",profile:"Profile",
-    history:"Changelog",how:"How to play",settings:"Settings",start:"Start game",restart:"Play again",duration:"Time limit",
+    history:"Changelog",how:"How to play",settings:"Settings",start:"Start game",restart:"Play again",duration:"Time limit",difficulty:"Difficulty",difficultyBreakfast:"Piece of cake",difficultyEasy:"Easy",difficultyNormal:"Normal",difficultyLittleHard:"A little hard",difficultyHard:"Quite hard",difficultyDemon:"Demon",difficulty100:"Bitterness level 100",durationUnit:" seconds",
     score:"Score",time:"Time left",ready:"Click/tap the blocks!",gameover:"Game over",
     noScores:"No scores yet.",rank:"Rank",name:"Name",date:"Date",points:"pts",page:"Page",
     search:"Search changelog",newest:"Newest",oldest:"Oldest",txt:"Export TXT",copy:"Copy all",
@@ -136,7 +221,7 @@ const T = {
   },
   ko:{
     title:"3D 블로커 탭",game:"게임",scores:"점수판",colors:"색상",profile:"프로필",history:"업데이트 기록",how:"사용법",settings:"설정",
-    start:"게임 시작",restart:"다시 하기",duration:"제한 시간",score:"점수",time:"남은 시간",ready:"블록을 클릭/탭하세요!",gameover:"게임 종료",
+    start:"게임 시작",restart:"다시 하기",difficulty:"난이도",difficultyBreakfast:"누워서 떡 먹기",difficultyEasy:"아주 쉬움",difficultyNormal:"보통",difficultyLittleHard:"조금 어려움",difficultyHard:"꽤 어려움",difficultyDemon:"오니",difficulty100:"고생 레벨 100",duration:"제한 시간",durationUnit:"초간",score:"점수",time:"남은 시간",ready:"블록을 클릭/탭하세요!",gameover:"게임 종료",
     noScores:"아직 점수가 없습니다.",rank:"순위",name:"이름",date:"날짜",points:"점",page:"페이지",search:"업데이트 기록 검색",
     newest:"최신순",oldest:"오래된순",txt:"TXT 저장",copy:"전체 복사",seconds:"초 표시",milliseconds:"밀리초 표시",
     stalker:"마우스 스토커",header:"헤더",on:"ON",off:"OFF",font:"아랍어 글꼴",amiri:"Amiri",noto:"Noto Sans Arabic",
@@ -151,21 +236,21 @@ const T = {
   },
   ch:{
     title:"3D方块点击",game:"游戏",scores:"排行榜",colors:"颜色",profile:"个人资料",history:"更新记录",how:"使用方法",settings:"设置",
-    start:"开始游戏",restart:"再玩一次",duration:"时间限制",score:"分数",time:"剩余时间",ready:"点击/轻触方块！",gameover:"游戏结束",
+    start:"开始游戏",restart:"再玩一次",difficulty:"难度",difficultyBreakfast:"小菜一碟",difficultyEasy:"轻松",difficultyNormal:"普通",difficultyLittleHard:"有点难",difficultyHard:"相当难",difficultyDemon:"鬼级",difficulty100:"辛酸等级100",duration:"时间限制",durationUnit:"秒",score:"分数",time:"剩余时间",ready:"点击/轻触方块！",gameover:"游戏结束",
     noScores:"还没有分数。",rank:"排名",name:"名称",date:"日期",points:"分",page:"页",search:"搜索更新记录",
     newest:"最新",oldest:"最旧",txt:"导出TXT",copy:"全部复制",seconds:"显示秒",milliseconds:"显示毫秒",
     stalker:"鼠标跟随",header:"页眉",on:"开",off:"关",font:"阿拉伯语字体",amiri:"Amiri",noto:"Noto Sans Arabic",
     colorsAuto:"不设置颜色时自动生成",addColor:"添加颜色",remove:"删除",save:"保存",opened:"网站运行时间",
-    days:"天",minutes:"分钟",secs:"秒",millis:"毫秒",lines:"源代码行数",html:"HTML行数",css:"CSS行数",js:"JavaScript行数",total:"总行数",
+    days:"天",minutes:"分钟",secs:"秒間",millis:"毫秒",lines:"源代码行数",html:"HTML行数",css:"CSS行数",js:"JavaScript行数",total:"总行数",
     backup:"备份",restore:"恢复",profileInfo:"作者信息",author:"作者",birth:"出生年月",gender:"性别",from:"出生地",hobby:"爱好",
     motto:"格言",message:"一句话",howText:"点击或轻触下落的3D方块来消除它们，在时间结束前尽可能多地消除。",
     headerHidden:"显示页眉",headerShown:"隐藏页眉",future:"此备份版本比当前应用更新，无法恢复。",invalid:"备份文件无效。",
     restored:"备份已恢复。",saved:"已保存。",copied:"已复制。",downloaded:"TXT已导出。",noHistory:"没有匹配的记录。",
-    deleteData:"删除全部数据",deleteWarning:"将删除所有已保存的应用数据。",confirmDelete:"确定要删除吗？",yes:"是",no:"否",deleteStep:"删除确认 %n/5",deleteWorking:"正在删除保存的数据…",deleteWait:"正在初始化，请稍候。",howPC:"电脑：用鼠标点击方块",howTouch:"手机/平板：轻触",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120秒",howSave:"设置和分数保存在IndexedDB中。"
+    deleteData:"删除全部数据",deleteWarning:"将删除所有已保存的应用数据。",confirmDelete:"确定要删除吗？",yes:"是",no:"否",deleteStep:"删除确认 %n/5",deleteWorking:"正在删除保存的数据…",deleteWait:"正在初始化，请稍候。",howPC:"电脑：用鼠标点击方块",howTouch:"手机/平板：轻触",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120秒間",howSave:"设置和分数保存在IndexedDB中。"
   },
   eo:{
     title:"3D Blokfrapeto",game:"Ludo",scores:"Poentaro",colors:"Koloroj",profile:"Profilo",history:"Ĝisdatigoj",how:"Kiel ludi",settings:"Agordoj",
-    start:"Komenci",restart:"Reludi",duration:"Tempolimo",score:"Poentoj",time:"Restanta tempo",ready:"Alklaku/frapetu la blokojn!",gameover:"Ludo finiĝis",
+    start:"Komenci",restart:"Reludi",difficulty:"Malfacileco",difficultyBreakfast:"Matenmanĝo-ŝerco",difficultyEasy:"Facila",difficultyNormal:"Normala",difficultyLittleHard:"Iom malfacila",difficultyHard:"Sufiĉe malfacila",difficultyDemon:"Demona",difficulty100:"Malfacila nivelo 100",duration:"Tempolimo",durationUnit:" sekundoj",score:"Poentoj",time:"Restanta tempo",ready:"Alklaku/frapetu la blokojn!",gameover:"Ludo finiĝis",
     noScores:"Ankoraŭ neniuj poentoj.",rank:"Rango",name:"Nomo",date:"Dato",points:"poentoj",page:"Paĝo",search:"Serĉi ĝisdatigojn",
     newest:"Plej novaj",oldest:"Plej malnovaj",txt:"Elporti TXT",copy:"Kopii ĉion",seconds:"Montri sekundojn",milliseconds:"Montri milisekundojn",
     stalker:"Musa sekvilo",header:"Kapo",on:"ŜALTITA",off:"MALŜALTITA",font:"Araba tiparo",amiri:"Amiri",noto:"Noto Sans Arabic",
@@ -180,7 +265,7 @@ const T = {
   },
   ar:{
     title:"نقر الكتل ثلاثية الأبعاد",game:"اللعبة",scores:"لوحة النتائج",colors:"الألوان",profile:"الملف الشخصي",history:"سجل التحديثات",how:"طريقة اللعب",settings:"الإعدادات",
-    start:"بدء اللعبة",restart:"العب مجدداً",duration:"المدة",score:"النقاط",time:"الوقت المتبقي",ready:"انقر/المس الكتل!",gameover:"انتهت اللعبة",
+    start:"بدء اللعبة",restart:"العب مجدداً",difficulty:"الصعوبة",difficultyBreakfast:"سهل جدًا",difficultyEasy:"سهل",difficultyNormal:"عادي",difficultyLittleHard:"صعب قليلًا",difficultyHard:"صعب جدًا",difficultyDemon:"شيطاني",difficulty100:"مستوى العناء 100",duration:"المدة",score:"النقاط",time:"الوقت المتبقي",ready:"انقر/المس الكتل!",gameover:"انتهت اللعبة",
     noScores:"لا توجد نتائج بعد.",rank:"الترتيب",name:"الاسم",date:"التاريخ",points:"نقطة",page:"صفحة",search:"بحث في سجل التحديثات",
     newest:"الأحدث",oldest:"الأقدم",txt:"تصدير TXT",copy:"نسخ الكل",seconds:"إظهار الثواني",milliseconds:"إظهار المللي ثانية",
     stalker:"متتبع الفأرة",header:"الرأس",on:"تشغيل",off:"إيقاف",font:"خط العربية",amiri:"Amiri",noto:"Noto Sans Arabic",
@@ -199,6 +284,15 @@ Object.assign(T.ko,{playerName:"플레이어 이름",profileEdit:"내 프로필"
 Object.assign(T.ch,{playerName:"玩家名称",profileEdit:"我的个人资料",profileSave:"保存个人资料",profileReset:"重置个人资料",profileName:"显示名称",profileBirth:"出生年月",profileGender:"性别",profileFrom:"出生地",profileHobby:"兴趣",profileMotto:"格言 / 喜欢的话",profileMessage:"一句话",exports:"下载",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"我的个人资料行数",stalkerShape:"跟随器形状",circle:"圆",star:"星",square:"□",customImage:"我的图片",chooseImage:"选择小图片",stalkerImage:"跟随器图片",exportFailed:"此浏览器无法生成此格式。"});
 Object.assign(T.eo,{playerName:"Nomo de ludanto",profileEdit:"Mia profilo",profileSave:"Konservi profilon",profileReset:"Restarigi profilon",profileName:"Montrata nomo",profileBirth:"Naskiĝo",profileGender:"Sekso",profileFrom:"De",profileHobby:"Ŝatokupoj",profileMotto:"Moto / ŝatataj vortoj",profileMessage:"Mesaĝo",exports:"Elŝuti",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"Linioj de mia profilo",stalkerShape:"Formo de sekvilo",circle:"Rondo",star:"Stelo",square:"□",customImage:"Mia bildo",chooseImage:"Elektu malgrandan bildon",stalkerImage:"Bildo de sekvilo",exportFailed:"Ĉi tiu retumilo ne povas generi ĉi tiun formaton."});
 Object.assign(T.ar,{playerName:"اسم اللاعب",profileEdit:"ملفي الشخصي",profileSave:"حفظ الملف الشخصي",profileReset:"إعادة تعيين الملف الشخصي",profileName:"الاسم المعروض",profileBirth:"تاريخ الميلاد",profileGender:"الجنس",profileFrom:"من",profileHobby:"الهوايات",profileMotto:"الحكمة / الكلمات المفضلة",profileMessage:"رسالة",exports:"تنزيل",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"أسطر ملفي الشخصي",stalkerShape:"شكل المتتبع",circle:"دائرة",star:"نجمة",square:"□",customImage:"صورتي",chooseImage:"اختر صورة صغيرة",stalkerImage:"صورة المتتبع",exportFailed:"لا يمكن لهذا المتصفح إنشاء هذا التنسيق."});
+// テーマ切り替え用の追加翻訳（既存の翻訳ロジックはそのまま利用）
+Object.assign(T.ja,{theme:"テーマ",themeDark:"ダーク",themeLight:"ライト",themeAuto:"自動（端末設定）"});
+Object.assign(T.en,{theme:"Theme",themeDark:"Dark",themeLight:"Light",themeAuto:"Auto (system)"});
+Object.assign(T.ko,{theme:"테마",themeDark:"다크",themeLight:"라이트",themeAuto:"자동 (시스템)"});
+Object.assign(T.ch,{theme:"主题",themeDark:"深色",themeLight:"浅色",themeAuto:"自动（系统）"});
+Object.assign(T.eo,{theme:"Temo",themeDark:"Malhela",themeLight:"Luma",themeAuto:"Aŭtomata (sistemo)"});
+Object.assign(T.ar,{theme:"السمة",themeDark:"داكن",themeLight:"فاتح",themeAuto:"تلقائي (النظام)"});
+const DEFAULT_THEME="dark";
+
 const PROFILE = {
   author: {
   ar: "سين نو ريكيو",
@@ -218,7 +312,10 @@ const PROFILE = {
   backupNote:{ar:"‎.itsme هو تنسيق نسخ احتياطي خاص مبني على JSON ويحفظ حالة التطبيق القابلة للاستعادة من IndexedDB.",eo:".itsme estas propra JSON-bazita sekurkopioformato, kiu konservas restarigeblan aplikan staton de IndexedDB.",ja:".itsme はJSONベースの独自バックアップ形式で、IndexedDBの復元可能なアプリ状態を保存します。",ko:".itsme는 JSON 기반의 독자적인 백업 형식이며 IndexedDB에서 복원 가능한 앱 상태를 저장합니다.",ch:".itsme是基于JSON的专用备份格式，用于保存可从IndexedDB恢复的应用状态。",en:".itsme is a JSON-based backup format that stores restorable application state from IndexedDB."}
 };
 const DEFAULT_HISTORY=[
-  {version:"1.4",datetime:"2026-09-16T19:00:00+09:00",title:{ar:"منع التفاف أزرار الرأس وتحسين عد أسطر المصدر",eo:"Malebligita envolvo de kapbutonoj kaj plibonigita fontlinia kalkulo",ja:"ヘッダーボタンの縦並び防止とソース行数解析の強化",ko:"헤더 버튼 세로 배치 방지 및 소스 줄 수 분석 강화",ch:"防止页眉按钮纵向排列并强化源代码行数分析",en:"Prevented header button stacking and improved source line analysis"},description:{ar:"أصبحت أزرار الرأس تبقى في صف واحد، وأصبح عد أسطر HTML وCSS وJavaScript يعتمد على فصل نصوص المصدر الفعلية بدل احتسابها مرتين.",eo:"La kapbutonoj restas en unu vico, kaj HTML-, CSS- kaj JavaScript-linioj estas kalkulataj aparte por eviti duoblan kalkulon.",ja:"ヘッダーのボタンを横一列に保ち、HTML・CSS・JavaScriptを分離して実際のソース構造に基づいて行数を集計するようにしました。",ko:"헤더 버튼을 한 줄에 유지하고 HTML·CSS·JavaScript를 분리해 실제 소스 구조를 기준으로 줄 수를 계산하도록 했습니다.",ch:"让页眉按钮保持在一行，并分离HTML、CSS、JavaScript，按实际源代码结构统计行数，避免重复计算。",en:"Header buttons now stay on one row, and HTML, CSS, and JavaScript line counts are analyzed separately from the source structure to avoid double counting."}},
+  {version:"1.7",datetime:"2026-09-17T09:30:00+09:00",title:{ar:"إضافة مستويات الصعوبة",eo:"Aldono de malfacilecaj niveloj",ja:"難易度を追加",ko:"난이도 추가",ch:"添加难度",en:"Added difficulty levels"},description:{ar:"تمت إضافة سبعة مستويات صعوبة، من السهل جدًا إلى مستوى العناء 100، مع دعم متعدد اللغات وحفظ الإعداد.",eo:"Aldonitaj sep malfacilecniveloj, de tre facila ĝis nivelo 100, kun plurlingva subteno kaj konservado de la elekto.",ja:"朝飯前・楽勝・ふつう・ちょっと難しい・結構難しい・オニ・辛酸レベル100の7段階の難易度を追加し、6言語に対応しました。選択した難易度は保存されます。",ko:"누워서 떡 먹기·아주 쉬움·보통·조금 어려움·꽤 어려움·오니·고생 레벨 100의 7단계 난이도를 추가하고 6개 언어를 지원합니다. 선택한 난이도는 저장됩니다.",ch:"新增小菜一碟、轻松、普通、有点难、相当难、鬼级、辛酸等级100七个难度，并支持六种语言。所选难度会被保存。",en:"Added seven difficulty levels from Piece of cake to Bitterness level 100, with support for six languages. The selected difficulty is saved."}},
+  {version:"1.6",datetime:"2026-09-17T09:00:00+09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
+  {version:"1.5",datetime:"2026-09-17T08:10:00+09:00",title:{ar:"إصلاح أزرار الهاتف المحمول",eo:"Riparo de butonoj ĉe poŝtelefonoj",ja:"スマホでボタンが縦になる問題を修正",ko:"스마트폰에서 버튼이 세로로 표시되는 문제 수정",ch:"修复手机按钮纵向排列问题",en:"Fixed buttons becoming vertical on smartphones"},description:{ar:"تم إصلاح مشكلة ظهور الأزرار بشكل عمودي على الهواتف الذكية.",eo:"Riparita problemo, pro kiu la butonoj aperis vertikale ĉe poŝtelefonoj.",ja:"スマホ画面でボタンが1個ずつ縦に並んでしまう問題を修正し、横並びで表示されるようにしました。",ko:"스마트폰 화면에서 버튼이 하나씩 세로로 표시되는 문제를 수정하여 가로로 배치되도록 했습니다.",ch:"修复了手机屏幕上按钮逐个纵向排列的问题，使按钮能够横向排列。",en:"Fixed an issue where buttons appeared one per line on smartphones, so they now stay arranged horizontally."}},
+  {version:"1.4",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"指・マウスを動かすと、その位置を目標にしてストーカーがスーッと追いかけるようにしました。丸・星・□・自分で選んだ小さい画像から形状を選べます。",ko:"마우스와 손가락의 이동 위치를 목표로 스토커가 부드럽게 따라가며 원, 별, □ 또는 사용자가 선택한 작은 이미지를 고를 수 있게 했습니다.",ch:"移动鼠标或手指时，跟随器会以目标位置平滑追踪，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows the target position of mouse or finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.3",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"マウス・指の移動先を目標にしてスーッと追従するようにし、丸・星・□・自分で選んだ小さい画像を選択できるようにしました。",ko:"마우스와 손가락의 이동 위치를 목표로 부드럽게 따라가며 원, 별, □ 또는 사용자 이미지를 선택할 수 있게 했습니다.",ch:"现在会平滑跟随鼠标和手指的移动目标，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows mouse and finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.2",datetime:"2026-09-16T19:00:00+09:00",title:{ar:"إصدار 3D Block Tap",eo:"Publika versio de 3D Blokfrapeto",ja:"3Dブロッカータップ公開版",ko:"3D 블로커 탭 공개 버전",ch:"3D方块点击公开版",en:"3D Block Tap Release"},description:{ar:"إضافة الكتل ثلاثية الأبعاد ولوحة النتائج والإعدادات والنسخ الاحتياطي .itsme.",eo:"Aldonita 3D-blokoj, poentaro, agordoj kaj .itsme-sekurkopio.",ja:"3Dブロック、スコアボード、設定、.itsmeバックアップを搭載しました。",ko:"3D 블록, 점수판, 설정 및 .itsme 백업을 추가했습니다.",ch:"加入了3D方块、排行榜、设置和.itsme备份。",en:"Added 3D blocks, scoreboard, settings, and .itsme backup."}},
   {version:"1.1",datetime:"2026-09-15T18:30:00+09:00",title:{ar:"أساس النسخ الاحتياطي",eo:"Bazo de sekurkopio",ja:"バックアップ基盤",ko:"백업 기반",ch:"备份基础",en:"Backup Foundation"},description:{ar:"إضافة أساس حفظ IndexedDB واستعادة النسخ الاحتياطية.",eo:"Aldonita la bazo por IndexedDB-konservado kaj restarigo de sekurkopioj.",ja:"IndexedDB保存とバックアップ復元の基盤を追加しました。",ko:"IndexedDB 저장 및 백업 복원의 기반을 추가했습니다.",ch:"添加了IndexedDB保存和备份恢复基础。",en:"Added the foundation for IndexedDB storage and backup restoration."}},
@@ -226,7 +323,7 @@ const DEFAULT_HISTORY=[
 ];
 
 const state = {
-  lang:"ja", duration:60, seconds:true, milliseconds:false, stalker:false, stalkerShape:"circle", stalkerImage:"", header:true, arabicFont:"noto",
+  lang:"ja", duration:60, difficulty:"normal", seconds:true, milliseconds:false, stalker:false, stalkerShape:"circle", stalkerImage:"", header:true, arabicFont:"noto", theme:DEFAULT_THEME,
   colors:[], scores:[], history:DEFAULT_HISTORY, playerName:"プレイヤー", customProfile:{name:"",birth:"",gender:"",from:"",hobby:"",motto:"",message:""}
 };
 
@@ -249,6 +346,7 @@ async function loadState(){
     if(data) Object.assign(state,data);
     // 更新履歴はアプリ本体のコードを正本とし、IndexedDBの古い履歴で上書きしない。
     state.history=latestHistory;
+    if(!["dark","light","auto"].includes(state.theme))state.theme=DEFAULT_THEME;
     if(!Array.isArray(state.colors))state.colors=[];
     if(!Array.isArray(state.scores))state.scores=[];
   }catch(e){console.warn("IndexedDB unavailable",e)}
@@ -261,6 +359,11 @@ async function saveState(){
 const $=s=>document.querySelector(s);
 const tr=k=>(T[state.lang]||T.ja)[k]||T.ja[k]||k;
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function applyTheme(){
+  const theme=["dark","light","auto"].includes(state.theme)?state.theme:DEFAULT_THEME;
+  document.documentElement.dataset.theme=theme;
+  document.documentElement.style.colorScheme=theme==="auto"?"light dark":theme;
+}
 function ma(k){return LANGS.map(l=>`${l}="${esc(T[l]?.[k]??T.ja[k]??k)}"`).join(" ")}
 function mt(k){return `data-i18n="${esc(k)}" ${ma(k)}`}
 function applyI18nAttributes(root=document){
@@ -327,27 +430,79 @@ function setLanguage(lang){
   applyI18nAttributes(document);
   saveState();
 }
-function renderTabs(){
-  const tabs=[
-    ["game","🎮"],["scores","🏆"],["colors","🎨"],["profile","👤"],["history","📝"],["how","❔"],["settings","⚙️"]
-  ];
-  const current=location.hash.slice(1)||"game";
-  $("#tabs").innerHTML=tabs.map(([k,i])=>`<button class="tab ${current===k?"active":""}" data-tab="${k}" ${mt(k)}>${i} ${tr(k)}</button>`).join("");
-  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{location.hash=b.dataset.tab;renderTabs();render()});
+const TAB_DEFINITIONS=[
+  ["game","🎮"],["scores","🏆"],["colors","🎨"],["profile","👤"],["history","📝"],["how","❔"],["settings","⚙️"]
+];
+const TAB_KEYS=new Set(TAB_DEFINITIONS.map(x=>x[0]));
+let currentTab="game";
+let renderingTab=false;
+function normalizeTab(value){
+  const k=String(value||"").replace(/^#/ ,"").trim().toLowerCase();
+  return TAB_KEYS.has(k)?k:"game";
 }
-function render(){
-  const tab=location.hash.slice(1)||"game";
-  if(tab==="game")renderGame(); else if(tab==="scores")renderScores(); else if(tab==="colors")renderColors();
-  else if(tab==="profile")renderProfile(); else if(tab==="history")renderHistory(); else if(tab==="how")renderHow(); else renderSettings();
+function getCurrentTab(){return normalizeTab(location.hash);}
+function renderTabs(){
+  const tabs=$("#tabs");
+  if(!tabs)return;
+  const current=getCurrentTab();
+  currentTab=current;
+  tabs.innerHTML=TAB_DEFINITIONS.map(([k,i])=>`<button type="button" class="tab ${current===k?"active":""}" data-tab="${k}" aria-selected="${current===k}" role="tab" ${mt(k)}>${i} ${tr(k)}</button>`).join("");
+  tabs.querySelectorAll(".tab").forEach(button=>{
+    button.addEventListener("click",e=>{e.preventDefault();navigateTab(button.dataset.tab)});
+    button.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();navigateTab(button.dataset.tab)}
+    });
+  });
+}
+function navigateTab(tab){
+  const k=normalizeTab(tab);
+  currentTab=k;
+  const target="#"+k;
+  if(location.hash!==target){
+    try{history.pushState({tab:k},"",target)}catch(e){location.hash=target;return;}
+  }
+  renderTabs();
+  render(k);
+}
+function render(tabOverride=null){
+  if(renderingTab)return;
+  renderingTab=true;
+  try{
+    if(!Array.isArray(state.scores))state.scores=[];
+    if(!Array.isArray(state.colors))state.colors=[];
+    if(!Array.isArray(state.history))state.history=normalizeHistory(DEFAULT_HISTORY);
+    const tab=normalizeTab(tabOverride===null?location.hash:tabOverride);
+    currentTab=tab;
+    if(location.hash!=="#"+tab){try{history.replaceState({tab:tab},"","#"+tab)}catch(e){}}
+    if(tab==="game")renderGame();
+    else if(tab==="scores")renderScores();
+    else if(tab==="colors")renderColors();
+    else if(tab==="profile")renderProfile();
+    else if(tab==="history")renderHistory();
+    else if(tab==="how")renderHow();
+    else renderSettings();
+  }catch(error){
+    console.error("Tab render error",tab,error);
+    const app=$("#app");
+    if(app){
+      app.innerHTML=`<section class="panel"><h2>${esc(tr(tab))}</h2><p class="muted">${esc(tr("tabError")||"この画面の表示中にエラーが発生しました。")}</p><button type="button" id="tabRetry">↻ ${esc(tr("retry")||"再表示")}</button></section>`;
+      $("#tabRetry")?.addEventListener("click",()=>{renderingTab=false;render(tab)});
+    }
+  }finally{
+    renderingTab=false;
+  }
   applyHeader();
   applyI18nAttributes($("#app"));
+  renderTabs();
 }
+
 function applyHeader(){
   $("#header").classList.toggle("hidden",!state.header);
   const show=$("#headerShow"); if(show)show.style.display=state.header?"none":"block";
 }
-function durationOptions(){return DURATIONS.map(d=>`<option value="${d}" ${state.duration===d?"selected":""} ${ma("secs")}>${d}${tr("secs")}</option>`).join("")}
+function durationOptions(){const tpl=$("duration-options-template");if(!tpl)return DURATIONS.map(d=>`<option value="${d}" ${state.duration===d?"selected":""} ${ma("durationUnit")}>${d}${tr("durationUnit")}</option>`).join("");return [...tpl.content.children].map(o=>{const d=+o.value;return `<option value="${d}" ${state.duration===d?"selected":""} ${ma("durationUnit")}>${d}${tr("durationUnit")}</option>`}).join("")}
 
+function difficultyOptions(){return DIFFICULTIES.map(d=>`<option value="${d.id}" ${state.difficulty===d.id?"selected":""} ${ma(d.key)}>${tr(d.key)}</option>`).join("")}
 let game=null;
 function renderGame(){
   $("#app").innerHTML=`
@@ -355,7 +510,7 @@ function renderGame(){
     <div class="gamebar">
       <div class="row">
         <label ${mt("playerName")}>${tr("playerName")} <input id="playerName" type="text" maxlength="40" value="${esc(state.playerName||"")}" style="width:12em"></label>
-        <label ${mt("duration")}>${tr("duration")} <select id="duration">${durationOptions()}</select></label>
+        <label ${mt("duration")}>${tr("duration")} <select id="duration">${durationOptions()}</select> <label ${mt("difficulty")}>${tr("difficulty")} <select id="difficultySelect">${difficultyOptions()}</select></label></label>
         <button class="primary" id="start" ${game?.running?mt("restart"):mt("start")}>${game?.running?tr("restart"):tr("start")}</button>
       </div>
       <div class="row"><span class="stat" ${mt("score")}>${tr("score")}: <b id="score">0</b></span><span class="stat" ${mt("time")}>${tr("time")}: <b id="time">${state.duration}</b></span></div>
@@ -375,7 +530,6 @@ function initCanvas(){
   const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
   c._ctx=ctx;c._w=rect.width;c._h=rect.height;
   drawScene();
-  window.onresize=()=>{if(location.hash.slice(1)==="game"){initCanvas()}};
   c.onpointerdown=e=>{if(game?.running)hitBlock(e)};
 }
 function startGame(){
@@ -481,19 +635,58 @@ function loop(now=performance.now()){
 }
 async function finishGame(){
   if(!game)return;game.running=false;cancelAnimationFrame(game.raf);
-  const entry={score:game.score,date:new Date().toISOString(),duration:state.duration,name:(state.playerName||"プレイヤー").trim()||"プレイヤー"};
+  const entry={score:game.score,date:new Date().toISOString(),duration:state.duration,difficulty:DIFFICULTIES.find(d=>d.id===state.difficulty)||DIFFICULTIES[2],name:(state.playerName||"プレイヤー").trim()||"プレイヤー"};
   state.scores.push(entry);state.scores.sort((a,b)=>b.score-a.score||a.date.localeCompare(b.date));state.scores=state.scores.slice(0,1000);await saveState();
   $("#gameMessage").textContent=tr("gameover")+" — "+tr("score")+": "+game.score;
   toast(tr("gameover"));
 }
 
+/* ===== 共通・安全ストレージ ===== */
+function safeSessionGet(key,fallback=""){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return fallback;
+    const value=storage.getItem(key);
+    return value===null?fallback:value;
+  }catch(e){return fallback;}
+}
+function safeSessionSet(key,value){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return false;
+    storage.setItem(key,String(value));
+    return true;
+  }catch(e){return false;}
+}
+function safeSessionRemove(key){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return false;
+    storage.removeItem(key);
+    return true;
+  }catch(e){return false;}
+}
+function safeSessionClear(){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return false;
+    storage.clear();
+    return true;
+  }catch(e){return false;}
+}
+function safePage(value,pages){
+  let n=Number(value);
+  if(!Number.isFinite(n)||n<1)n=1;
+  return Math.min(Math.floor(n),Math.max(1,pages));
+}
+
 function renderScores(){
-  const pages=Math.max(1,Math.ceil(state.scores.length/10)); let page=parseInt(sessionStorage.scorePage||"1",10); if(!Number.isFinite(page)||page<1)page=1; page=Math.min(page,pages); sessionStorage.scorePage=String(page);
+  const pages=Math.max(1,Math.ceil(state.scores.length/10)); let page=safePage(safeSessionGet("scorePage","1"),pages); safeSessionSet("scorePage",page);
   const slice=state.scores.slice((page-1)*10,page*10), recordsLabel=state.lang==="ja"?"件":state.lang==="en"?"records":state.lang==="ko"?"개":state.lang==="ch"?"条":state.lang==="eo"?"ierak":"سجل";
   $("#app").innerHTML=`<section class="panel"><div class="between"><h2 ${mt("scores")}>🏆 ${tr("scores")}</h2><span class="muted">${state.scores.length} ${esc(recordsLabel)}</span></div><div class="row" style="margin:8px 0" id="scoreExports"><span ${mt("exports")}>${tr("exports")}</span>${exportButtonHtml("score")}</div>
   <table class="scoreTable" id="scoreExportTable"><thead><tr><th ${mt("rank")}>${tr("rank")}</th><th ${mt("name")}>${tr("name")}</th><th ${mt("score")}>${tr("score")}</th><th ${mt("date")}>${tr("date")}</th></tr></thead><tbody>${slice.length?slice.map((x,i)=>`<tr><td>${(page-1)*10+i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0} ${tr("points")}</td><td>${esc(formatDate(x.date))}</td></tr>`).join(""):`<tr><td colspan="4">${tr("noScores")}</td></tr>`}</tbody></table>
   <div class="pagination">${Array.from({length:pages},(_,i)=>`<button class="page ${i+1===page?"active":""}" data-p="${i+1}" ${ma("page")}>${i+1}</button>`).join("")}</div></section>`;
-  document.querySelectorAll(".page").forEach(b=>b.onclick=()=>{sessionStorage.scorePage=b.dataset.p;renderScores()}); document.querySelectorAll("#scoreExports [data-export]").forEach(b=>b.onclick=()=>exportScore(b.dataset.export)); applyI18nAttributes($("#app"));
+  document.querySelectorAll(".page").forEach(b=>b.onclick=()=>{safeSessionSet("scorePage",safePage(b.dataset.p,Math.max(1,Math.ceil(state.scores.length/10))));renderScores()}); document.querySelectorAll("#scoreExports [data-export]").forEach(b=>b.onclick=()=>exportScore(b.dataset.export)); applyI18nAttributes($("#app"));
 }
 function formatDate(value){
   const d=new Date(value);
@@ -544,6 +737,7 @@ function renderHow(){
 }
 function renderSettings(){
   $("#app").innerHTML=`<section class="panel"><h2 ${mt("settings")}>⚙️ ${tr("settings")}</h2>
+  <div class="setting"><span ${mt("theme")}>${tr("theme")}</span><select id="themeSelect"><option value="dark" ${state.theme==="dark"?"selected":""}>🌙 ${tr("themeDark")}</option><option value="light" ${state.theme==="light"?"selected":""}>☀️ ${tr("themeLight")}</option><option value="auto" ${state.theme==="auto"?"selected":""}>🌓 ${tr("themeAuto")}</option></select></div>
   <div class="setting"><span ${mt("seconds")}>${tr("seconds")}</span><input id="seconds" type="checkbox" ${state.seconds?"checked":""}></div>
   <div class="setting"><span ${mt("milliseconds")}>${tr("milliseconds")}</span><input id="milliseconds" type="checkbox" ${state.milliseconds?"checked":""}></div>
   <div class="setting"><span ${mt("stalker")}>${tr("stalker")}</span><select id="stalkerSelect"><option value="0" ${!state.stalker?"selected":""}>${tr("off")}</option><option value="1" ${state.stalker?"selected":""}>${tr("on")}</option></select></div><div class="setting"><span ${mt("stalkerShape")}>${tr("stalkerShape")}</span><select id="stalkerShape"><option value="circle" ${state.stalkerShape==="circle"?"selected":""}>${tr("circle")}</option><option value="star" ${state.stalkerShape==="star"?"selected":""}>${tr("star")}</option><option value="square" ${state.stalkerShape==="square"?"selected":""}>${tr("square")}</option><option value="custom" ${state.stalkerShape==="custom"?"selected":""}>${tr("customImage")}</option></select></div>
@@ -554,6 +748,7 @@ function renderSettings(){
   <section class="panel"><h2 ${mt("backup")}>🌐 ${tr("backup")}</h2><p class="muted" ${profileAttr("backupNote")}>${esc(localizedObject(PROFILE.backupNote))}</p>
   <div class="row"><button class="primary" id="backup2" ${mt("backup")}>${tr("backup")}</button><button id="restore2" ${mt("restore")}>${tr("restore")}</button></div></section>
   <section class="panel"><h2 ${mt("deleteData")}>🗑 ${tr("deleteData")}</h2><p class="muted" ${mt("deleteWarning")}>${tr("deleteWarning")}</p><button class="danger" id="delete2" ${mt("deleteData")}>🗑 ${tr("deleteData")}</button></section>`;
+  $("#themeSelect").onchange=async e=>{state.theme=e.target.value;applyTheme();await saveState();renderSettings()};
   $("#seconds").onchange=e=>{state.seconds=e.target.checked;saveState();renderSettings()};
   $("#milliseconds").onchange=e=>{state.milliseconds=e.target.checked;saveState();renderSettings()};
   $("#stalkerSelect").onchange=e=>{state.stalker=e.target.value==="1";applyStalker();saveState()};
@@ -565,13 +760,13 @@ function renderSettings(){
 }
 function renderHistory(){
   $("#app").innerHTML=`<section class="panel"><div class="between"><h2 ${mt("history")}>📝 ${tr("history")}</h2><div class="row"><button id="sortNew" ${mt("newest")}>${tr("newest")}</button><button id="sortOld" ${mt("oldest")}>${tr("oldest")}</button><button id="txt" ${mt("txt")}>${tr("txt")}</button><button id="copy" ${mt("copy")}>${tr("copy")}</button></div></div>
-  <input id="historySearch" type="text" data-i18n-placeholder="search" data-i18n-aria-label="search" placeholder="${esc(tr("search"))}" value="${esc(sessionStorage.histSearch||"")}">
+  <input id="historySearch" type="text" data-i18n-placeholder="search" data-i18n-aria-label="search" placeholder="${esc(tr("search"))}" value="${esc(safeSessionGet("histSearch",""))}">
   <div id="historyList" style="margin-top:12px"></div>
   <div id="historyPagination" class="pagination" style="margin-top:12px"></div></section>`;
 
   const draw=(order="new",requestedPage=null)=>{
     const q=String($("#historySearch")?.value||"").trim().toLocaleLowerCase();
-    sessionStorage.histSearch=q;
+    safeSessionSet("histSearch",q);
     let arr=normalizeHistory(state.history).filter(x=>historySearchText(x).includes(q));
     arr.sort((a,b)=>{
       const ad=String(a.datetime||a.date||""),bd=String(b.datetime||b.date||"");
@@ -580,10 +775,8 @@ function renderHistory(){
 
     const perPage=10;
     const pages=Math.max(1,Math.ceil(arr.length/perPage));
-    let page=requestedPage===null ? parseInt(sessionStorage.historyPage||"1",10) : Number(requestedPage);
-    if(!Number.isFinite(page)||page<1)page=1;
-    page=Math.min(page,pages);
-    sessionStorage.historyPage=String(page);
+    let page=requestedPage===null ? safePage(safeSessionGet("historyPage","1"),pages) : safePage(requestedPage,pages);
+    safeSessionSet("historyPage",page);
 
     const slice=arr.slice((page-1)*perPage,page*perPage);
     $("#historyList").innerHTML=slice.length?slice.map(x=>{
@@ -632,7 +825,7 @@ function migration(data){
 function backupData(){
   return {
     format:"itsme",version:APP_VERSION,createdAt:new Date().toISOString(),
-    settings:{duration:state.duration,seconds:state.seconds,milliseconds:state.milliseconds,stalker:state.stalker,header:state.header,arabicFont:state.arabicFont},
+    settings:{duration:state.duration,difficulty:state.difficulty,seconds:state.seconds,milliseconds:state.milliseconds,stalker:state.stalker,header:state.header,arabicFont:state.arabicFont,theme:state.theme},
     language:{current:state.lang},fonts:{arabic:state.arabicFont},colors:state.colors,
     scores:state.scores,history:state.history,playerName:state.playerName,customProfile:state.customProfile,
     world:{},items:{},commands:{},game:{},appState:{}
@@ -645,16 +838,17 @@ async function restoreFile(file){
     const data=JSON.parse(await file.text());if(data.format!=="itsme")throw new Error("INVALID");
     const d=migration(data),s=d.settings||{};
     if(s.duration)state.duration=DURATIONS.includes(+s.duration)?+s.duration:60;
+    if(typeof s.difficulty==="string"&&DIFFICULTIES.some(d=>d.id===s.difficulty))state.difficulty=s.difficulty;
     if(typeof s.seconds==="boolean")state.seconds=s.seconds;if(typeof s.milliseconds==="boolean")state.milliseconds=s.milliseconds;
     if(typeof s.stalker==="boolean")state.stalker=s.stalker;if(typeof s.header==="boolean")state.header=s.header;
-    if(s.arabicFont)state.arabicFont=s.arabicFont;
+    if(s.arabicFont)state.arabicFont=s.arabicFont;if(["dark","light","auto"].includes(s.theme))state.theme=s.theme;
     if(d.language?.current)state.lang=LANGS.includes(d.language.current)?d.language.current:"ja";
     if(Array.isArray(d.colors))state.colors=d.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
     if(Array.isArray(d.scores))state.scores=d.scores;
     if(typeof d.playerName==="string")state.playerName=d.playerName.slice(0,40);
     if(d.customProfile&&typeof d.customProfile==="object")state.customProfile={...state.customProfile,...Object.fromEntries(["name","birth","gender","from","hobby","motto","message"].map(k=>[k,String(d.customProfile[k]??"").slice(0,300)]))};
     if(Array.isArray(d.history))state.history=normalizeHistory(d.history);
-    await saveState();applyStalker();setLanguage(state.lang);toast(tr("restored"));
+    await saveState();applyTheme();applyStalker();setLanguage(state.lang);toast(tr("restored"));
   }catch(e){modal(tr("invalid"),e.message==="FUTURE"?tr("future"):tr("invalid"))}
 }
 async function confirmDeleteSequence(){
@@ -688,7 +882,7 @@ async function deleteAllAppData(){
   try{
     await deleteIndexedDB();
     try{localStorage.clear()}catch(e){}
-    try{sessionStorage.clear()}catch(e){}
+    safeSessionClear()
     if("caches" in window){try{const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)))}catch(e){}}
   }finally{
     setTimeout(()=>location.reload(),4000);
@@ -749,6 +943,7 @@ setInterval(()=>{if(location.hash.slice(1)==="profile")updateAge();},100);
 window.addEventListener("hashchange",()=>{renderTabs();render()});
 (async()=>{
   await loadState();
+  applyTheme();
   if(!location.hash)location.hash="game";
   ipTimezone=state.ipTimezone||null;
   setLanguage(state.lang);
