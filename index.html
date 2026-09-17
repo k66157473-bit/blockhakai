@@ -18,7 +18,7 @@ button,input,select{font:inherit}button:focus-visible,input:focus-visible,select
 #header.hidden{display:none}#headerShow{position:fixed;top:12px;right:12px;z-index:120;display:none}.deleteOverlay{position:fixed;inset:0;background:#fff;z-index:5000;display:none;place-items:center;color:#111;font-weight:800;font-size:clamp(1.1rem,3vw,1.8rem);text-align:center;padding:24px;white-space:pre-line}.deleteOverlay.show{display:grid}.head{max-width:1200px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:1.25rem;font-weight:800;letter-spacing:.02em;margin-right:auto}.clock{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700}
 .actions{display:flex;gap:7px;flex-wrap:nowrap;align-items:center;white-space:nowrap;overflow-x:auto;overflow-y:hidden;max-width:100%;scrollbar-width:thin}.actions>*{flex:0 0 auto}.tabs{max-width:1200px;margin:auto;padding:0 16px 12px;display:flex;gap:7px;overflow:auto}.tab.active{background:var(--accent);color:#04101a;border-color:var(--accent);font-weight:700}
 main{max-width:1200px;margin:auto;padding:18px 16px 60px}.panel{background:linear-gradient(180deg,#0f1d30ee,#0a1423ee);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.card{background:#ffffff06;border:1px solid var(--line);border-radius:12px;padding:14px}.muted{color:var(--muted)}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1,h2,h3{margin-top:0;color:var(--text)}label{color:var(--text)}.card{color:var(--text)}.muted{color:var(--muted)}.scoreTable th{color:#ffffff;font-weight:800}.scoreTable td{color:#e9f1fa}.setting{color:#e9f1fa}input::placeholder,textarea::placeholder{color:#9fb0c2;opacity:1}a{color:#7be9ff}button{color:#f5f9ff}button.primary{color:#ffffff}.tab.active,.page.active{color:#06131d}.toast{color:#f5f9ff}
-#gameWrap{position:relative;max-width:1000px;margin:auto}.gamebar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.stat{font-variant-numeric:tabular-nums}.stat b{color:var(--accent)}
+.tab{flex:0 0 auto;white-space:nowrap;writing-mode:horizontal-tb;word-break:keep-all;overflow-wrap:normal}.tabs{flex-wrap:nowrap}.game-control{white-space:nowrap;writing-mode:horizontal-tb;word-break:keep-all;flex:0 0 auto}.gamebar .row:first-child{min-width:0}.gamebar .game-control select{width:auto;min-width:6.5em;max-width:15em}.gamebar button{flex:0 0 auto;white-space:nowrap;writing-mode:horizontal-tb;word-break:keep-all}button{white-space:nowrap;writing-mode:horizontal-tb;word-break:keep-all}label{white-space:nowrap;writing-mode:horizontal-tb;word-break:keep-all}#gameWrap{position:relative;max-width:1000px;margin:auto}.gamebar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.stat{font-variant-numeric:tabular-nums}.stat b{color:var(--accent)}
 #gameCanvas{display:block;width:100%;height:min(66vh,650px);min-height:390px;border-radius:16px;background:linear-gradient(#09192a,#07111f 55%,#030812);border:1px solid #35516d;touch-action:none;cursor:crosshair}
 #stalker{position:fixed;z-index:1000;width:18px;height:18px;border:2px solid var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;box-shadow:0 0 18px var(--accent);will-change:left,top;overflow:hidden;align-items:center;justify-content:center}#stalker.star{border:0;border-radius:0;box-shadow:none;font-size:20px;line-height:18px;color:var(--accent)}#stalker.square{border-radius:2px}#stalker.custom{border:0;border-radius:3px;box-shadow:0 0 10px #0008;background-size:cover;background-position:center;background-repeat:no-repeat}
 label{display:flex;align-items:center;gap:8px}.setting{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff12}.setting:last-child{border-bottom:0}
@@ -163,7 +163,7 @@ html[data-theme="dark"] .toast{color:#f5f9ff}
    Single-file / offline-first
    ========================= */
 
-const APP_VERSION = "1.7";
+const APP_VERSION = "1.8";
 const DB_NAME = "blocker-tap";
 const DB_VERSION = 1;
 const STORE = "state";
@@ -172,13 +172,14 @@ const LANGS = ["ar","eo","ja","ko","ch","en"];
 const LANG_NAMES = {ar:"AR",eo:"EO",ja:"JA",ko:"KO",ch:"中文",en:"EN"};
 const DURATIONS = [15,30,46,60,75,90,105,120];
 const DIFFICULTIES = [
-  {id:"breakfast",key:"difficultyBreakfast",speed:0.72,spawn:0.78,size:1.28},
-  {id:"easy",key:"difficultyEasy",speed:0.86,spawn:0.90,size:1.16},
-  {id:"normal",key:"difficultyNormal",speed:1.00,spawn:1.00,size:1.00},
-  {id:"littleHard",key:"difficultyLittleHard",speed:1.15,spawn:1.10,size:0.94},
-  {id:"hard",key:"difficultyHard",speed:1.32,spawn:1.22,size:0.88},
-  {id:"demon",key:"difficultyDemon",speed:1.55,spawn:1.38,size:0.82},
-  {id:"level100",key:"difficulty100",speed:1.85,spawn:1.65,size:0.74}
+  // speed = falling speed multiplier / spawn = spawn pressure / size = block size / cap = simultaneous block cap
+  {id:"breakfast",key:"difficultyBreakfast",speed:0.55,spawn:0.55,size:1.60,cap:6},
+  {id:"easy",key:"difficultyEasy",speed:0.78,spawn:0.72,size:1.30,cap:8},
+  {id:"normal",key:"difficultyNormal",speed:1.00,spawn:1.00,size:1.00,cap:12},
+  {id:"littleHard",key:"difficultyLittleHard",speed:1.30,spawn:1.35,size:0.86,cap:15},
+  {id:"hard",key:"difficultyHard",speed:1.65,spawn:1.80,size:0.76,cap:18},
+  {id:"demon",key:"difficultyDemon",speed:2.10,spawn:2.40,size:0.66,cap:23},
+  {id:"level100",key:"difficulty100",speed:2.75,spawn:3.25,size:0.54,cap:30}
 ];
 
 const T = {
@@ -312,8 +313,9 @@ const PROFILE = {
   backupNote:{ar:"‎.itsme هو تنسيق نسخ احتياطي خاص مبني على JSON ويحفظ حالة التطبيق القابلة للاستعادة من IndexedDB.",eo:".itsme estas propra JSON-bazita sekurkopioformato, kiu konservas restarigeblan aplikan staton de IndexedDB.",ja:".itsme はJSONベースの独自バックアップ形式で、IndexedDBの復元可能なアプリ状態を保存します。",ko:".itsme는 JSON 기반의 독자적인 백업 형식이며 IndexedDB에서 복원 가능한 앱 상태를 저장합니다.",ch:".itsme是基于JSON的专用备份格式，用于保存可从IndexedDB恢复的应用状态。",en:".itsme is a JSON-based backup format that stores restorable application state from IndexedDB."}
 };
 const DEFAULT_HISTORY=[
+  {version:"1.8",datetime:"2026-09-17T17:00:00+09:00",title:{ar:"ضبط مستويات الصعوبة وإصلاح الاتجاه العمودي",eo:"Fajnaĝigo de malfacileco kaj riparo de vertikala teksto",ja:"難易度を大幅調整・日本語の縦表示を修正",ko:"난이도 대폭 조정 및 일본어 세로 표시 수정",ch:"大幅调整难度并修复日文纵向显示",en:"Major difficulty tuning and Japanese vertical-text fix"},description:{ar:"تمت إعادة ضبط سرعة السقوط وحجم الكتل وكثافة الظهور وحد الكتل المتزامنة لكل مستوى، مع إصلاح عرض الأزرار وعناصر اللعبة أفقيًا باليابانية.",eo:"La falrapideco, grandeco, aperdenseco kaj samtempaj bloklimoj estis forte agorditaj por ĉiu nivelo, kaj japanaj butonoj kaj ludkontroloj nun restas horizontalaj.",ja:"7段階それぞれで落下速度・ブロックサイズ・出現圧・同時存在数を大幅に調整しました。また、日本語のボタンやゲームタブの文字が縦にならないよう、横書き表示と横並びを強制しました。",ko:"각 난이도의 낙하 속도·블록 크기·생성 압력·동시 블록 수를 크게 조정했으며 일본어 버튼과 게임 탭의 세로 표시 문제를 수정했습니다.",ch:"大幅调整七个难度的下落速度、方块大小、出现压力和同时存在数量，并修复日文按钮与游戏标签纵向显示的问题。",en:"Greatly retuned falling speed, block size, spawn pressure, and simultaneous-block caps for all seven levels. Japanese buttons and game controls are also forced to remain horizontal."}},
   {version:"1.7",datetime:"2026-09-17T16:30:00+09:00",title:{ar:"إضافة مستويات الصعوبة",eo:"Aldono de malfacilecaj niveloj",ja:"難易度を追加",ko:"난이도 추가",ch:"添加难度",en:"Added difficulty levels"},description:{ar:"تمت إضافة سبعة مستويات صعوبة، من السهل جدًا إلى مستوى العناء 100، مع دعم متعدد اللغات وحفظ الإعداد.",eo:"Aldonitaj sep malfacilecniveloj, de tre facila ĝis nivelo 100, kun plurlingva subteno kaj konservado de la elekto.",ja:"朝飯前・楽勝・ふつう・ちょっと難しい・結構難しい・オニ・辛酸レベル100の7段階の難易度を追加し、6言語に対応しました。選択した難易度は保存されます。",ko:"누워서 떡 먹기·아주 쉬움·보통·조금 어려움·꽤 어려움·오니·고생 레벨 100의 7단계 난이도를 추가하고 6개 언어를 지원합니다. 선택한 난이도는 저장됩니다.",ch:"新增小菜一碟、轻松、普通、有点难、相当难、鬼级、辛酸等级100七个难度，并支持六种语言。所选难度会被保存。",en:"Added seven difficulty levels from Piece of cake to Bitterness level 100, with support for six languages. The selected difficulty is saved."}},
-  {version:"1.6",datetime:"2026-09-17T12:03:00+09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
+  {version:"1.6",datetime:"2026-09-17T12:03:00:00+09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
   {version:"1.5",datetime:"2026-09-17T08:10:00+09:00",title:{ar:"إصلاح أزرار الهاتف المحمول",eo:"Riparo de butonoj ĉe poŝtelefonoj",ja:"スマホでボタンが縦になる問題を修正",ko:"스마트폰에서 버튼이 세로로 표시되는 문제 수정",ch:"修复手机按钮纵向排列问题",en:"Fixed buttons becoming vertical on smartphones"},description:{ar:"تم إصلاح مشكلة ظهور الأزرار بشكل عمودي على الهواتف الذكية.",eo:"Riparita problemo, pro kiu la butonoj aperis vertikale ĉe poŝtelefonoj.",ja:"スマホ画面でボタンが1個ずつ縦に並んでしまう問題を修正し、横並びで表示されるようにしました。",ko:"스마트폰 화면에서 버튼이 하나씩 세로로 표시되는 문제를 수정하여 가로로 배치되도록 했습니다.",ch:"修复了手机屏幕上按钮逐个纵向排列的问题，使按钮能够横向排列。",en:"Fixed an issue where buttons appeared one per line on smartphones, so they now stay arranged horizontally."}},
   {version:"1.4",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"指・マウスを動かすと、その位置を目標にしてストーカーがスーッと追いかけるようにしました。丸・星・□・自分で選んだ小さい画像から形状を選べます。",ko:"마우스와 손가락의 이동 위치를 목표로 스토커가 부드럽게 따라가며 원, 별, □ 또는 사용자가 선택한 작은 이미지를 고를 수 있게 했습니다.",ch:"移动鼠标或手指时，跟随器会以目标位置平滑追踪，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows the target position of mouse or finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.3",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"マウス・指の移動先を目標にしてスーッと追従するようにし、丸・星・□・自分で選んだ小さい画像を選択できるようにしました。",ko:"마우스와 손가락의 이동 위치를 목표로 부드럽게 따라가며 원, 별, □ 또는 사용자 이미지를 선택할 수 있게 했습니다.",ch:"现在会平滑跟随鼠标和手指的移动目标，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows mouse and finger movement, with circle, star, square, or custom small image choices."}},
@@ -510,7 +512,8 @@ function renderGame(){
     <div class="gamebar">
       <div class="row">
         <label ${mt("playerName")}>${tr("playerName")} <input id="playerName" type="text" maxlength="40" value="${esc(state.playerName||"")}" style="width:12em"></label>
-        <label ${mt("duration")}>${tr("duration")} <select id="duration">${durationOptions()}</select> <label ${mt("difficulty")}>${tr("difficulty")} <select id="difficultySelect">${difficultyOptions()}</select></label></label>
+        <label class="game-control" ${mt("duration")}>${tr("duration")} <select id="duration">${durationOptions()}</select></label>
+        <label class="game-control" ${mt("difficulty")}>${tr("difficulty")} <select id="difficultySelect">${difficultyOptions()}</select></label>
         <button class="primary" id="start" ${game?.running?mt("restart"):mt("start")}>${game?.running?tr("restart"):tr("start")}</button>
       </div>
       <div class="row"><span class="stat" ${mt("score")}>${tr("score")}: <b id="score">0</b></span><span class="stat" ${mt("time")}>${tr("time")}: <b id="time">${state.duration}</b></span></div>
@@ -520,6 +523,7 @@ function renderGame(){
   </section>`;
   $("#playerName").oninput=e=>{state.playerName=e.target.value.slice(0,40);saveState()};
   $("#duration").onchange=()=>{state.duration=+$("#duration").value;saveState();if(!game?.running){$("#time").textContent=state.duration}};
+  $("#difficultySelect").onchange=()=>{state.difficulty=$("#difficultySelect").value;saveState()};
   $("#start").onclick=startGame;
   initCanvas();
 }
@@ -544,9 +548,12 @@ function colorList(){
   if(state.colors.length)return state.colors.slice(0,10);
   return ["#45b8ff","#ff5c77","#ffd34e","#72e07a","#a97cff","#ff8a3d","#38e6d2","#f06cff"];
 }
+function getDifficulty(){return DIFFICULTIES.find(d=>d.id===state.difficulty)||DIFFICULTIES[2]}
 function spawnBlock(){
-  const w=$("#gameCanvas")._w,h=$("#gameCanvas")._h;
-  game.blocks.push({x:(Math.random()-.5)*8,y:6.5+Math.random()*2,z:4+Math.random()*6,size:.55+Math.random()*.45,v:.8+Math.random()*1.1,color:colorList()[Math.floor(Math.random()*colorList().length)],rot:Math.random()*6.28,spin:(Math.random()-.5)*1.5});
+  const d=getDifficulty();
+  const size=d.size*(0.82+Math.random()*0.36);
+  const speed=d.speed*(0.78+Math.random()*0.44);
+  game.blocks.push({x:(Math.random()-.5)*8,y:6.5+Math.random()*2,z:4+Math.random()*6,size,v:speed,color:colorList()[Math.floor(Math.random()*colorList().length)],rot:Math.random()*6.28,spin:(Math.random()-.5)*1.5});
 }
 function project(x,y,z){
   const c=$("#gameCanvas"),w=c._w,h=c._h;
@@ -624,7 +631,10 @@ function loop(now=performance.now()){
   if(!game?.running)return;
   const dt=Math.min(40,now-(game.last||now));game.last=now;
   if(now>=game.end){finishGame();return}
-  if(now-game.spawn>Math.max(240,750-game.score*5)){spawnBlock();game.spawn=now}
+  const d=getDifficulty();
+  // Difficulty controls both the interval and the pressure ramp as the score rises.
+  const spawnInterval=Math.max(105,Math.round((980-d.spawn*230)-Math.min(430,game.score*(5+d.spawn*2))));
+  if(now-game.spawn>spawnInterval && game.blocks.length<d.cap){spawnBlock();game.spawn=now}
   const sec=dt/1000;
   for(const b of game.blocks)b.y-=b.v*sec;
   game.blocks=game.blocks.filter(b=>b.y>-1.0);
