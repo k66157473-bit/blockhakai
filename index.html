@@ -23,6 +23,7 @@ main{max-width:1200px;margin:auto;padding:18px 16px 60px}.panel{background:linea
 #stalker{position:fixed;z-index:1000;width:18px;height:18px;border:2px solid var(--accent);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;box-shadow:0 0 18px var(--accent);will-change:left,top;overflow:hidden;align-items:center;justify-content:center}#stalker.star{border:0;border-radius:0;box-shadow:none;font-size:20px;line-height:18px;color:var(--accent)}#stalker.square{border-radius:2px}#stalker.custom{border:0;border-radius:3px;box-shadow:0 0 10px #0008;background-size:cover;background-position:center;background-repeat:no-repeat}
 label{display:flex;align-items:center;gap:8px}.setting{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff12}.setting:last-child{border-bottom:0}
 input[type=text],input[type=number],select{background:#07111f;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px;width:100%}.colorInput{width:55px;height:40px;padding:2px}.scoreTable{width:100%;border-collapse:collapse}.scoreTable th,.scoreTable td{padding:9px;border-bottom:1px solid #ffffff12;text-align:left}.pagination{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.page.active{background:var(--accent);color:#031019}
+.share-url{width:100%;min-height:76px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.82rem;word-break:break-all}.share-id{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em}.live-line{font-variant-numeric:tabular-nums}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#07111ff2;border:1px solid var(--line);padding:11px 15px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:200}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .modal{position:fixed;inset:0;background:#0009;z-index:150;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modalBox{max-width:520px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
 pre{white-space:pre-wrap;word-break:break-word;background:#030812;border:1px solid var(--line);border-radius:10px;padding:12px;max-height:330px;overflow:auto}
@@ -163,7 +164,7 @@ html[data-theme="dark"] .toast{color:#f5f9ff}
    Single-file / offline-first
    ========================= */
 
-const APP_VERSION = "1.8";
+const APP_VERSION = "1.9";
 const DB_NAME = "blocker-tap";
 const DB_VERSION = 1;
 const STORE = "state";
@@ -292,6 +293,12 @@ Object.assign(T.ko,{theme:"테마",themeDark:"다크",themeLight:"라이트",the
 Object.assign(T.ch,{theme:"主题",themeDark:"深色",themeLight:"浅色",themeAuto:"自动（系统）"});
 Object.assign(T.eo,{theme:"Temo",themeDark:"Malhela",themeLight:"Luma",themeAuto:"Aŭtomata (sistemo)"});
 Object.assign(T.ar,{theme:"السمة",themeDark:"داكن",themeLight:"فاتح",themeAuto:"تلقائي (النظام)"});
+Object.assign(T.ja,{shareState:"現在の状態をURL共有",shareCreate:"共有URLを作成",shareCopy:"共有URLをコピー",shareId:"共有ID",shareReady:"共有URLを作成しました。別の端末で開くと、この状態を読み込めます。",shareTooLong:"状態が大きすぎるため、URL共有用にスコア履歴などを圧縮しました。",shareInvalid:"共有URLの状態を読み込めませんでした。",shareLineNote:"HTML・CSS・JavaScriptの行数を現在のページからリアルタイム集計します。",shareCopied:"共有URLをコピーしました。"});
+Object.assign(T.en,{shareState:"Share current state by URL",shareCreate:"Create share URL",shareCopy:"Copy share URL",shareId:"Share ID",shareReady:"A share URL was created. Open it on another device to load this state.",shareTooLong:"The state was compressed for URL sharing.",shareInvalid:"The shared URL state could not be loaded.",shareLineNote:"HTML, CSS, and JavaScript line counts are updated from the current page in real time.",shareCopied:"Share URL copied."});
+Object.assign(T.ko,{shareState:"현재 상태를 URL로 공유",shareCreate:"공유 URL 만들기",shareCopy:"공유 URL 복사",shareId:"공유 ID",shareReady:"공유 URL을 만들었습니다. 다른 기기에서 열면 이 상태를 불러옵니다.",shareTooLong:"URL 공유를 위해 상태를 압축했습니다.",shareInvalid:"공유 URL 상태를 불러오지 못했습니다.",shareLineNote:"현재 페이지에서 HTML·CSS·JavaScript 줄 수를 실시간으로 집계합니다.",shareCopied:"공유 URL을 복사했습니다."});
+Object.assign(T.ch,{shareState:"通过URL分享当前状态",shareCreate:"创建分享URL",shareCopy:"复制分享URL",shareId:"分享ID",shareReady:"已创建分享URL。在另一台设备打开即可加载此状态。",shareTooLong:"已为URL分享压缩状态。",shareInvalid:"无法加载分享URL中的状态。",shareLineNote:"实时统计当前页面中的HTML、CSS和JavaScript行数。",shareCopied:"已复制分享URL。"});
+Object.assign(T.eo,{shareState:"Kunhavigi nunan staton per URL",shareCreate:"Krei kunhavigan URL",shareCopy:"Kopii kunhavigan URL",shareId:"Kunhaviga ID",shareReady:"Kunhaviga URL kreita. Malfermu ĝin ĉe alia aparato por ŝargi ĉi tiun staton.",shareTooLong:"La stato estis kunpremita por URL-kunhavigo.",shareInvalid:"La stato en la kunhaviga URL ne povis esti ŝargita.",shareLineNote:"Linioj de HTML, CSS kaj JavaScript estas ĝisdatigataj realtempe el la nuna paĝo.",shareCopied:"Kunhaviga URL kopiita."});
+Object.assign(T.ar,{shareState:"مشاركة الحالة الحالية عبر URL",shareCreate:"إنشاء URL للمشاركة",shareCopy:"نسخ URL المشاركة",shareId:"معرّف المشاركة",shareReady:"تم إنشاء URL للمشاركة. افتحه على جهاز آخر لتحميل هذه الحالة.",shareTooLong:"تم ضغط الحالة لمشاركة URL.",shareInvalid:"تعذر تحميل الحالة من URL المشاركة.",shareLineNote:"يتم تحديث عدد أسطر HTML وCSS وJavaScript لحظيًا من الصفحة الحالية.",shareCopied:"تم نسخ URL المشاركة."});
 const DEFAULT_THEME="dark";
 
 const PROFILE = {
@@ -309,10 +316,12 @@ const PROFILE = {
   hobby:{ar:"تحديث المواقع وكتابة HTML",eo:"Ĝisdatigi retejojn kaj tajpi HTML",ja:"サイト更新、HTMLを打ち込むこと",ko:"사이트 업데이트, HTML 입력",ch:"更新网站、编写HTML",en:"Updating websites and writing HTML"},
   motto:{ar:"«لنمل في عمل الخير بلا ملل. إذا لم نفتر، فسنحصد في الوقت المناسب. — رسالة غلاطية 6:9»",eo:"“Ni ne laciĝu farante bonon. Se ni ne laciĝos, ĝustatempe ni rikoltos. — Galatoj 6:9”",ja:"「私たちは、たゆまず善を行いましょう。飽きずにいれば、時が来て刈り取ることになります。── ガラテヤ人への手紙 6章9節」",ko:"“우리는 선을 행하되 낙심하지 맙시다. 포기하지 않으면 때가 되어 거두게 됩니다. — 갈라디아서 6:9”",ch:"“我们行善不可丧志；若不灰心，到了时候就要收成。——加拉太书 6:9”",en:"“Let us not become weary in doing good. If we do not give up, we will reap at the proper time. — Galatians 6:9”"},
   message:{ar:"أستمتع بتحديث الموقع.",eo:"Mi ĝuas ĝisdatigi la retejon.",ja:"更新するのがたのしい",ko:"업데이트하는 것이 즐겁다",ch:"更新网站很开心",en:"I enjoy updating the site."},
+  aiNote:{ar:"تمت كتابة جزء من الكود بمساعدة الذكاء الاصطناعي.",eo:"Parto de la kodo estis verkita kun helpo de AI.",ja:"コードの一部はAIを使用して作成しています。",ko:"코드의 일부는 AI의 도움을 받아 작성했습니다.",ch:"部分代码使用AI辅助编写。",en:"Part of the code was written with AI assistance."},
   lineNote:{ar:"يتم عد نصوص HTML وCSS وJavaScript الحالية المتاحة في المتصفح بحسب فواصل الأسطر.",eo:"La aktualaj HTML-, CSS- kaj JavaScript-tekstoj disponeblaj en la retumilo estas kalkulataj laŭ linifinoj.",ja:"ブラウザ上で取得できる現在のHTML/CSS/JavaScript本文を改行単位で集計しています。",ko:"브라우저에서 현재 사용할 수 있는 HTML/CSS/JavaScript 본문을 줄바꿈 단위로 집계합니다.",ch:"按换行统计浏览器中当前可获取的HTML/CSS/JavaScript文本。",en:"The current HTML/CSS/JavaScript text available in the browser is counted by line breaks."},
   backupNote:{ar:"‎.itsme هو تنسيق نسخ احتياطي خاص مبني على JSON ويحفظ حالة التطبيق القابلة للاستعادة من IndexedDB.",eo:".itsme estas propra JSON-bazita sekurkopioformato, kiu konservas restarigeblan aplikan staton de IndexedDB.",ja:".itsme はJSONベースの独自バックアップ形式で、IndexedDBの復元可能なアプリ状態を保存します。",ko:".itsme는 JSON 기반의 독자적인 백업 형식이며 IndexedDB에서 복원 가능한 앱 상태를 저장합니다.",ch:".itsme是基于JSON的专用备份格式，用于保存可从IndexedDB恢复的应用状态。",en:".itsme is a JSON-based backup format that stores restorable application state from IndexedDB."}
 };
 const DEFAULT_HISTORY=[
+  {version:"1.9",datetime:"2026-09-17T17:03:00+09:00",title:{ar:"مشاركة الحالة عبر URL وعدّ الأسطر لحظيًا",eo:"URL-kunhavigo de stato kaj realtempa linikalkulo",ja:"現在状態のURL共有・ソースコード行数をリアルタイム化",ko:"현재 상태 URL 공유 및 소스 코드 줄 수 실시간화",ch:"当前状态URL分享及源代码行数实时统计",en:"Added URL state sharing and real-time source line counting"},description:{ar:"تمت إضافة رابط يحتوي على معرّف مشاركة وحالة مضغوطة، ويمكن فتحه على جهاز آخر لاستعادة الإعدادات، كما أصبحت أعداد أسطر HTML وCSS وJavaScript تُحدّث لحظيًا. كما تم استخدام الذكاء الاصطناعي لكتابة جزء من الكود.",eo:"Aldonita URL kun unika kunhaviga ID kaj kunpremita stato, kiu povas esti malfermita ĉe alia aparato por restarigi agordojn. HTML-, CSS- kaj JavaScript-liniokalkuloj nun ĝisdatigas sin realtempe. Parto de la kodo estis verkita kun helpo de AI.",ja:"共有IDと圧縮した現在状態をURLに含め、別の端末で開くと設定・言語・カラー・プロフィール・スコアなどを復元できるようにしました。また、HTML・CSS・JavaScriptのソースコード行数をリアルタイム集計するようにしました。一部のコード作成にはAIを使用しています。",ko:"고유 공유 ID와 압축된 현재 상태를 URL에 포함하여 다른 기기에서 열면 설정·언어·색상·프로필·점수 등을 복원할 수 있게 했습니다. HTML·CSS·JavaScript 소스 코드 줄 수도 실시간으로 집계합니다. 코드 일부는 AI의 도움을 받아 작성했습니다.",ch:"在URL中加入唯一分享ID和压缩后的当前状态，在另一台设备打开即可恢复设置、语言、颜色、个人资料和分数等。同时实时统计HTML、CSS和JavaScript源代码行数。部分代码使用AI辅助编写。",en:"The URL now contains a unique share ID and compressed current state, so opening it on another device restores settings, language, colors, profile, scores, and more. HTML, CSS, and JavaScript source line counts are also updated in real time. Part of the code was written with AI assistance."}},
   {version:"1.8",datetime:"2026-09-17T17:00:00+09:00",title:{ar:"ضبط مستويات الصعوبة وإصلاح الاتجاه العمودي",eo:"Fajnaĝigo de malfacileco kaj riparo de vertikala teksto",ja:"難易度を大幅調整・日本語の縦表示を修正",ko:"난이도 대폭 조정 및 일본어 세로 표시 수정",ch:"大幅调整难度并修复日文纵向显示",en:"Major difficulty tuning and Japanese vertical-text fix"},description:{ar:"تمت إعادة ضبط سرعة السقوط وحجم الكتل وكثافة الظهور وحد الكتل المتزامنة لكل مستوى، مع إصلاح عرض الأزرار وعناصر اللعبة أفقيًا باليابانية.",eo:"La falrapideco, grandeco, aperdenseco kaj samtempaj bloklimoj estis forte agorditaj por ĉiu nivelo, kaj japanaj butonoj kaj ludkontroloj nun restas horizontalaj.",ja:"7段階それぞれで落下速度・ブロックサイズ・出現圧・同時存在数を大幅に調整しました。また、日本語のボタンやゲームタブの文字が縦にならないよう、横書き表示と横並びを強制しました。",ko:"각 난이도의 낙하 속도·블록 크기·생성 압력·동시 블록 수를 크게 조정했으며 일본어 버튼과 게임 탭의 세로 표시 문제를 수정했습니다.",ch:"大幅调整七个难度的下落速度、方块大小、出现压力和同时存在数量，并修复日文按钮与游戏标签纵向显示的问题。",en:"Greatly retuned falling speed, block size, spawn pressure, and simultaneous-block caps for all seven levels. Japanese buttons and game controls are also forced to remain horizontal."}},
   {version:"1.7",datetime:"2026-09-17T16:30:00+09:00",title:{ar:"إضافة مستويات الصعوبة",eo:"Aldono de malfacilecaj niveloj",ja:"難易度を追加",ko:"난이도 추가",ch:"添加难度",en:"Added difficulty levels"},description:{ar:"تمت إضافة سبعة مستويات صعوبة، من السهل جدًا إلى مستوى العناء 100، مع دعم متعدد اللغات وحفظ الإعداد.",eo:"Aldonitaj sep malfacilecniveloj, de tre facila ĝis nivelo 100, kun plurlingva subteno kaj konservado de la elekto.",ja:"朝飯前・楽勝・ふつう・ちょっと難しい・結構難しい・オニ・辛酸レベル100の7段階の難易度を追加し、6言語に対応しました。選択した難易度は保存されます。",ko:"누워서 떡 먹기·아주 쉬움·보통·조금 어려움·꽤 어려움·오니·고생 레벨 100의 7단계 난이도를 추가하고 6개 언어를 지원합니다. 선택한 난이도는 저장됩니다.",ch:"新增小菜一碟、轻松、普通、有点难、相当难、鬼级、辛酸等级100七个难度，并支持六种语言。所选难度会被保存。",en:"Added seven difficulty levels from Piece of cake to Bitterness level 100, with support for six languages. The selected difficulty is saved."}},
   {version:"1.6",datetime:"2026-09-17T12:03:00:09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
@@ -320,7 +329,7 @@ const DEFAULT_HISTORY=[
   {version:"1.4",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"指・マウスを動かすと、その位置を目標にしてストーカーがスーッと追いかけるようにしました。丸・星・□・自分で選んだ小さい画像から形状を選べます。",ko:"마우스와 손가락의 이동 위치를 목표로 스토커가 부드럽게 따라가며 원, 별, □ 또는 사용자가 선택한 작은 이미지를 고를 수 있게 했습니다.",ch:"移动鼠标或手指时，跟随器会以目标位置平滑追踪，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows the target position of mouse or finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.3",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"マウス・指の移動先を目標にしてスーッと追従するようにし、丸・星・□・自分で選んだ小さい画像を選択できるようにしました。",ko:"마우스와 손가락의 이동 위치를 목표로 부드럽게 따라가며 원, 별, □ 또는 사용자 이미지를 선택할 수 있게 했습니다.",ch:"现在会平滑跟随鼠标和手指的移动目标，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows mouse and finger movement, with circle, star, square, or custom small image choices."}},
   {version:"1.2",datetime:"2026-09-16T19:00:00+09:00",title:{ar:"إصدار 3D Block Tap",eo:"Publika versio de 3D Blokfrapeto",ja:"3Dブロッカータップ公開版",ko:"3D 블로커 탭 공개 버전",ch:"3D方块点击公开版",en:"3D Block Tap Release"},description:{ar:"إضافة الكتل ثلاثية الأبعاد ولوحة النتائج والإعدادات والنسخ الاحتياطي .itsme.",eo:"Aldonita 3D-blokoj, poentaro, agordoj kaj .itsme-sekurkopio.",ja:"3Dブロック、スコアボード、設定、.itsmeバックアップを搭載しました。",ko:"3D 블록, 점수판, 설정 및 .itsme 백업을 추가했습니다.",ch:"加入了3D方块、排行榜、设置和.itsme备份。",en:"Added 3D blocks, scoreboard, settings, and .itsme backup."}},
-  {version:"1.1",datetime:"2026-09-15T18:30:00+09:00",title:{ar:"أساس النسخ الاحتياطي",eo:"Bazo de sekurkopio",ja:"バックアップ基盤",ko:"백업 기반",ch:"备份基础",en:"Backup Foundation"},description:{ar:"إضافة أساس حفظ IndexedDB واستعادة النسخ الاحتياطية.",eo:"Aldonita la bazo por IndexedDB-konservado kaj restarigo de sekurkopioj.",ja:"IndexedDB保存とバックアップ復元の基盤を追加しました。",ko:"IndexedDB 저장 및 백업 복원의 기반을 추가했습니다.",ch:"添加了IndexedDB保存和备份恢复基础。",en:"Added the foundation for IndexedDB storage and backup restoration."}},
+  {version:"1.1",datetime:"2026-09-15T18:30:00+09:00",title:{ar:"أساس النسخ الاحتياطي",eo:"Bazo de sekurkopio",ja:"バックアップ基盤",ko:"백업 기반",ch:"备份基础",en:"Backup Foundation"},description:{ar:"إضافة أساس حفظ IndexedDB واستعادة النسخ الاحتياطية.",eo:"Aldonita la bazo por IndexedDB-konservado kaj restarigo de sekurkopioj.",ja:"IndexedDB保存とバックアップ復元の基盤を追加しました。",ko:"IndexedDB 저장 및 백업 복원의 기반을 추가했습니다.",ch:"添加了IndexedDB保存和备份恢复的基础。",en:"Added the foundation for IndexedDB storage and backup restoration."}},
   {version:"1.0",datetime:"2026-09-14T17:00:00+09:00",title:{ar:"إصدار Hello",eo:"Hello-versio",ja:"Helloバージョン",ko:"Hello 버전",ch:"Hello版本",en:"Hello Version"},description:{ar:"النسخة الأولى من 3D Block Tap.",eo:"La unua versio de 3D Blokfrapeto.",ja:"3Dブロッカータップの最初のバージョンです。",ko:"3D 블로커 탭의 첫 번째 버전입니다.",ch:"这是3D方块点击的第一个版本。",en:"The first version of 3D Block Tap."}}
 ];
 
@@ -332,6 +341,7 @@ const state = {
 let db;
 let clockTimer=null;
 let ipTimezone=null;
+let importedShareTab=null;
 function openDB(){
   return new Promise((resolve,reject)=>{
     const r=indexedDB.open(DB_NAME,DB_VERSION);
@@ -719,8 +729,8 @@ function profileAttr(key){return LANGS.map(l=>`${l}="${esc(PROFILE[key]?.[l]??""
 function renderProfile(){
   const p=PROFILE,c=state.customProfile||{}; const field=(key,labelKey)=>`<label class="setting"><span ${mt(labelKey)}>${tr(labelKey)}</span><input id="cp_${key}" maxlength="300" value="${esc(c[key]||"")}"></label>`;
   $("#app").innerHTML=`<section class="panel"><h2 ${mt("profileEdit")}>✏️ ${tr("profileEdit")}</h2><div class="grid">${field("name","profileName")}${field("birth","profileBirth")}${field("gender","profileGender")}${field("from","profileFrom")}${field("hobby","profileHobby")}${field("motto","profileMotto")}${field("message","profileMessage")}</div><div class="row" style="margin-top:12px"><button class="primary" id="saveProfile" ${mt("profileSave")}>${tr("profileSave")}</button><button id="resetProfile" ${mt("profileReset")}>${tr("profileReset")}</button></div></section>
-  <section class="panel"><h2 ${mt("profileEdit")}>👤 ${tr("profileEdit")}</h2><div class="grid"><div class="card"><b ${mt("profileName")}>${tr("profileName")}</b><p>${esc(c.name||state.playerName||"")}</p></div><div class="card"><b ${mt("profileBirth")}>${tr("profileBirth")}</b><p>${esc(c.birth||"")}</p></div><div class="card"><b ${mt("profileGender")}>${tr("profileGender")}</b><p>${esc(c.gender||"")}</p></div><div class="card"><b ${mt("profileFrom")}>${tr("profileFrom")}</b><p>${esc(c.from||"")}</p></div><div class="card"><b ${mt("profileHobby")}>${tr("profileHobby")}</b><p>${esc(c.hobby||"")}</p></div><div class="card"><b ${mt("profileMotto")}>${tr("profileMotto")}</b><p>${esc(c.motto||"")}</p></div><div class="card"><b ${mt("profileMessage")}>${tr("profileMessage")}</b><p>${esc(c.message||"")}</p></div></div></section><section class="panel"><h2 ${mt("profileInfo")}>👤 ${tr("profileInfo")}</h2><div class="grid"><div class="card"><b ${mt("author")}>${tr("author")}</b><p ${profileAttr("author")}>${esc(localizedObject(p.author))}</p></div><div class="card"><b ${mt("birth")}>${tr("birth")}</b><p ${profileAttr("birth")}>${esc(localizedObject(p.birth))}</p></div><div class="card"><b ${mt("gender")}>${tr("gender")}</b><p ${profileAttr("gender")}>${esc(localizedObject(p.gender))}</p></div><div class="card"><b ${mt("from")}>${tr("from")}</b><p ${profileAttr("from")}>${esc(localizedObject(p.from))}</p></div><div class="card"><b ${mt("hobby")}>${tr("hobby")}</b><p ${profileAttr("hobby")}>${esc(localizedObject(p.hobby))}</p></div><div class="card"><b ${mt("motto")}>${tr("motto")}</b><p ${profileAttr("motto")}>${esc(localizedObject(p.motto))}</p></div><div class="card"><b ${mt("message")}>${tr("message")}</b><p ${profileAttr("message")}>${esc(localizedObject(p.message))}</p></div></div></section>
-  <section class="panel"><h2 ${mt("profileEdit")}>📥 ${tr("profileEdit")}</h2><div class="row" id="profileExports"><span ${mt("exports")}>${tr("exports")}</span>${exportButtonHtml("profile")}</div></section><section class="panel"><h2 ${mt("opened")}>⏱️ ${tr("opened")}</h2><div id="ageGrid" class="grid"></div></section><section class="panel"><h2 ${mt("lines")}>🧩 ${tr("lines")}</h2><div id="lineGrid" class="grid"></div><p class="muted" ${profileAttr("lineNote")}>${esc(localizedObject(p.lineNote))}</p></section>`;
+  <section class="panel"><h2 ${mt("profileEdit")}>👤 ${tr("profileEdit")}</h2><div class="grid"><div class="card"><b ${mt("profileName")}>${tr("profileName")}</b><p>${esc(c.name||state.playerName||"")}</p></div><div class="card"><b ${mt("profileBirth")}>${tr("profileBirth")}</b><p>${esc(c.birth||"")}</p></div><div class="card"><b ${mt("profileGender")}>${tr("profileGender")}</b><p>${esc(c.gender||"")}</p></div><div class="card"><b ${mt("profileFrom")}>${tr("profileFrom")}</b><p>${esc(c.from||"")}</p></div><div class="card"><b ${mt("profileHobby")}>${tr("profileHobby")}</b><p>${esc(c.hobby||"")}</p></div><div class="card"><b ${mt("profileMotto")}>${tr("profileMotto")}</b><p>${esc(c.motto||"")}</p></div><div class="card"><b ${mt("profileMessage")}>${tr("profileMessage")}</b><p>${esc(c.message||"")}</p></div></div></section><section class="panel"><h2 ${mt("profileInfo")}>👤 ${tr("profileInfo")}</h2><div class="card" style="margin-bottom:12px"><b>🤖 AI</b><p ${profileAttr("aiNote")}>${esc(localizedObject(p.aiNote))}</p></div><div class="grid"><div class="card"><b ${mt("author")}>${tr("author")}</b><p ${profileAttr("author")}>${esc(localizedObject(p.author))}</p></div><div class="card"><b ${mt("birth")}>${tr("birth")}</b><p ${profileAttr("birth")}>${esc(localizedObject(p.birth))}</p></div><div class="card"><b ${mt("gender")}>${tr("gender")}</b><p ${profileAttr("gender")}>${esc(localizedObject(p.gender))}</p></div><div class="card"><b ${mt("from")}>${tr("from")}</b><p ${profileAttr("from")}>${esc(localizedObject(p.from))}</p></div><div class="card"><b ${mt("hobby")}>${tr("hobby")}</b><p ${profileAttr("hobby")}>${esc(localizedObject(p.hobby))}</p></div><div class="card"><b ${mt("motto")}>${tr("motto")}</b><p ${profileAttr("motto")}>${esc(localizedObject(p.motto))}</p></div><div class="card"><b ${mt("message")}>${tr("message")}</b><p ${profileAttr("message")}>${esc(localizedObject(p.message))}</p></div></div></section>
+  <section class="panel"><h2 ${mt("profileEdit")}>📥 ${tr("profileEdit")}</h2><div class="row" id="profileExports"><span ${mt("exports")}>${tr("exports")}</span>${exportButtonHtml("profile")}</div></section><section class="panel"><h2 ${mt("opened")}>⏱️ ${tr("opened")}</h2><div id="ageGrid" class="grid"></div></section><section class="panel"><h2 ${mt("lines")}>🧩 ${tr("lines")}</h2><div id="lineGrid" class="grid"></div><p id="lineLiveNote" class="muted" ${profileAttr("lineNote")}>${esc(localizedObject(p.lineNote))}</p></section>`;
   $("#saveProfile").onclick=async()=>{saveCustomProfileFromForm();state.playerName=(state.customProfile.name||state.playerName||"プレイヤー").trim()||"プレイヤー";await saveState();renderProfile();toast(tr("saved"))}; $("#resetProfile").onclick=async()=>{state.customProfile={name:"",birth:"",gender:"",from:"",hobby:"",motto:"",message:""};await saveState();renderProfile();toast(tr("saved"))}; document.querySelectorAll("#profileExports [data-export]").forEach(b=>b.onclick=()=>exportProfile(b.dataset.export)); updateAge();updateLines();applyI18nAttributes($("#app"));
 }
 function saveCustomProfileFromForm(){const c=state.customProfile||{}; ["name","birth","gender","from","hobby","motto","message"].forEach(k=>{const el=$("#cp_"+k);c[k]=el?el.value.slice(0,300):""}); state.customProfile=c;}
@@ -731,15 +741,21 @@ function updateAge(){
   const el=$("#ageGrid");if(el)el.innerHTML=vals.map(x=>`<div class="card"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
 }
 function countLines(text){const s=String(text??"").replace(/\r\n?/g,"\n");return s? s.split("\n").length:0}
-const SOURCE_LINE_COUNTS={html:68,css:16,js:678,total:762};
 function countSourceLines(){
-  /* 単一HTMLファイルそのものを基準にした固定解析値。DOM生成後の内容はHTML行数へ混入させません。 */
-  return {...SOURCE_LINE_COUNTS};
+  // 実行中ページを基準に、HTML本体（style/scriptを除外）・CSS・JavaScriptを再集計。
+  const root=document.documentElement.cloneNode(true);
+  root.querySelectorAll("style,script,noscript").forEach(el=>el.remove());
+  const html=countLines(root.outerHTML);
+  const css=[...document.querySelectorAll("style")].map(el=>el.textContent||"").join("\n");
+  const js=[...document.querySelectorAll("script")].map(el=>el.textContent||"").join("\n");
+  const c=countLines(css),j=countLines(js);
+  return {html,css:c,js:j,total:html+c+j};
 }
 function updateLines(){
   const src=countSourceLines(),profileText=JSON.stringify(state.customProfile||{},null,2),p=countLines(profileText);
   const a=src.html,b=src.css,c=src.js,d=src.total;
-  const el=$("#lineGrid");if(el)el.innerHTML=[[tr("html"),a],[tr("css"),b],[tr("js"),c],[tr("profileLines"),p],[tr("total"),d]].map(x=>`<div class="card"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
+  const el=$("#lineGrid");if(el)el.innerHTML=[[tr("html"),a],[tr("css"),b],[tr("js"),c],[tr("profileLines"),p],[tr("total"),d]].map(x=>`<div class="card live-line"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
+  const note=$("#lineLiveNote");if(note){note.textContent=tr("shareLineNote");note.setAttribute("data-i18n","shareLineNote");}
 }
 function renderHow(){
   $("#app").innerHTML=`<section class="panel"><h2 ${mt("how")}>❔ ${tr("how")}</h2><p ${mt("howText")}>${tr("howText")}</p>
@@ -757,6 +773,9 @@ function renderSettings(){
   </section>
   <section class="panel"><h2 ${mt("backup")}>🌐 ${tr("backup")}</h2><p class="muted" ${profileAttr("backupNote")}>${esc(localizedObject(PROFILE.backupNote))}</p>
   <div class="row"><button class="primary" id="backup2" ${mt("backup")}>${tr("backup")}</button><button id="restore2" ${mt("restore")}>${tr("restore")}</button></div></section>
+  <section class="panel"><h2 ${mt("shareState")}>🔗 ${tr("shareState")}</h2>
+  <div class="row"><button class="primary" id="createShareUrl" ${mt("shareCreate")}>🔗 ${tr("shareCreate")}</button><button id="copyShareUrl" ${mt("shareCopy")} disabled>📋 ${tr("shareCopy")}</button></div>
+  <p id="shareStatus" class="muted"></p><p><b ${mt("shareId")}>${tr("shareId")}</b>: <span id="shareId" class="share-id">—</span></p><textarea id="shareUrl" class="share-url" readonly aria-label="${esc(tr("shareState"))}" placeholder="${esc(tr("shareCreate"))}"></textarea></section>
   <section class="panel"><h2 ${mt("deleteData")}>🗑 ${tr("deleteData")}</h2><p class="muted" ${mt("deleteWarning")}>${tr("deleteWarning")}</p><button class="danger" id="delete2" ${mt("deleteData")}>🗑 ${tr("deleteData")}</button></section>`;
   $("#themeSelect").onchange=async e=>{state.theme=e.target.value;applyTheme();await saveState();renderSettings()};
   $("#seconds").onchange=e=>{state.seconds=e.target.checked;saveState();renderSettings()};
@@ -767,6 +786,8 @@ function renderSettings(){
   $("#headerSelect").onchange=e=>{state.header=e.target.value==="1";saveState();renderSettings();applyHeader()};
   $("#fontSelect").onchange=e=>{state.arabicFont=e.target.value;saveState();setLanguage(state.lang)};
   $("#backup2").onclick=downloadBackup;$("#restore2").onclick=()=>$("#restoreInput").click();$("#delete2").onclick=confirmDeleteSequence;
+  $("#createShareUrl").onclick=createShareUrl;$("#copyShareUrl").onclick=copyShareUrl;
+  const existing=getShareFromUrl();if(existing){$("#shareId").textContent=existing.id;$("#shareUrl").value=location.href;$("#copyShareUrl").disabled=false;}
 }
 function renderHistory(){
   $("#app").innerHTML=`<section class="panel"><div class="between"><h2 ${mt("history")}>📝 ${tr("history")}</h2><div class="row"><button id="sortNew" ${mt("newest")}>${tr("newest")}</button><button id="sortOld" ${mt("oldest")}>${tr("oldest")}</button><button id="txt" ${mt("txt")}>${tr("txt")}</button><button id="copy" ${mt("copy")}>${tr("copy")}</button></div></div>
@@ -818,6 +839,65 @@ async function exportCanvas(canvas,format,base){if(format==="gif"){try{downloadB
 function encodeGIF(canvas){const w=Math.min(640,canvas.width),h=Math.min(640,Math.round(canvas.height*w/canvas.width)),tmp=document.createElement("canvas");tmp.width=w;tmp.height=h;const ctx=tmp.getContext("2d");ctx.drawImage(canvas,0,0,w,h);const d=ctx.getImageData(0,0,w,h).data,pal=new Uint8Array(256*3);for(let i=0;i<256;i++){pal[i*3]=((i>>5)&7)*255/7;pal[i*3+1]=((i>>2)&7)*255/7;pal[i*3+2]=(i&3)*255/3}const idx=new Uint8Array(w*h);for(let i=0,j=0;i<d.length;i+=4,j++)idx[j]=((d[i]*7/255)<<5)|((d[i+1]*7/255)<<2)|(d[i+2]*3/255);return gifBytes(w,h,pal,idx);}
 function gifBytes(w,h,pal,pixels){const out=[],put=v=>out.push(...v);put([...new TextEncoder().encode("GIF89a"),w&255,w>>8,h&255,h>>8,0xF7,0,0,...pal]);put([0x21,0xF9,4,0,0,0,0,0,0x2C,0,0,0,0,w&255,w>>8,h&255,h>>8,0,0]);const clear=256,end=257,codeSize=9,bitsPer=codeSize,bytes=[];let bits=0,cur=0;const emit=c=>{cur|=c<<bits;bits+=bitsPer;while(bits>=8){bytes.push(cur&255);cur>>=8;bits-=8}};emit(clear);for(const px of pixels)emit(px);emit(end);if(bits)bytes.push(cur&255);for(let i=0;i<bytes.length;i+=255){const n=Math.min(255,bytes.length-i);put([n,...bytes.slice(i,i+n)])}put([0,0x3B]);return new Uint8Array(out);}
 function fallbackCopy(text){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();toast(tr("copied"))}
+function randomShareId(){
+  const raw=(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}-${Math.random()}`).replace(/-/g,"");
+  return raw.slice(0,12).toUpperCase();
+}
+function bytesToBase64Url(bytes){
+  let bin="";for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"");
+}
+function base64UrlToBytes(s){
+  const b64=s.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-s.length%4)%4);const bin=atob(b64),out=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out;
+}
+function textToBase64Url(text){return bytesToBase64Url(new TextEncoder().encode(text));}
+function base64UrlToText(s){return new TextDecoder().decode(base64UrlToBytes(s));}
+async function gzipText(text){
+  if(!window.CompressionStream)return null;
+  const cs=new CompressionStream("gzip"),w=cs.writable.getWriter();w.write(new TextEncoder().encode(text));w.close();return bytesToBase64Url(new Uint8Array(await new Response(cs.readable).arrayBuffer()));
+}
+async function gunzipText(s){
+  if(!window.DecompressionStream)return null;
+  const ds=new DecompressionStream("gzip"),w=ds.writable.getWriter();w.write(base64UrlToBytes(s));w.close();return new TextDecoder().decode(await new Response(ds.readable).arrayBuffer());
+}
+function shareSnapshot(){
+  const copy=JSON.parse(JSON.stringify(state));
+  // 履歴はアプリ本体の正本として別端末でも再構築できるため、URLを軽くする。
+  delete copy.history;
+  return {format:"blocker-tap-share",version:APP_VERSION,createdAt:new Date().toISOString(),tab:normalizeTab(location.hash),state:copy};
+}
+async function createShareUrl(){
+  try{
+    const id=randomShareId(),json=JSON.stringify(shareSnapshot());
+    let mode="r",payload=textToBase64Url(json);const gz=await gzipText(json);if(gz&&gz.length<payload.length){mode="g";payload=gz;}
+    const u=new URL(location.href);u.searchParams.set("share",`${id}.${mode}.${payload}`);u.hash="#"+normalizeTab(location.hash);
+    const url=u.toString();
+    if(url.length>16000){
+      // 画像などが巨大な場合でも、基本設定は共有できるように再生成。
+      const lite=shareSnapshot();lite.state.scores=[];lite.state.stalkerImage="";
+      const lj=JSON.stringify(lite),lg=await gzipText(lj);payload=lg||textToBase64Url(lj);mode=lg?"g":"r";u.searchParams.set("share",`${id}.${mode}.${payload}`);
+    }
+    $("#shareId").textContent=id;$("#shareUrl").value=u.toString();$("#copyShareUrl").disabled=false;history.replaceState(null,"",u.toString());toast(tr("shareReady"));
+  }catch(e){modal(tr("invalid"),tr("shareInvalid"));}
+}
+async function copyShareUrl(){const el=$("#shareUrl"),text=el?.value||"";if(!text)return;try{await navigator.clipboard.writeText(text);toast(tr("shareCopied"));}catch(e){fallbackCopy(text);}}
+function getShareFromUrl(){
+  try{const raw=new URL(location.href).searchParams.get("share");if(!raw)return null;const [id,mode,payload]=raw.split(".",3);if(!id||!mode||!payload)throw new Error("bad share");return {id,mode,payload};}catch(e){return null;}
+}
+async function importShareFromUrl(){
+  const info=getShareFromUrl();if(!info)return false;
+  try{
+    const text=info.mode==="g"?await gunzipText(info.payload):base64UrlToText(info.payload);if(!text)throw new Error("decode");
+    const data=JSON.parse(text);if(data.format!=="blocker-tap-share"||!data.state)throw new Error("format");
+    const d=migration({...data.state,version:data.version||APP_VERSION});Object.assign(state,d);state.history=normalizeHistory(DEFAULT_HISTORY);
+    importedShareTab=normalizeTab(data.tab||"game");
+    if(!LANGS.includes(state.lang))state.lang="ja";if(!DIFFICULTIES.some(x=>x.id===state.difficulty))state.difficulty="normal";if(!["dark","light","auto"].includes(state.theme))state.theme=DEFAULT_THEME;
+    if(!Array.isArray(state.colors))state.colors=[];if(!Array.isArray(state.scores))state.scores=[];state.colors=state.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
+    await saveState();return true;
+  }catch(e){console.warn("share import failed",e);toast(tr("shareInvalid"));return false;}
+}
+
 function migration(data){
   const v=String(data.version||"0.0.0"), nums=v.split(".").map(x=>parseInt(x,10)||0), cur=APP_VERSION.split(".").map(x=>parseInt(x,10)||0);
   const newer=(nums[0]>cur[0])||(nums[0]===cur[0]&&nums[1]>cur[1])||(nums[0]===cur[0]&&nums[1]===cur[1]&&nums[2]>cur[2]);
@@ -949,12 +1029,14 @@ async function resolveIPTimezone(){
   }catch(e){}
 }
 
-setInterval(()=>{if(location.hash.slice(1)==="profile")updateAge();},100);
+setInterval(()=>{if(location.hash.slice(1)==="profile"){updateAge();updateLines();}},100);
 window.addEventListener("hashchange",()=>{renderTabs();render()});
 (async()=>{
   await loadState();
+  await importShareFromUrl();
   applyTheme();
-  if(!location.hash)location.hash="game";
+  if(importedShareTab)location.hash="#"+importedShareTab;
+  else if(!location.hash)location.hash="game";
   ipTimezone=state.ipTimezone||null;
   setLanguage(state.lang);
   applyStalker();
