@@ -1,0 +1,933 @@
+(() => {
+"use strict";
+
+/* =========================
+   3Dブロッカータップ
+   Single-file / offline-first
+   ========================= */
+
+const APP_VERSION = "1.10";
+const DB_NAME = "blocker-tap";
+const DB_VERSION = 1;
+const STORE = "state";
+const OPENED_AT = "2026-09-14T17:00:00+09:00";
+const LANGS = ["ar","eo","ja","ko","ch","en"];
+const LANG_NAMES = {ar:"AR",eo:"EO",ja:"JA",ko:"KO",ch:"中文",en:"EN"};
+const DURATIONS = [15,30,46,60,75,90,105,120];
+const DIFFICULTIES = [
+  // speed = falling speed multiplier / spawn = spawn pressure / size = block size / cap = simultaneous block cap
+  {id:"breakfast",key:"difficultyBreakfast",speed:0.55,spawn:0.55,size:1.60,cap:6},
+  {id:"easy",key:"difficultyEasy",speed:0.78,spawn:0.72,size:1.30,cap:8},
+  {id:"normal",key:"difficultyNormal",speed:1.00,spawn:1.00,size:1.00,cap:12},
+  {id:"littleHard",key:"difficultyLittleHard",speed:1.30,spawn:1.35,size:0.86,cap:15},
+  {id:"hard",key:"difficultyHard",speed:1.65,spawn:1.80,size:0.76,cap:18},
+  {id:"demon",key:"difficultyDemon",speed:2.10,spawn:2.40,size:0.66,cap:23},
+  {id:"level100",key:"difficulty100",speed:2.75,spawn:3.25,size:0.54,cap:30}
+];
+
+const T = {
+  ja:{
+    title:"3Dブロッカータップ",game:"ゲーム",scores:"スコアボード",colors:"カラー",profile:"プロフィール",
+    history:"更新履歴",how:"使い方",settings:"設定",start:"ゲーム開始",restart:"もう一度",duration:"制限時間",difficulty:"難易度",difficultyBreakfast:"朝飯前",difficultyEasy:"楽勝",difficultyNormal:"ふつう",difficultyLittleHard:"ちょっと難しい",difficultyHard:"結構難しい",difficultyDemon:"オニ",difficulty100:"辛酸レベル100",durationUnit:"秒間",
+    score:"スコア",time:"残り時間",ready:"クリック/タップでブロックを消そう！",gameover:"ゲーム終了",
+    noScores:"まだスコアがありません。",rank:"順位",name:"名前",date:"日時",points:"点",page:"ページ",selectedDifficulty:"選択難易度",selectedDuration:"選択制限時間",unrecorded:"未記録",
+    search:"更新履歴を検索",newest:"最新順",oldest:"古い順",txt:"TXT出力",copy:"一括コピー",
+    seconds:"秒を表示",milliseconds:"ミリ秒を表示",stalker:"マウスストーカー",header:"ヘッダー",
+    on:"ON",off:"OFF",font:"アラビア語フォント",amiri:"Amiri",noto:"Noto Sans Arabic",
+    colorsAuto:"色を未設定にすると自動生成",addColor:"色を追加",remove:"削除",save:"保存",
+    opened:"サイト開設期間",days:"開設日数",minutes:"開設分数",secs:"開設秒数",millis:"開設ミリ秒数",
+    lines:"ソースコード行数",html:"HTML行数",css:"CSS行数",js:"JavaScript行数",total:"総行数",
+    backup:"バックアップ",restore:"復元",profileInfo:"作者情報",author:"作者名",birth:"生年月",
+    gender:"性別",from:"出身地",hobby:"趣味",motto:"格言・好きな言葉",message:"一言",
+    howText:"落下する3Dブロックをマウスクリックまたはタップして消します。制限時間内にできるだけ多く消してください。ブロックが床まで落ちてもゲームは続きます。",
+    headerHidden:"ヘッダーを表示",headerShown:"ヘッダーを非表示",future:"このバックアップは現在のアプリより新しいため復元できません。",
+    invalid:"バックアップ形式が不正です。",restored:"バックアップを復元しました。",saved:"保存しました。",
+    copied:"コピーしました。",downloaded:"TXTを出力しました。",noHistory:"該当する更新履歴がありません。",
+    deleteData:"データ全削除",deleteWarning:"保存されているアプリデータをすべて削除します。",confirmDelete:"本当に削除しますか？",yes:"Yes",no:"No",deleteStep:"削除確認 %n/5",deleteWorking:"保存データを削除しています…",deleteWait:"初期化しています。しばらくお待ちください。",howPC:"PC: マウスでブロックをクリック",howTouch:"スマホ/タブレット: タップ",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120秒間",howSave:"設定とスコアはIndexedDBに保存されます。"
+  },
+  en:{
+    title:"3D Block Tap",game:"Game",scores:"Scoreboard",colors:"Colors",profile:"Profile",
+    history:"Changelog",how:"How to play",settings:"Settings",start:"Start game",restart:"Play again",duration:"Time limit",difficulty:"Difficulty",difficultyBreakfast:"Piece of cake",difficultyEasy:"Easy",difficultyNormal:"Normal",difficultyLittleHard:"A little hard",difficultyHard:"Quite hard",difficultyDemon:"Demon",difficulty100:"Bitterness level 100",durationUnit:" seconds",
+    score:"Score",time:"Time left",ready:"Click/tap the blocks!",gameover:"Game over",
+    noScores:"No scores yet.",rank:"Rank",name:"Name",date:"Date",points:"pts",page:"Page",selectedDifficulty:"Selected difficulty",selectedDuration:"Selected time limit",unrecorded:"Unrecorded",
+    search:"Search changelog",newest:"Newest",oldest:"Oldest",txt:"Export TXT",copy:"Copy all",
+    seconds:"Show seconds",milliseconds:"Show milliseconds",stalker:"Mouse stalker",header:"Header",
+    on:"ON",off:"OFF",font:"Arabic font",amiri:"Amiri",noto:"Noto Sans Arabic",
+    colorsAuto:"Leave colors unset to generate them automatically",addColor:"Add color",remove:"Remove",save:"Save",
+    opened:"Site age",days:"Days",minutes:"Minutes",secs:"Seconds",millis:"Milliseconds",
+    lines:"Source code lines",html:"HTML lines",css:"CSS lines",js:"JavaScript lines",total:"Total",
+    backup:"Backup",restore:"Restore",profileInfo:"Author information",author:"Author",birth:"Born",
+    gender:"Gender",from:"From",hobby:"Hobby",motto:"Motto",message:"Message",
+    howText:"Click or tap falling 3D blocks to remove them. Clear as many as possible before time runs out.",
+    headerHidden:"Show header",headerShown:"Hide header",future:"This backup was made by a newer app version and cannot be restored.",
+    invalid:"Invalid backup file.",restored:"Backup restored.",saved:"Saved.",copied:"Copied.",downloaded:"TXT exported.",noHistory:"No matching entries.",
+    deleteData:"Delete all data",deleteWarning:"All saved app data will be deleted.",confirmDelete:"Are you sure you want to delete it?",yes:"Yes",no:"No",deleteStep:"Delete confirmation %n/5",deleteWorking:"Deleting saved data…",deleteWait:"Initializing. Please wait.",howPC:"PC: Click blocks with the mouse",howTouch:"Phone/tablet: Tap",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120 seconds",howSave:"Settings and scores are stored in IndexedDB."
+  },
+  ko:{
+    title:"3D 블로커 탭",game:"게임",scores:"점수판",colors:"색상",profile:"프로필",history:"업데이트 기록",how:"사용법",settings:"설정",
+    start:"게임 시작",restart:"다시 하기",difficulty:"난이도",difficultyBreakfast:"누워서 떡 먹기",difficultyEasy:"아주 쉬움",difficultyNormal:"보통",difficultyLittleHard:"조금 어려움",difficultyHard:"꽤 어려움",difficultyDemon:"오니",difficulty100:"고생 레벨 100",duration:"제한 시간",durationUnit:"초간",score:"점수",time:"남은 시간",ready:"블록을 클릭/탭하세요!",gameover:"게임 종료",
+    noScores:"아직 점수가 없습니다.",rank:"순위",name:"이름",date:"날짜",points:"점",page:"페이지",selectedDifficulty:"선택 난이도",selectedDuration:"선택 시간 제한",unrecorded:"기록 없음",search:"업데이트 기록 검색",
+    newest:"최신순",oldest:"오래된순",txt:"TXT 저장",copy:"전체 복사",seconds:"초 표시",milliseconds:"밀리초 표시",
+    stalker:"마우스 스토커",header:"헤더",on:"ON",off:"OFF",font:"아랍어 글꼴",amiri:"Amiri",noto:"Noto Sans Arabic",
+    colorsAuto:"색을 비워두면 자동 생성됩니다.",addColor:"색상 추가",remove:"삭제",save:"저장",opened:"사이트 개설 기간",
+    days:"개설 일수",minutes:"개설 분수",secs:"개설 초수",millis:"개설 밀리초수",lines:"소스 코드 줄 수",html:"HTML 줄 수",
+    css:"CSS 줄 수",js:"JavaScript 줄 수",total:"총 줄 수",backup:"백업",restore:"복원",profileInfo:"작성자 정보",
+    author:"작성자",birth:"생년월",gender:"성별",from:"출신지",hobby:"취미",motto:"좌우명",message:"한마디",
+    howText:"떨어지는 3D 블록을 마우스 클릭 또는 탭으로 제거하세요.",headerHidden:"헤더 표시",headerShown:"헤더 숨기기",
+    future:"현재 앱보다 새로운 버전의 백업은 복원할 수 없습니다.",invalid:"잘못된 백업 파일입니다.",restored:"백업을 복원했습니다.",
+    saved:"저장했습니다.",copied:"복사했습니다.",downloaded:"TXT를 저장했습니다.",noHistory:"일치하는 기록이 없습니다.",
+    deleteData:"모든 데이터 삭제",deleteWarning:"저장된 앱 데이터를 모두 삭제합니다.",confirmDelete:"정말 삭제하시겠습니까?",yes:"예",no:"아니요",deleteStep:"삭제 확인 %n/5",deleteWorking:"저장 데이터를 삭제하는 중…",deleteWait:"초기화 중입니다. 잠시 기다려 주세요.",howPC:"PC: 마우스로 블록 클릭",howTouch:"스마트폰/태블릿: 탭",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120초",howSave:"설정과 점수는 IndexedDB에 저장됩니다."
+  },
+  ch:{
+    title:"3D方块点击",game:"游戏",scores:"排行榜",colors:"颜色",profile:"个人资料",history:"更新记录",how:"使用方法",settings:"设置",
+    start:"开始游戏",restart:"再玩一次",difficulty:"难度",difficultyBreakfast:"小菜一碟",difficultyEasy:"轻松",difficultyNormal:"普通",difficultyLittleHard:"有点难",difficultyHard:"相当难",difficultyDemon:"鬼级",difficulty100:"辛酸等级100",duration:"时间限制",durationUnit:"秒",score:"分数",time:"剩余时间",ready:"点击/轻触方块！",gameover:"游戏结束",
+    noScores:"还没有分数。",rank:"排名",name:"名称",date:"日期",points:"分",page:"页",selectedDifficulty:"选择难度",selectedDuration:"选择时间限制",unrecorded:"未记录",search:"搜索更新记录",
+    newest:"最新",oldest:"最旧",txt:"导出TXT",copy:"全部复制",seconds:"显示秒",milliseconds:"显示毫秒",
+    stalker:"鼠标跟随",header:"页眉",on:"开",off:"关",font:"阿拉伯语字体",amiri:"Amiri",noto:"Noto Sans Arabic",
+    colorsAuto:"不设置颜色时自动生成",addColor:"添加颜色",remove:"删除",save:"保存",opened:"网站运行时间",
+    days:"天",minutes:"分钟",secs:"秒間",millis:"毫秒",lines:"源代码行数",html:"HTML行数",css:"CSS行数",js:"JavaScript行数",total:"总行数",
+    backup:"备份",restore:"恢复",profileInfo:"作者信息",author:"作者",birth:"出生年月",gender:"性别",from:"出生地",hobby:"爱好",
+    motto:"格言",message:"一句话",howText:"点击或轻触下落的3D方块来消除它们，在时间结束前尽可能多地消除。",
+    headerHidden:"显示页眉",headerShown:"隐藏页眉",future:"此备份版本比当前应用更新，无法恢复。",invalid:"备份文件无效。",
+    restored:"备份已恢复。",saved:"已保存。",copied:"已复制。",downloaded:"TXT已导出。",noHistory:"没有匹配的记录。",
+    deleteData:"删除全部数据",deleteWarning:"将删除所有已保存的应用数据。",confirmDelete:"确定要删除吗？",yes:"是",no:"否",deleteStep:"删除确认 %n/5",deleteWorking:"正在删除保存的数据…",deleteWait:"正在初始化，请稍候。",howPC:"电脑：用鼠标点击方块",howTouch:"手机/平板：轻触",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120秒間",howSave:"设置和分数保存在IndexedDB中。"
+  },
+  eo:{
+    title:"3D Blokfrapeto",game:"Ludo",scores:"Poentaro",colors:"Koloroj",profile:"Profilo",history:"Ĝisdatigoj",how:"Kiel ludi",settings:"Agordoj",
+    start:"Komenci",restart:"Reludi",difficulty:"Malfacileco",difficultyBreakfast:"Matenmanĝo-ŝerco",difficultyEasy:"Facila",difficultyNormal:"Normala",difficultyLittleHard:"Iom malfacila",difficultyHard:"Sufiĉe malfacila",difficultyDemon:"Demona",difficulty100:"Malfacila nivelo 100",duration:"Tempolimo",durationUnit:" sekundoj",score:"Poentoj",time:"Restanta tempo",ready:"Alklaku/frapetu la blokojn!",gameover:"Ludo finiĝis",
+    noScores:"Ankoraŭ neniuj poentoj.",rank:"Rango",name:"Nomo",date:"Dato",points:"poentoj",page:"Paĝo",selectedDifficulty:"Elektita malfacileco",selectedDuration:"Elektita tempolimo",unrecorded:"Ne registrita",search:"Serĉi ĝisdatigojn",
+    newest:"Plej novaj",oldest:"Plej malnovaj",txt:"Elporti TXT",copy:"Kopii ĉion",seconds:"Montri sekundojn",milliseconds:"Montri milisekundojn",
+    stalker:"Musa sekvilo",header:"Kapo",on:"ŜALTITA",off:"MALŜALTITA",font:"Araba tiparo",amiri:"Amiri",noto:"Noto Sans Arabic",
+    colorsAuto:"Se koloroj estas malplenaj, ili estos aŭtomate kreitaj.",addColor:"Aldoni koloron",remove:"Forigi",save:"Konservi",
+    opened:"Daŭro de la retejo",days:"Tagoj",minutes:"Minutoj",secs:"Sekundoj",millis:"Milisekundoj",lines:"Linioj de fontkodo",
+    html:"HTML-linioj",css:"CSS-linioj",js:"JavaScript-linioj",total:"Totalo",backup:"Sekurkopio",restore:"Restarigi",
+    profileInfo:"Informoj pri aŭtoro",author:"Aŭtoro",birth:"Naskiĝo",gender:"Sekso",from:"De",hobby:"Ŝatokupo",motto:"Devizo",message:"Mesaĝo",
+    howText:"Alklaku aŭ frapetu falantajn 3D-blokojn por forigi ilin.",headerHidden:"Montri kapon",headerShown:"Kaŝi kapon",
+    future:"Ĉi tiu sekurkopio estas de pli nova versio kaj ne povas esti restarigita.",invalid:"Nevalida sekurkopio.",
+    restored:"Sekurkopio restarigita.",saved:"Konservita.",copied:"Kopiita.",downloaded:"TXT elportita.",noHistory:"Neniuj kongruoj.",
+    deleteData:"Forigi ĉiujn datumojn",deleteWarning:"Ĉiuj konservitaj aplikaj datumoj estos forigitaj.",confirmDelete:"Ĉu vi vere volas forigi ĝin?",yes:"Jes",no:"Ne",deleteStep:"Konfirmo de forigo %n/5",deleteWorking:"Forigante konservitajn datumojn…",deleteWait:"Inicialigante. Bonvolu atendi.",howPC:"Komputilo: alklaku blokojn per la muso",howTouch:"Telefono/tablojdo: frapetu",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120 sekundoj",howSave:"Agordoj kaj poentoj estas konservitaj en IndexedDB."
+  },
+  ar:{
+    title:"نقر الكتل ثلاثية الأبعاد",game:"اللعبة",scores:"لوحة النتائج",colors:"الألوان",profile:"الملف الشخصي",history:"سجل التحديثات",how:"طريقة اللعب",settings:"الإعدادات",
+    start:"بدء اللعبة",restart:"العب مجدداً",difficulty:"الصعوبة",difficultyBreakfast:"سهل جدًا",difficultyEasy:"سهل",difficultyNormal:"عادي",difficultyLittleHard:"صعب قليلًا",difficultyHard:"صعب جدًا",difficultyDemon:"شيطاني",difficulty100:"مستوى العناء 100",duration:"المدة",score:"النقاط",time:"الوقت المتبقي",ready:"انقر/المس الكتل!",gameover:"انتهت اللعبة",
+    noScores:"لا توجد نتائج بعد.",rank:"الترتيب",name:"الاسم",date:"التاريخ",points:"نقطة",page:"صفحة",selectedDifficulty:"الصعوبة المختارة",selectedDuration:"المدة المختارة",unrecorded:"غير مسجل",search:"بحث في سجل التحديثات",
+    newest:"الأحدث",oldest:"الأقدم",txt:"تصدير TXT",copy:"نسخ الكل",seconds:"إظهار الثواني",milliseconds:"إظهار المللي ثانية",
+    stalker:"متتبع الفأرة",header:"الرأس",on:"تشغيل",off:"إيقاف",font:"خط العربية",amiri:"Amiri",noto:"Noto Sans Arabic",
+    colorsAuto:"اترك الألوان فارغة ليتم إنشاؤها تلقائياً",addColor:"إضافة لون",remove:"حذف",save:"حفظ",opened:"مدة افتتاح الموقع",
+    days:"أيام",minutes:"دقائق",secs:"ثوانٍ",millis:"مللي ثانية",lines:"أسطر المصدر",html:"أسطر HTML",css:"أسطر CSS",js:"أسطر JavaScript",total:"المجموع",
+    backup:"نسخ احتياطي",restore:"استعادة",profileInfo:"معلومات المؤلف",author:"المؤلف",birth:"الميلاد",gender:"الجنس",from:"الموطن",hobby:"الهواية",
+    motto:"المقولة",message:"رسالة",howText:"انقر أو المس الكتل ثلاثية الأبعاد الساقطة لإزالتها.",headerHidden:"إظهار الرأس",headerShown:"إخفاء الرأس",
+    future:"هذا النسخ الاحتياطي أحدث من التطبيق الحالي ولا يمكن استعادته.",invalid:"ملف النسخ الاحتياطي غير صالح.",restored:"تمت استعادة النسخ الاحتياطي.",
+    saved:"تم الحفظ.",copied:"تم النسخ.",downloaded:"تم تصدير TXT.",noHistory:"لا توجد نتائج مطابقة.",
+    deleteData:"حذف جميع البيانات",deleteWarning:"سيتم حذف جميع بيانات التطبيق المحفوظة.",confirmDelete:"هل أنت متأكد من رغبتك في الحذف؟",yes:"نعم",no:"لا",deleteStep:"تأكيد الحذف %n/5",deleteWorking:"جارٍ حذف البيانات المحفوظة…",deleteWait:"جارٍ التهيئة. يرجى الانتظار.",howPC:"الكمبيوتر: انقر على الكتل بالماوس",howTouch:"الهاتف/الجهاز اللوحي: المس",howTime:"15 / 30 / 46 / 60 / 75 / 90 / 105 / 120 ثانية",howSave:"يتم حفظ الإعدادات والنتائج في IndexedDB."
+  }
+};
+Object.assign(T.ja,{playerName:"プレイヤー名",profileEdit:"自分のプロフィール",profileSave:"プロフィールを保存",profileReset:"プロフィールを初期化",profileName:"表示名",profileBirth:"生年月",profileGender:"性別",profileFrom:"出身地",profileHobby:"趣味",profileMotto:"格言・好きな言葉",profileMessage:"一言",exports:"ダウンロード",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"自分プロフィール行数",stalkerShape:"ストーカー形状",circle:"丸",star:"星",square:"□",customImage:"自分の画像",chooseImage:"小さい画像を選択",stalkerImage:"ストーカー画像",exportFailed:"このブラウザではこの形式を生成できません。"});
+Object.assign(T.en,{playerName:"Player name",profileEdit:"My Profile",profileSave:"Save Profile",profileReset:"Reset Profile",profileName:"Display name",profileBirth:"Birth",profileGender:"Gender",profileFrom:"From",profileHobby:"Hobby",profileMotto:"Motto / favorite words",profileMessage:"Message",exports:"Download",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"My profile lines",stalkerShape:"Stalker shape",circle:"Circle",star:"Star",square:"Square",customImage:"My image",chooseImage:"Choose a small image",stalkerImage:"Stalker image",exportFailed:"This browser cannot generate this format."});
+Object.assign(T.ko,{playerName:"플레이어 이름",profileEdit:"내 프로필",profileSave:"프로필 저장",profileReset:"프로필 초기화",profileName:"표시 이름",profileBirth:"생년월일",profileGender:"성별",profileFrom:"출신지",profileHobby:"취미",profileMotto:"좌우명 / 좋아하는 말",profileMessage:"한마디",exports:"다운로드",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"내 프로필 줄 수",stalkerShape:"스토커 모양",circle:"원",star:"별",square:"□",customImage:"내 이미지",chooseImage:"작은 이미지 선택",stalkerImage:"스토커 이미지",exportFailed:"이 브라우저에서는 이 형식을 만들 수 없습니다."});
+Object.assign(T.ch,{playerName:"玩家名称",profileEdit:"我的个人资料",profileSave:"保存个人资料",profileReset:"重置个人资料",profileName:"显示名称",profileBirth:"出生年月",profileGender:"性别",profileFrom:"出生地",profileHobby:"兴趣",profileMotto:"格言 / 喜欢的话",profileMessage:"一句话",exports:"下载",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"我的个人资料行数",stalkerShape:"跟随器形状",circle:"圆",star:"星",square:"□",customImage:"我的图片",chooseImage:"选择小图片",stalkerImage:"跟随器图片",exportFailed:"此浏览器无法生成此格式。"});
+Object.assign(T.eo,{playerName:"Nomo de ludanto",profileEdit:"Mia profilo",profileSave:"Konservi profilon",profileReset:"Restarigi profilon",profileName:"Montrata nomo",profileBirth:"Naskiĝo",profileGender:"Sekso",profileFrom:"De",profileHobby:"Ŝatokupoj",profileMotto:"Moto / ŝatataj vortoj",profileMessage:"Mesaĝo",exports:"Elŝuti",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"Linioj de mia profilo",stalkerShape:"Formo de sekvilo",circle:"Rondo",star:"Stelo",square:"□",customImage:"Mia bildo",chooseImage:"Elektu malgrandan bildon",stalkerImage:"Bildo de sekvilo",exportFailed:"Ĉi tiu retumilo ne povas generi ĉi tiun formaton."});
+Object.assign(T.ar,{playerName:"اسم اللاعب",profileEdit:"ملفي الشخصي",profileSave:"حفظ الملف الشخصي",profileReset:"إعادة تعيين الملف الشخصي",profileName:"الاسم المعروض",profileBirth:"تاريخ الميلاد",profileGender:"الجنس",profileFrom:"من",profileHobby:"الهوايات",profileMotto:"الحكمة / الكلمات المفضلة",profileMessage:"رسالة",exports:"تنزيل",png:"PNG",avif:"AVIF",webp:"WebP",jpg:"JPG",gif:"GIF",htmlExport:"HTML",profileLines:"أسطر ملفي الشخصي",stalkerShape:"شكل المتتبع",circle:"دائرة",star:"نجمة",square:"□",customImage:"صورتي",chooseImage:"اختر صورة صغيرة",stalkerImage:"صورة المتتبع",exportFailed:"لا يمكن لهذا المتصفح إنشاء هذا التنسيق."});
+// テーマ切り替え用の追加翻訳（既存の翻訳ロジックはそのまま利用）
+Object.assign(T.ja,{theme:"テーマ",themeDark:"ダーク",themeLight:"ライト",themeAuto:"自動（端末設定）"});
+Object.assign(T.en,{theme:"Theme",themeDark:"Dark",themeLight:"Light",themeAuto:"Auto (system)"});
+Object.assign(T.ko,{theme:"테마",themeDark:"다크",themeLight:"라이트",themeAuto:"자동 (시스템)"});
+Object.assign(T.ch,{theme:"主题",themeDark:"深色",themeLight:"浅色",themeAuto:"自动（系统）"});
+Object.assign(T.eo,{theme:"Temo",themeDark:"Malhela",themeLight:"Luma",themeAuto:"Aŭtomata (sistemo)"});
+Object.assign(T.ar,{theme:"السمة",themeDark:"داكن",themeLight:"فاتح",themeAuto:"تلقائي (النظام)"});
+Object.assign(T.ja,{shareState:"現在の状態をURL共有",shareCreate:"共有URLを作成",shareCopy:"共有URLをコピー",shareId:"共有ID",shareReady:"共有URLを作成しました。別の端末で開くと、この状態を読み込めます。",shareTooLong:"状態が大きすぎるため、URL共有用にスコア履歴などを圧縮しました。",shareInvalid:"共有URLの状態を読み込めませんでした。",shareLineNote:"HTML・CSS・JavaScriptの行数を現在のページからリアルタイム集計します。",shareCopied:"共有URLをコピーしました。"});
+Object.assign(T.en,{shareState:"Share current state by URL",shareCreate:"Create share URL",shareCopy:"Copy share URL",shareId:"Share ID",shareReady:"A share URL was created. Open it on another device to load this state.",shareTooLong:"The state was compressed for URL sharing.",shareInvalid:"The shared URL state could not be loaded.",shareLineNote:"HTML, CSS, and JavaScript line counts are updated from the current page in real time.",shareCopied:"Share URL copied."});
+Object.assign(T.ko,{shareState:"현재 상태를 URL로 공유",shareCreate:"공유 URL 만들기",shareCopy:"공유 URL 복사",shareId:"공유 ID",shareReady:"공유 URL을 만들었습니다. 다른 기기에서 열면 이 상태를 불러옵니다.",shareTooLong:"URL 공유를 위해 상태를 압축했습니다.",shareInvalid:"공유 URL 상태를 불러오지 못했습니다.",shareLineNote:"현재 페이지에서 HTML·CSS·JavaScript 줄 수를 실시간으로 집계합니다.",shareCopied:"공유 URL을 복사했습니다."});
+Object.assign(T.ch,{shareState:"通过URL分享当前状态",shareCreate:"创建分享URL",shareCopy:"复制分享URL",shareId:"分享ID",shareReady:"已创建分享URL。在另一台设备打开即可加载此状态。",shareTooLong:"已为URL分享压缩状态。",shareInvalid:"无法加载分享URL中的状态。",shareLineNote:"实时统计当前页面中的HTML、CSS和JavaScript行数。",shareCopied:"已复制分享URL。"});
+Object.assign(T.eo,{shareState:"Kunhavigi nunan staton per URL",shareCreate:"Krei kunhavigan URL",shareCopy:"Kopii kunhavigan URL",shareId:"Kunhaviga ID",shareReady:"Kunhaviga URL kreita. Malfermu ĝin ĉe alia aparato por ŝargi ĉi tiun staton.",shareTooLong:"La stato estis kunpremita por URL-kunhavigo.",shareInvalid:"La stato en la kunhaviga URL ne povis esti ŝargita.",shareLineNote:"Linioj de HTML, CSS kaj JavaScript estas ĝisdatigataj realtempe el la nuna paĝo.",shareCopied:"Kunhaviga URL kopiita."});
+Object.assign(T.ar,{shareState:"مشاركة الحالة الحالية عبر URL",shareCreate:"إنشاء URL للمشاركة",shareCopy:"نسخ URL المشاركة",shareId:"معرّف المشاركة",shareReady:"تم إنشاء URL للمشاركة. افتحه على جهاز آخر لتحميل هذه الحالة.",shareTooLong:"تم ضغط الحالة لمشاركة URL.",shareInvalid:"تعذر تحميل الحالة من URL المشاركة.",shareLineNote:"يتم تحديث عدد أسطر HTML وCSS وJavaScript لحظيًا من الصفحة الحالية.",shareCopied:"تم نسخ URL المشاركة."});
+const DEFAULT_THEME="dark";
+
+const PROFILE = {
+  author: {
+  ar: "سين نو ريكيو",
+  eo: "Sen no Rikju",
+  ja: "千之利休",
+  ko: "센노 리큐",
+  ch: "千之利休",
+  en: "Sen no Rikyu"
+},
+  birth:{ar:"يونيو 2013",eo:"Junio 2013",ja:"2013年6月",ko:"2013년 6월",ch:"2013年6月",en:"June 2013"},
+  gender:{ar:"فتى",eo:"Knabo",ja:"boy",ko:"남자",ch:"男",en:"boy"},
+  from:{ar:"إيزو",eo:"Ezo",ja:"蝦夷",ko:"에조",ch:"虾夷",en:"Ezo"},
+  hobby:{ar:"تحديث المواقع وكتابة HTML",eo:"Ĝisdatigi retejojn kaj tajpi HTML",ja:"サイト更新、HTMLを打ち込むこと",ko:"사이트 업데이트, HTML 입력",ch:"更新网站、编写HTML",en:"Updating websites and writing HTML"},
+  motto:{ar:"«لنمل في عمل الخير بلا ملل. إذا لم نفتر، فسنحصد في الوقت المناسب. — رسالة غلاطية 6:9»",eo:"“Ni ne laciĝu farante bonon. Se ni ne laciĝos, ĝustatempe ni rikoltos. — Galatoj 6:9”",ja:"「私たちは、たゆまず善を行いましょう。飽きずにいれば、時が来て刈り取ることになります。── ガラテヤ人への手紙 6章9節」",ko:"“우리는 선을 행하되 낙심하지 맙시다. 포기하지 않으면 때가 되어 거두게 됩니다. — 갈라디아서 6:9”",ch:"“我们行善不可丧志；若不灰心，到了时候就要收成。——加拉太书 6:9”",en:"“Let us not become weary in doing good. If we do not give up, we will reap at the proper time. — Galatians 6:9”"},
+  message:{ar:"أستمتع بتحديث الموقع.",eo:"Mi ĝuas ĝisdatigi la retejon.",ja:"更新するのがたのしい",ko:"업데이트하는 것이 즐겁다",ch:"更新网站很开心",en:"I enjoy updating the site."},
+  aiNote:{ar:"تمت كتابة جزء من الكود بمساعدة الذكاء الاصطناعي.",eo:"Parto de la kodo estis verkita kun helpo de AI.",ja:"コードの一部はAIを使用して作成しています。",ko:"코드의 일부는 AI의 도움을 받아 작성했습니다.",ch:"部分代码使用AI辅助编写。",en:"Part of the code was written with AI assistance."},
+  lineNote:{ar:"يتم عد نصوص HTML وCSS وJavaScript الحالية المتاحة في المتصفح بحسب فواصل الأسطر.",eo:"La aktualaj HTML-, CSS- kaj JavaScript-tekstoj disponeblaj en la retumilo estas kalkulataj laŭ linifinoj.",ja:"ブラウザ上で取得できる現在のHTML/CSS/JavaScript本文を改行単位で集計しています。",ko:"브라우저에서 현재 사용할 수 있는 HTML/CSS/JavaScript 본문을 줄바꿈 단위로 집계합니다.",ch:"按换行统计浏览器中当前可获取的HTML/CSS/JavaScript文本。",en:"The current HTML/CSS/JavaScript text available in the browser is counted by line breaks."},
+  backupNote:{ar:"‎.itsme هو تنسيق نسخ احتياطي خاص مبني على JSON ويحفظ حالة التطبيق القابلة للاستعادة من IndexedDB.",eo:".itsme estas propra JSON-bazita sekurkopioformato, kiu konservas restarigeblan aplikan staton de IndexedDB.",ja:".itsme はJSONベースの独自バックアップ形式で、IndexedDBの復元可能なアプリ状態を保存します。",ko:".itsme는 JSON 기반의 독자적인 백업 형식이며 IndexedDB에서 복원 가능한 앱 상태를 저장합니다.",ch:".itsme是基于JSON的专用备份格式，用于保存可从IndexedDB恢复的应用状态。",en:".itsme is a JSON-based backup format that stores restorable application state from IndexedDB."}
+};
+const DEFAULT_HISTORY=[
+  {version:"2.0",datetime:"2026-09-18T06:18:00+09:00",title:{ar:"إضافة أعمدة الصعوبة والمدة إلى لوحة النتائج",eo:"Aldonitaj kolumnoj por malfacileco kaj tempolimo",ja:"スコアボードに選択難易度・選択制限時間を追加",ko:"점수판에 선택 난이도·선택 시간 제한 추가",ch:"在排行榜中添加选择难度和选择时间限制列",en:"Added selected difficulty and selected time-limit columns to the scoreboard"},description:{ar:"تمت إضافة عمودي الصعوبة المختارة والمدة المختارة إلى لوحة النتائج، مع ترحيل السجلات القديمة تلقائيًا.",eo:"La elektita malfacileco kaj elektita tempolimo nun aperas en la poentaro, kaj malnovaj rekordoj estas aŭtomate normaligitaj.",ja:"スコアボードに「選択難易度」「選択制限時間」の列を追加しました。新しい列が追加される前の既存記録も自動的に補完・正規化して表示します。",ko:"점수판에 선택 난이도와 선택 시간 제한 열을 추가했습니다. 새 열이 추가되기 전의 기존 기록도 자동으로 보완·정규화하여 표시합니다.",ch:"在排行榜中添加“选择难度”和“选择时间限制”列，并自动补全和规范化新增列之前的旧记录。",en:"Added selected difficulty and selected time-limit columns to the scoreboard. Older records are automatically normalized so the new columns also display safely."}},
+  {version:"1.9",datetime:"2026-09-17T17:03:00+09:00",title:{ar:"مشاركة الحالة عبر URL وعدّ الأسطر لحظيًا",eo:"URL-kunhavigo de stato kaj realtempa linikalkulo",ja:"現在状態のURL共有・ソースコード行数をリアルタイム化",ko:"현재 상태 URL 공유 및 소스 코드 줄 수 실시간화",ch:"当前状态URL分享及源代码行数实时统计",en:"Added URL state sharing and real-time source line counting"},description:{ar:"تمت إضافة رابط يحتوي على معرّف مشاركة وحالة مضغوطة، ويمكن فتحه على جهاز آخر لاستعادة الإعدادات، كما أصبحت أعداد أسطر HTML وCSS وJavaScript تُحدّث لحظيًا. كما تم استخدام الذكاء الاصطناعي لكتابة جزء من الكود.",eo:"Aldonita URL kun unika kunhaviga ID kaj kunpremita stato, kiu povas esti malfermita ĉe alia aparato por restarigi agordojn. HTML-, CSS- kaj JavaScript-liniokalkuloj nun ĝisdatigas sin realtempe. Parto de la kodo estis verkita kun helpo de AI.",ja:"共有IDと圧縮した現在状態をURLに含め、別の端末で開くと設定・言語・カラー・プロフィール・スコアなどを復元できるようにしました。また、HTML・CSS・JavaScriptのソースコード行数をリアルタイム集計するようにしました。一部のコード作成にはAIを使用しています。",ko:"고유 공유 ID와 압축된 현재 상태를 URL에 포함하여 다른 기기에서 열면 설정·언어·색상·프로필·점수 등을 복원할 수 있게 했습니다. HTML·CSS·JavaScript 소스 코드 줄 수도 실시간으로 집계합니다. 코드 일부는 AI의 도움을 받아 작성했습니다.",ch:"在URL中加入唯一分享ID和压缩后的当前状态，在另一台设备打开即可恢复设置、语言、颜色、个人资料和分数等。同时实时统计HTML、CSS和JavaScript源代码行数。部分代码使用AI辅助编写。",en:"The URL now contains a unique share ID and compressed current state, so opening it on another device restores settings, language, colors, profile, scores, and more. HTML, CSS, and JavaScript source line counts are also updated in real time. Part of the code was written with AI assistance."}},
+  {version:"1.8",datetime:"2026-09-17T17:00:00+09:00",title:{ar:"ضبط مستويات الصعوبة وإصلاح الاتجاه العمودي",eo:"Fajnaĝigo de malfacileco kaj riparo de vertikala teksto",ja:"難易度を大幅調整・日本語の縦表示を修正",ko:"난이도 대폭 조정 및 일본어 세로 표시 수정",ch:"大幅调整难度并修复日文纵向显示",en:"Major difficulty tuning and Japanese vertical-text fix"},description:{ar:"تمت إعادة ضبط سرعة السقوط وحجم الكتل وكثافة الظهور وحد الكتل المتزامنة لكل مستوى، مع إصلاح عرض الأزرار وعناصر اللعبة أفقيًا باليابانية.",eo:"La falrapideco, grandeco, aperdenseco kaj samtempaj bloklimoj estis forte agorditaj por ĉiu nivelo, kaj japanaj butonoj kaj ludkontroloj nun restas horizontalaj.",ja:"7段階それぞれで落下速度・ブロックサイズ・出現圧・同時存在数を大幅に調整しました。また、日本語のボタンやゲームタブの文字が縦にならないよう、横書き表示と横並びを強制しました。",ko:"각 난이도의 낙하 속도·블록 크기·생성 압력·동시 블록 수를 크게 조정했으며 일본어 버튼과 게임 탭의 세로 표시 문제를 수정했습니다.",ch:"大幅调整七个难度的下落速度、方块大小、出现压力和同时存在数量，并修复日文按钮与游戏标签纵向显示的问题。",en:"Greatly retuned falling speed, block size, spawn pressure, and simultaneous-block caps for all seven levels. Japanese buttons and game controls are also forced to remain horizontal."}},
+  {version:"1.7",datetime:"2026-09-17T16:30:00+09:00",title:{ar:"إضافة مستويات الصعوبة",eo:"Aldono de malfacilecaj niveloj",ja:"難易度を追加",ko:"난이도 추가",ch:"添加难度",en:"Added difficulty levels"},description:{ar:"تمت إضافة سبعة مستويات صعوبة، من السهل جدًا إلى مستوى العناء 100، مع دعم متعدد اللغات وحفظ الإعداد.",eo:"Aldonitaj sep malfacilecniveloj, de tre facila ĝis nivelo 100, kun plurlingva subteno kaj konservado de la elekto.",ja:"朝飯前・楽勝・ふつう・ちょっと難しい・結構難しい・オニ・辛酸レベル100の7段階の難易度を追加し、6言語に対応しました。選択した難易度は保存されます。",ko:"누워서 떡 먹기·아주 쉬움·보통·조금 어려움·꽤 어려움·오니·고생 레벨 100의 7단계 난이도를 추가하고 6개 언어를 지원합니다. 선택한 난이도는 저장됩니다.",ch:"新增小菜一碟、轻松、普通、有点难、相当难、鬼级、辛酸等级100七个难度，并支持六种语言。所选难度会被保存。",en:"Added seven difficulty levels from Piece of cake to Bitterness level 100, with support for six languages. The selected difficulty is saved."}},
+  {version:"1.6",datetime:"2026-09-17T12:03:00+09:00",title:{ar:"إضافة تبديل السمة",eo:"Aldono de temoŝaltilo",ja:"ダークモード・ライトモード切り替えを追加",ko:"다크 모드·라이트 모드 전환 추가",ch:"添加深色/浅色模式切换",en:"Added dark/light mode switching"},description:{ar:"تمت إضافة الوضع الداكن والوضع الفاتح والوضع التلقائي حسب إعداد الجهاز، مع حفظ الاختيار.",eo:"Aldonis malluman, helan kaj aŭtomatan temon laŭ la sistema agordo, kun konservado de la elekto.",ja:"設定からダーク・ライト・自動（端末設定）を切り替えられるようにし、選択したテーマを保存するようにしました。",ko:"설정에서 다크·라이트·자동(시스템) 테마를 선택할 수 있으며 선택한 테마를 저장합니다.",ch:"现在可以在设置中切换深色、浅色和自动（系统）主题，并保存所选主题。",en:"Added dark, light, and automatic (system) themes in Settings, with the selected theme saved."}},
+  {version:"1.5",datetime:"2026-09-17T08:10:00+09:00",title:{ar:"إصلاح أزرار الهاتف المحمول",eo:"Riparo de butonoj ĉe poŝtelefonoj",ja:"スマホでボタンが縦になる問題を修正",ko:"스마트폰에서 버튼이 세로로 표시되는 문제 수정",ch:"修复手机按钮纵向排列问题",en:"Fixed buttons becoming vertical on smartphones"},description:{ar:"تم إصلاح مشكلة ظهور الأزرار بشكل عمودي على الهواتف الذكية.",eo:"Riparita problemo, pro kiu la butonoj aperis vertikale ĉe poŝtelefonoj.",ja:"スマホ画面でボタンが1個ずつ縦に並んでしまう問題を修正し、横並びで表示されるようにしました。",ko:"스마트폰 화면에서 버튼이 하나씩 세로로 표시되는 문제를 수정하여 가로로 배치되도록 했습니다.",ch:"修复了手机屏幕上按钮逐个纵向排列的问题，使按钮能够横向排列。",en:"Fixed an issue where buttons appeared one per line on smartphones, so they now stay arranged horizontally."}},
+  {version:"1.4",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"指・マウスを動かすと、その位置を目標にしてストーカーがスーッと追いかけるようにしました。丸・星・□・自分で選んだ小さい画像から形状を選べます。",ko:"마우스와 손가락의 이동 위치를 목표로 스토커가 부드럽게 따라가며 원, 별, □ 또는 사용자가 선택한 작은 이미지를 고를 수 있게 했습니다.",ch:"移动鼠标或手指时，跟随器会以目标位置平滑追踪，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows the target position of mouse or finger movement, with circle, star, square, or custom small image choices."}},
+  {version:"1.3",datetime:"2026-09-16T20:34:00+09:00",title:{ar:"تحسين متتبع الفأرة",eo:"Plibonigita mussekvilo",ja:"マウスストーカー追従機能の強化",ko:"마우스 스토커 추적 기능 강화",ch:"增强鼠标跟随功能",en:"Improved mouse stalker following"},description:{ar:"أصبح المتتبع يتبع حركة المؤشر بسلاسة، مع اختيار الدائرة أو النجمة أو المربع أو صورة مخصصة.",eo:"La sekvilo nun glate sekvas la movadon de la montrilo, kun elekto de rondo, stelo, kvadrato aŭ propra bildo.",ja:"マウス・指の移動先を目標にしてスーッと追従するようにし、丸・星・□・自分で選んだ小さい画像を選択できるようにしました。",ko:"마우스와 손가락의 이동 위치를 목표로 부드럽게 따라가며 원, 별, □ 또는 사용자 이미지를 선택할 수 있게 했습니다.",ch:"现在会平滑跟随鼠标和手指的移动目标，并可选择圆形、星形、□或自定义小图片。",en:"The stalker now smoothly follows mouse and finger movement, with circle, star, square, or custom small image choices."}},
+  {version:"1.2",datetime:"2026-09-16T19:00:00+09:00",title:{ar:"إصدار 3D Block Tap",eo:"Publika versio de 3D Blokfrapeto",ja:"3Dブロッカータップ公開版",ko:"3D 블로커 탭 공개 버전",ch:"3D方块点击公开版",en:"3D Block Tap Release"},description:{ar:"إضافة الكتل ثلاثية الأبعاد ولوحة النتائج والإعدادات والنسخ الاحتياطي .itsme.",eo:"Aldonita 3D-blokoj, poentaro, agordoj kaj .itsme-sekurkopio.",ja:"3Dブロック、スコアボード、設定、.itsmeバックアップを搭載しました。",ko:"3D 블록, 점수판, 설정 및 .itsme 백업을 추가했습니다.",ch:"加入了3D方块、排行榜、设置和.itsme备份。",en:"Added 3D blocks, scoreboard, settings, and .itsme backup."}},
+  {version:"1.1",datetime:"2026-09-15T18:30:00+09:00",title:{ar:"أساس النسخ الاحتياطي",eo:"Bazo de sekurkopio",ja:"バックアップ基盤",ko:"백업 기반",ch:"备份基础",en:"Backup Foundation"},description:{ar:"إضافة أساس حفظ IndexedDB واستعادة النسخ الاحتياطية.",eo:"Aldonita la bazo por IndexedDB-konservado kaj restarigo de sekurkopioj.",ja:"IndexedDB保存とバックアップ復元の基盤を追加しました。",ko:"IndexedDB 저장 및 백업 복원의 기반을 추가했습니다.",ch:"添加了IndexedDB保存和备份恢复的基础。",en:"Added the foundation for IndexedDB storage and backup restoration."}},
+  {version:"1.0",datetime:"2026-09-14T17:00:00+09:00",title:{ar:"إصدار Hello",eo:"Hello-versio",ja:"Helloバージョン",ko:"Hello 버전",ch:"Hello版本",en:"Hello Version"},description:{ar:"النسخة الأولى من 3D Block Tap.",eo:"La unua versio de 3D Blokfrapeto.",ja:"3Dブロッカータップの最初のバージョンです。",ko:"3D 블로커 탭의 첫 번째 버전입니다.",ch:"这是3D方块点击的第一个版本。",en:"The first version of 3D Block Tap."}}
+];
+
+const state = {
+  lang:"ja", duration:60, difficulty:"normal", seconds:true, milliseconds:false, stalker:false, stalkerShape:"circle", stalkerImage:"", header:true, arabicFont:"noto", theme:DEFAULT_THEME,
+  colors:[], scores:[], history:DEFAULT_HISTORY, playerName:"プレイヤー", customProfile:{name:"",birth:"",gender:"",from:"",hobby:"",motto:"",message:""}
+};
+
+let db;
+let clockTimer=null;
+let ipTimezone=null;
+let importedShareTab=null;
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    const r=indexedDB.open(DB_NAME,DB_VERSION);
+    r.onupgradeneeded=()=>{db=r.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE)};
+    r.onsuccess=()=>{db=r.result;resolve()};
+    r.onerror=()=>reject(r.error);
+  });
+}
+async function loadState(){
+  try{
+    await openDB();
+    const data=await new Promise((res,rej)=>{const t=db.transaction(STORE,"readonly"),q=t.objectStore(STORE).get("app");q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});
+    const latestHistory=normalizeHistory(state.history);
+    if(data) Object.assign(state,data);
+    // 更新履歴はアプリ本体のコードを正本とし、IndexedDBの古い履歴で上書きしない。
+    state.history=latestHistory;
+    if(!["dark","light","auto"].includes(state.theme))state.theme=DEFAULT_THEME;
+    if(!Array.isArray(state.colors))state.colors=[];
+    if(!Array.isArray(state.scores))state.scores=[];
+    normalizeScores();
+    if(data) await saveState();
+  }catch(e){console.warn("IndexedDB unavailable",e)}
+}
+async function saveState(){
+  const clean=JSON.parse(JSON.stringify(state));
+  if(!db)return;
+  try{await new Promise((res,rej)=>{const t=db.transaction(STORE,"readwrite");t.objectStore(STORE).put(clean,"app");t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}
+}
+const $=s=>document.querySelector(s);
+const tr=k=>(T[state.lang]||T.ja)[k]||T.ja[k]||k;
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function applyTheme(){
+  const theme=["dark","light","auto"].includes(state.theme)?state.theme:DEFAULT_THEME;
+  document.documentElement.dataset.theme=theme;
+  document.documentElement.style.colorScheme=theme==="auto"?"light dark":theme;
+}
+function ma(k){return LANGS.map(l=>`${l}="${esc(T[l]?.[k]??T.ja[k]??k)}"`).join(" ")}
+function mt(k){return `data-i18n="${esc(k)}" ${ma(k)}`}
+function applyI18nAttributes(root=document){
+  root.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n");
+    if(!k || el.children.length>0)return;
+    el.textContent=tr(k);
+  });
+  root.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{
+    const k=el.getAttribute("data-i18n-placeholder");
+    el.setAttribute("placeholder",tr(k));
+  });
+  root.querySelectorAll("[data-i18n-aria-label]").forEach(el=>{
+    const k=el.getAttribute("data-i18n-aria-label");
+    el.setAttribute("aria-label",tr(k));
+  });
+}
+function localizedObject(value){
+  if(value && typeof value === "object" && !Array.isArray(value)){
+    return value[state.lang] ?? value.ja ?? value.en ?? Object.values(value)[0] ?? "";
+  }
+  return String(value ?? "");
+}
+function historySearchText(x){
+  const fields=[x.version,x.datetime,x.date];
+  for(const key of ["title","description"]){
+    const v=x[key];
+    if(v && typeof v === "object") fields.push(...Object.values(v));
+    else fields.push(v);
+  }
+  return fields.join(" ").toLocaleLowerCase();
+}
+function normalizeHistory(arr){
+  if(!Array.isArray(arr))return [];
+  return arr.map(x=>{
+    if(!x || typeof x!=="object")return null;
+    const title=(x.title && typeof x.title==="object")?x.title:{ar:String(x.title??""),eo:String(x.title??""),ja:String(x.title??""),ko:String(x.title??""),ch:String(x.title??""),en:String(x.title??"")};
+    const description=(x.description && typeof x.description==="object")?x.description:{ar:String(x.description??""),eo:String(x.description??""),ja:String(x.description??""),ko:String(x.description??""),ch:String(x.description??""),en:String(x.description??"")};
+    const datetime=String(x.datetime??x.date??"");
+    return {version:String(x.version??""),datetime,date:datetime,title,description};
+  }).filter(Boolean);
+}
+function toast(s){const x=$("#toast");x.textContent=s;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
+function modal(title,text){$("#modalTitle").textContent=title;$("#modalText").textContent=text;$("#modal").classList.add("show")}
+$("#modalClose").onclick=()=>$("#modal").classList.remove("show");
+
+function setLanguage(lang){
+  if(!LANGS.includes(lang))lang="ja"; state.lang=lang;
+  document.documentElement.lang=lang==="ch"?"zh-CN":lang;
+  document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+  const titleEl=document.querySelector("title");
+  titleEl.textContent=tr("title");
+  LANGS.forEach(l=>titleEl.setAttribute(l,T[l]?.title||T.ja.title));
+  $("#brand").textContent=tr("title");
+  $("#backupBtn").textContent="⬇ "+tr("backup");
+  $("#restoreBtn").textContent="⬆ "+tr("restore");
+  $("#deleteBtn").textContent="🗑 "+tr("deleteData");
+  $("#headerToggle").textContent="☰ "+(state.header?tr("headerShown"):tr("headerHidden"));
+  $("#headerShow").textContent="☰ "+tr("headerHidden");
+  $("#modalClose").textContent="OK";
+  const langSelect=$("#langSelect"); if(langSelect)langSelect.value=lang;
+  document.body.style.fontFamily=lang==="ar"?(state.arabicFont==="amiri"?"'Amiri',serif":"Arial,sans-serif"):"system-ui,-apple-system,'Segoe UI',sans-serif";
+  renderTabs(); render();
+  applyI18nAttributes(document);
+  saveState();
+}
+const TAB_DEFINITIONS=[
+  ["game","🎮"],["scores","🏆"],["colors","🎨"],["profile","👤"],["history","📝"],["how","❔"],["settings","⚙️"]
+];
+const TAB_KEYS=new Set(TAB_DEFINITIONS.map(x=>x[0]));
+let currentTab="game";
+let renderingTab=false;
+function normalizeTab(value){
+  const k=String(value||"").replace(/^#/ ,"").trim().toLowerCase();
+  return TAB_KEYS.has(k)?k:"game";
+}
+function getCurrentTab(){return normalizeTab(location.hash);}
+function renderTabs(){
+  const tabs=$("#tabs");
+  if(!tabs)return;
+  const current=getCurrentTab();
+  currentTab=current;
+  tabs.innerHTML=TAB_DEFINITIONS.map(([k,i])=>`<button type="button" class="tab ${current===k?"active":""}" data-tab="${k}" aria-selected="${current===k}" role="tab" ${mt(k)}>${i} ${tr(k)}</button>`).join("");
+  tabs.querySelectorAll(".tab").forEach(button=>{
+    button.addEventListener("click",e=>{e.preventDefault();navigateTab(button.dataset.tab)});
+    button.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();navigateTab(button.dataset.tab)}
+    });
+  });
+}
+function navigateTab(tab){
+  const k=normalizeTab(tab);
+  currentTab=k;
+  const target="#"+k;
+  if(location.hash!==target){
+    try{history.pushState({tab:k},"",target)}catch(e){location.hash=target;return;}
+  }
+  renderTabs();
+  render(k);
+}
+function render(tabOverride=null){
+  if(renderingTab)return;
+  renderingTab=true;
+  try{
+    if(!Array.isArray(state.scores))state.scores=[];
+    if(!Array.isArray(state.colors))state.colors=[];
+    if(!Array.isArray(state.history))state.history=normalizeHistory(DEFAULT_HISTORY);
+    const tab=normalizeTab(tabOverride===null?location.hash:tabOverride);
+    currentTab=tab;
+    if(location.hash!=="#"+tab){try{history.replaceState({tab:tab},"","#"+tab)}catch(e){}}
+    if(tab==="game")renderGame();
+    else if(tab==="scores")renderScores();
+    else if(tab==="colors")renderColors();
+    else if(tab==="profile")renderProfile();
+    else if(tab==="history")renderHistory();
+    else if(tab==="how")renderHow();
+    else renderSettings();
+  }catch(error){
+    console.error("Tab render error",tab,error);
+    const app=$("#app");
+    if(app){
+      app.innerHTML=`<section class="panel"><h2>${esc(tr(tab))}</h2><p class="muted">${esc(tr("tabError")||"この画面の表示中にエラーが発生しました。")}</p><button type="button" id="tabRetry">↻ ${esc(tr("retry")||"再表示")}</button></section>`;
+      $("#tabRetry")?.addEventListener("click",()=>{renderingTab=false;render(tab)});
+    }
+  }finally{
+    renderingTab=false;
+  }
+  applyHeader();
+  applyI18nAttributes($("#app"));
+  renderTabs();
+}
+
+function applyHeader(){
+  $("#header").classList.toggle("hidden",!state.header);
+  const show=$("#headerShow"); if(show)show.style.display=state.header?"none":"block";
+}
+function durationOptions(){const tpl=$("duration-options-template");if(!tpl)return DURATIONS.map(d=>`<option value="${d}" ${state.duration===d?"selected":""} ${ma("durationUnit")}>${d}${tr("durationUnit")}</option>`).join("");return [...tpl.content.children].map(o=>{const d=+o.value;return `<option value="${d}" ${state.duration===d?"selected":""} ${ma("durationUnit")}>${d}${tr("durationUnit")}</option>`}).join("")}
+
+function difficultyOptions(){return DIFFICULTIES.map(d=>`<option value="${d.id}" ${state.difficulty===d.id?"selected":""} ${ma(d.key)}>${tr(d.key)}</option>`).join("")}
+let game=null;
+function renderGame(){
+  $("#app").innerHTML=`
+  <section class="panel" id="gameWrap">
+    <div class="gamebar">
+      <div class="row">
+        <label ${mt("playerName")}>${tr("playerName")} <input id="playerName" type="text" maxlength="40" value="${esc(state.playerName||"")}" style="width:12em"></label>
+        <label class="game-control" ${mt("duration")}>${tr("duration")} <select id="duration">${durationOptions()}</select></label>
+        <label class="game-control" ${mt("difficulty")}>${tr("difficulty")} <select id="difficultySelect">${difficultyOptions()}</select></label>
+        <button class="primary" id="start" ${game?.running?mt("restart"):mt("start")}>${game?.running?tr("restart"):tr("start")}</button>
+      </div>
+      <div class="row"><span class="stat" ${mt("score")}>${tr("score")}: <b id="score">0</b></span><span class="stat" ${mt("time")}>${tr("time")}: <b id="time">${state.duration}</b></span></div>
+    </div>
+    <canvas id="gameCanvas" aria-label="${esc(tr("title"))}"></canvas>
+    <p class="muted" id="gameMessage" ${mt("ready")}>${tr("ready")}</p>
+  </section>`;
+  $("#playerName").oninput=e=>{state.playerName=e.target.value.slice(0,40);saveState()};
+  $("#duration").onchange=()=>{state.duration=+$("#duration").value;saveState();if(!game?.running){$("#time").textContent=state.duration}};
+  $("#difficultySelect").onchange=()=>{state.difficulty=$("#difficultySelect").value;saveState()};
+  $("#start").onclick=startGame;
+  initCanvas();
+}
+function initCanvas(){
+  const c=$("#gameCanvas"); if(!c)return;
+  const dpr=Math.min(devicePixelRatio||1,2);
+  const rect=c.getBoundingClientRect(); c.width=Math.floor(rect.width*dpr);c.height=Math.floor(rect.height*dpr);
+  const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+  c._ctx=ctx;c._w=rect.width;c._h=rect.height;
+  drawScene();
+  c.onpointerdown=e=>{if(game?.running)hitBlock(e)};
+}
+function startGame(){
+  if(game?.running)cancelAnimationFrame(game.raf);
+  game={running:true,score:0,started:performance.now(),end:performance.now()+state.duration*1000,blocks:[],spawn:0,raf:0,particles:[]};
+  $("#gameMessage").textContent=tr("ready");
+  $("#score").textContent="0";$("#time").textContent=state.duration;
+  $("#start").textContent=tr("restart");
+  loop();
+}
+function colorList(){
+  if(state.colors.length)return state.colors.slice(0,10);
+  return ["#45b8ff","#ff5c77","#ffd34e","#72e07a","#a97cff","#ff8a3d","#38e6d2","#f06cff"];
+}
+function getDifficulty(){return DIFFICULTIES.find(d=>d.id===state.difficulty)||DIFFICULTIES[2]}
+function spawnBlock(){
+  const d=getDifficulty();
+  const size=d.size*(0.82+Math.random()*0.36);
+  const speed=d.speed*(0.78+Math.random()*0.44);
+  game.blocks.push({x:(Math.random()-.5)*8,y:6.5+Math.random()*2,z:4+Math.random()*6,size,v:speed,color:colorList()[Math.floor(Math.random()*colorList().length)],rot:Math.random()*6.28,spin:(Math.random()-.5)*1.5});
+}
+function project(x,y,z){
+  const c=$("#gameCanvas"),w=c._w,h=c._h;
+  const f=360/(z+10), ground=h*.78;
+  return {x:w/2+x*f,y:ground-y*f*.9+z*7,f};
+}
+function cubePoints(b){
+  const s=b.size/2,pts=[];
+  for(const dx of [-s,s])for(const dy of [-s,s])for(const dz of [-s,s])pts.push(project(b.x+dx,b.y+dy,b.z+dz));
+  return pts;
+}
+function drawPoly(ctx,pts,idx,fill,stroke="#ffffff22"){
+  ctx.beginPath();idx.forEach((p,i)=>{const q=pts[p];i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.stroke();
+}
+function shade(hex,f){
+  const n=parseInt(hex.slice(1),16),r=Math.max(0,Math.min(255,((n>>16)&255)*f)),g=Math.max(0,Math.min(255,((n>>8)&255)*f)),b=Math.max(0,Math.min(255,(n&255)*f));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawScene(){
+  const c=$("#gameCanvas");if(!c)return;const ctx=c._ctx,w=c._w,h=c._h;
+  ctx.clearRect(0,0,w,h);
+  // horizon/grid
+  ctx.strokeStyle="#29405a55";ctx.lineWidth=1;
+  for(let i=-10;i<=10;i++){let a=project(i,0,0),b=project(i*1.8,0,18);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+  for(let z=0;z<=18;z+=2){let a=project(-10,0,z),b=project(10,0,z);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+  ctx.fillStyle="#0b1726";ctx.fillRect(0,h*.79,w,h*.21);
+  if(game){
+    const arr=[...game.blocks].sort((a,b)=>b.z-a.z);
+    for(const b of arr){
+      const p=cubePoints(b);
+      // vertices order: (-,-,-),(-,-,+),(-,+,-),(-,+,+),(+,-,-),(+,-,+),(+,+,-),(+,+,+)
+      drawPoly(ctx,p,[0,4,6,2],shade(b.color,.72));
+      drawPoly(ctx,p,[1,3,7,5],shade(b.color,.9));
+      drawPoly(ctx,p,[2,6,7,3],b.color);
+    }
+    for(const q of game.particles){ctx.globalAlpha=Math.max(0,q.life);ctx.fillStyle=q.color;ctx.fillRect(q.x,q.y,4,4)}ctx.globalAlpha=1;
+  }
+}
+function pointInPolygon(px,py,points){
+  let inside=false;
+  for(let i=0,j=points.length-1;i<points.length;j=i++){
+    const xi=points[i].x,yi=points[i].y,xj=points[j].x,yj=points[j].y;
+    const intersect=((yi>py)!==(yj>py)) && (px < (xj-xi)*(py-yi)/((yj-yi)||1e-9)+xi);
+    if(intersect)inside=!inside;
+  }
+  return inside;
+}
+function hitBlock(e){
+  const c=$("#gameCanvas");
+  if(!c||!game?.running)return;
+  const r=c.getBoundingClientRect();
+  const mx=e.clientX-r.left,my=e.clientY-r.top;
+  let hit=-1,bestZ=Infinity,bestDistance=Infinity;
+  for(let i=0;i<game.blocks.length;i++){
+    const b=game.blocks[i],p=cubePoints(b);
+    const faces=[[0,4,6,2],[1,3,7,5],[2,6,7,3]];
+    let inside=false;
+    for(const f of faces){if(pointInPolygon(mx,my,f.map(n=>p[n]))){inside=true;break}}
+    const center=project(b.x,b.y,b.z);
+    const scale=360/Math.max(1,b.z+10);
+    const radius=Math.max(32,b.size*scale*1.15);
+    const dist=Math.hypot(mx-center.x,my-center.y);
+    if((inside||dist<=radius) && (b.z<bestZ || (b.z===bestZ&&dist<bestDistance))){
+      bestZ=b.z;bestDistance=dist;hit=i;
+    }
+  }
+  if(hit<0)return;
+  const b=game.blocks.splice(hit,1)[0],p=project(b.x,b.y,b.z);
+  for(let i=0;i<14;i++)game.particles.push({x:p.x,y:p.y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,life:1,color:b.color});
+  game.score++;
+  const score=$("#score");if(score)score.textContent=String(game.score);
+}
+
+function loop(now=performance.now()){
+  if(!game?.running)return;
+  const dt=Math.min(40,now-(game.last||now));game.last=now;
+  if(now>=game.end){finishGame();return}
+  const d=getDifficulty();
+  // Difficulty controls both the interval and the pressure ramp as the score rises.
+  const spawnInterval=Math.max(105,Math.round((980-d.spawn*230)-Math.min(430,game.score*(5+d.spawn*2))));
+  if(now-game.spawn>spawnInterval && game.blocks.length<d.cap){spawnBlock();game.spawn=now}
+  const sec=dt/1000;
+  for(const b of game.blocks)b.y-=b.v*sec;
+  game.blocks=game.blocks.filter(b=>b.y>-1.0);
+  for(const p of game.particles){p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life-=sec*2}
+  game.particles=game.particles.filter(p=>p.life>0);
+  $("#time").textContent=Math.max(0,(game.end-now)/1000).toFixed(state.seconds?1:0);
+  drawScene();game.raf=requestAnimationFrame(loop);
+}
+async function finishGame(){
+  if(!game)return;game.running=false;cancelAnimationFrame(game.raf);
+  const entry={score:game.score,date:new Date().toISOString(),duration:DURATIONS.includes(Number(state.duration))?Number(state.duration):60,difficulty:DIFFICULTIES.some(d=>d.id===state.difficulty)?state.difficulty:"normal",name:(state.playerName||"プレイヤー").trim()||"プレイヤー"};
+  state.scores.push(normalizeScoreEntry(entry));state.scores.sort((a,b)=>b.score-a.score||a.date.localeCompare(b.date));state.scores=state.scores.slice(0,1000);await saveState();
+  $("#gameMessage").textContent=tr("gameover")+" — "+tr("score")+": "+game.score;
+  toast(tr("gameover"));
+}
+
+/* ===== 共通・安全ストレージ ===== */
+function safeSessionGet(key,fallback=""){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return fallback;
+    const value=storage.getItem(key);
+    return value===null?fallback:value;
+  }catch(e){return fallback;}
+}
+function safeSessionSet(key,value){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return false;
+    storage.setItem(key,String(value));
+    return true;
+  }catch(e){return false;}
+}
+function safeSessionRemove(key){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return false;
+    storage.removeItem(key);
+    return true;
+  }catch(e){return false;}
+}
+function safeSessionClear(){
+  try{
+    const storage=window.sessionStorage;
+    if(!storage)return false;
+    storage.clear();
+    return true;
+  }catch(e){return false;}
+}
+function safePage(value,pages){
+  let n=Number(value);
+  if(!Number.isFinite(n)||n<1)n=1;
+  return Math.min(Math.floor(n),Math.max(1,pages));
+}
+
+function normalizeScoreEntry(entry){
+  const x=(entry&&typeof entry==="object")?{...entry}:{};
+  const duration=Number(x.duration);
+  x.duration=DURATIONS.includes(duration)?duration:60;
+  let did="";
+  if(typeof x.difficulty==="string") did=x.difficulty;
+  else if(x.difficulty&&typeof x.difficulty==="object"&&typeof x.difficulty.id==="string") did=x.difficulty.id;
+  if(!DIFFICULTIES.some(d=>d.id===did)) did="normal";
+  x.difficulty=did;
+  x.score=Number.isFinite(Number(x.score))?Number(x.score):0;
+  x.name=typeof x.name==="string"?x.name:"プレイヤー";
+  return x;
+}
+function normalizeScores(){
+  if(!Array.isArray(state.scores)) state.scores=[];
+  state.scores=state.scores.map(normalizeScoreEntry);
+}
+function difficultyLabel(id){
+  const d=DIFFICULTIES.find(x=>x.id===id);
+  return d?tr(d.key):tr("unrecorded");
+}
+function durationLabel(value){
+  const n=Number(value);
+  return DURATIONS.includes(n)?`${n}${tr("durationUnit")}`:tr("unrecorded");
+}
+
+function renderScores(){
+  normalizeScores();
+  const pages=Math.max(1,Math.ceil(state.scores.length/10)); let page=safePage(safeSessionGet("scorePage","1"),pages); safeSessionSet("scorePage",page);
+  const slice=state.scores.slice((page-1)*10,page*10), recordsLabel=state.lang==="ja"?"件":state.lang==="en"?"records":state.lang==="ko"?"개":state.lang==="ch"?"条":state.lang==="eo"?"ierak":"سجل";
+  $("#app").innerHTML=`<section class="panel"><div class="between"><h2 ${mt("scores")}>🏆 ${tr("scores")}</h2><span class="muted">${state.scores.length} ${esc(recordsLabel)}</span></div><div class="row" style="margin:8px 0" id="scoreExports"><span ${mt("exports")}>${tr("exports")}</span>${exportButtonHtml("score")}</div>
+  <div class="tableWrap"><table class="scoreTable" id="scoreExportTable"><thead><tr><th ${mt("rank")}>${tr("rank")}</th><th ${mt("name")}>${tr("name")}</th><th ${mt("score")}>${tr("score")}</th><th ${mt("selectedDifficulty")}>${tr("selectedDifficulty")}</th><th ${mt("selectedDuration")}>${tr("selectedDuration")}</th><th ${mt("date")}>${tr("date")}</th></tr></thead><tbody>${slice.length?slice.map((x,i)=>`<tr><td>${(page-1)*10+i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0} ${tr("points")}</td><td>${esc(difficultyLabel(x.difficulty))}</td><td>${esc(durationLabel(x.duration))}</td><td>${esc(formatDate(x.date))}</td></tr>`).join(""):`<tr><td colspan="6">${tr("noScores")}</td></tr>`}</tbody></table></div>
+  <div class="pagination">${Array.from({length:pages},(_,i)=>`<button class="page ${i+1===page?"active":""}" data-p="${i+1}" ${ma("page")}>${i+1}</button>`).join("")}</div></section>`;
+  document.querySelectorAll(".page").forEach(b=>b.onclick=()=>{safeSessionSet("scorePage",safePage(b.dataset.p,Math.max(1,Math.ceil(state.scores.length/10))));renderScores()}); document.querySelectorAll("#scoreExports [data-export]").forEach(b=>b.onclick=()=>exportScore(b.dataset.export)); applyI18nAttributes($("#app"));
+}
+
+function formatDate(value){
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return String(value??"");
+  try{return new Intl.DateTimeFormat(state.lang==="ch"?"zh-CN":state.lang==="ko"?"ko-KR":state.lang==="eo"?"en-GB":state.lang==="ar"?"ar":state.lang==="en"?"en-US":"ja-JP",{dateStyle:"medium",timeStyle:"short"}).format(d)}catch(e){return d.toLocaleString()}
+}
+
+function renderColors(){
+  const colors=state.colors.slice(0,10);
+  $("#app").innerHTML=`<section class="panel"><div class="between"><div><h2 ${mt("colors")}>🎨 ${tr("colors")}</h2><p class="muted" ${mt("colorsAuto")}>${tr("colorsAuto")}</p></div><button id="addColor" class="primary" ${mt("addColor")}>${tr("addColor")}</button></div>
+  <div id="colorList">${colors.map((c,i)=>`<div class="card row" style="margin-top:8px"><input class="colorInput" type="color" data-i="${i}" value="${esc(c)}"><span>#${esc(c.replace("#","").toUpperCase())}</span><button class="small danger removeColor" data-i="${i}" ${mt("remove")}>${tr("remove")}</button></div>`).join("")}</div>
+  <div class="row" style="margin-top:12px"><button class="primary" id="saveColors" ${mt("save")}>${tr("save")}</button><button id="autoColors" ar="تلقائي" eo="Aŭtomata" ja="自動" ko="자동" ch="自动" en="Auto">${state.lang==="ja"?"自動":state.lang==="en"?"Auto":state.lang==="ko"?"자동":state.lang==="ch"?"自动":state.lang==="eo"?"Aŭtomata":"تلقائي"}</button></div></section>`;
+  $("#addColor").onclick=()=>{if(state.colors.length<10){state.colors.push("#"+Math.floor(Math.random()*16777215).toString(16).padStart(6,"0"));renderColors()}};
+  document.querySelectorAll(".colorInput").forEach(i=>i.oninput=()=>state.colors[i.dataset.i]=i.value);
+  document.querySelectorAll(".removeColor").forEach(b=>b.onclick=()=>{state.colors.splice(+b.dataset.i,1);renderColors()});
+  $("#saveColors").onclick=async()=>{await saveState();toast(tr("saved"))};
+  $("#autoColors").onclick=async()=>{state.colors=[];await saveState();renderColors();toast(tr("saved"))};
+}
+function profileAttr(key){return LANGS.map(l=>`${l}="${esc(PROFILE[key]?.[l]??"")}"`).join(" ")}
+function renderProfile(){
+  const p=PROFILE,c=state.customProfile||{}; const field=(key,labelKey)=>`<label class="setting"><span ${mt(labelKey)}>${tr(labelKey)}</span><input id="cp_${key}" maxlength="300" value="${esc(c[key]||"")}"></label>`;
+  $("#app").innerHTML=`<section class="panel"><h2 ${mt("profileEdit")}>✏️ ${tr("profileEdit")}</h2><div class="grid">${field("name","profileName")}${field("birth","profileBirth")}${field("gender","profileGender")}${field("from","profileFrom")}${field("hobby","profileHobby")}${field("motto","profileMotto")}${field("message","profileMessage")}</div><div class="row" style="margin-top:12px"><button class="primary" id="saveProfile" ${mt("profileSave")}>${tr("profileSave")}</button><button id="resetProfile" ${mt("profileReset")}>${tr("profileReset")}</button></div></section>
+  <section class="panel"><h2 ${mt("profileEdit")}>👤 ${tr("profileEdit")}</h2><div class="grid"><div class="card"><b ${mt("profileName")}>${tr("profileName")}</b><p>${esc(c.name||state.playerName||"")}</p></div><div class="card"><b ${mt("profileBirth")}>${tr("profileBirth")}</b><p>${esc(c.birth||"")}</p></div><div class="card"><b ${mt("profileGender")}>${tr("profileGender")}</b><p>${esc(c.gender||"")}</p></div><div class="card"><b ${mt("profileFrom")}>${tr("profileFrom")}</b><p>${esc(c.from||"")}</p></div><div class="card"><b ${mt("profileHobby")}>${tr("profileHobby")}</b><p>${esc(c.hobby||"")}</p></div><div class="card"><b ${mt("profileMotto")}>${tr("profileMotto")}</b><p>${esc(c.motto||"")}</p></div><div class="card"><b ${mt("profileMessage")}>${tr("profileMessage")}</b><p>${esc(c.message||"")}</p></div></div></section><section class="panel"><h2 ${mt("profileInfo")}>👤 ${tr("profileInfo")}</h2><div class="card" style="margin-bottom:12px"><b>🤖 AI</b><p ${profileAttr("aiNote")}>${esc(localizedObject(p.aiNote))}</p></div><div class="grid"><div class="card"><b ${mt("author")}>${tr("author")}</b><p ${profileAttr("author")}>${esc(localizedObject(p.author))}</p></div><div class="card"><b ${mt("birth")}>${tr("birth")}</b><p ${profileAttr("birth")}>${esc(localizedObject(p.birth))}</p></div><div class="card"><b ${mt("gender")}>${tr("gender")}</b><p ${profileAttr("gender")}>${esc(localizedObject(p.gender))}</p></div><div class="card"><b ${mt("from")}>${tr("from")}</b><p ${profileAttr("from")}>${esc(localizedObject(p.from))}</p></div><div class="card"><b ${mt("hobby")}>${tr("hobby")}</b><p ${profileAttr("hobby")}>${esc(localizedObject(p.hobby))}</p></div><div class="card"><b ${mt("motto")}>${tr("motto")}</b><p ${profileAttr("motto")}>${esc(localizedObject(p.motto))}</p></div><div class="card"><b ${mt("message")}>${tr("message")}</b><p ${profileAttr("message")}>${esc(localizedObject(p.message))}</p></div></div></section>
+  <section class="panel"><h2 ${mt("profileEdit")}>📥 ${tr("profileEdit")}</h2><div class="row" id="profileExports"><span ${mt("exports")}>${tr("exports")}</span>${exportButtonHtml("profile")}</div></section><section class="panel"><h2 ${mt("opened")}>⏱️ ${tr("opened")}</h2><div id="ageGrid" class="grid"></div></section><section class="panel"><h2 ${mt("lines")}>🧩 ${tr("lines")}</h2><div id="lineGrid" class="grid"></div><p id="lineLiveNote" class="muted" ${profileAttr("lineNote")}>${esc(localizedObject(p.lineNote))}</p></section>`;
+  $("#saveProfile").onclick=async()=>{saveCustomProfileFromForm();state.playerName=(state.customProfile.name||state.playerName||"プレイヤー").trim()||"プレイヤー";await saveState();renderProfile();toast(tr("saved"))}; $("#resetProfile").onclick=async()=>{state.customProfile={name:"",birth:"",gender:"",from:"",hobby:"",motto:"",message:""};await saveState();renderProfile();toast(tr("saved"))}; document.querySelectorAll("#profileExports [data-export]").forEach(b=>b.onclick=()=>exportProfile(b.dataset.export)); updateAge();updateLines();applyI18nAttributes($("#app"));
+}
+function saveCustomProfileFromForm(){const c=state.customProfile||{}; ["name","birth","gender","from","hobby","motto","message"].forEach(k=>{const el=$("#cp_"+k);c[k]=el?el.value.slice(0,300):""}); state.customProfile=c;}
+function updateAge(){
+  const ms=Math.max(0,Date.now()-new Date(OPENED_AT).getTime());
+  const d=Math.floor(ms/86400000),m=Math.floor(ms/60000),s=Math.floor(ms/1000),mm=ms;
+  const vals=[[tr("days"),d],[tr("minutes"),m],[tr("secs"),s],[tr("millis"),mm]];
+  const el=$("#ageGrid");if(el)el.innerHTML=vals.map(x=>`<div class="card"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
+}
+function countLines(text){const s=String(text??"").replace(/\r\n?/g,"\n");return s? s.split("\n").length:0}
+function countSourceLines(){
+  // 実行中ページを基準に、HTML本体（style/scriptを除外）・CSS・JavaScriptを再集計。
+  const root=document.documentElement.cloneNode(true);
+  root.querySelectorAll("style,script,noscript").forEach(el=>el.remove());
+  const html=countLines(root.outerHTML);
+  const css=[...document.querySelectorAll("style")].map(el=>el.textContent||"").join("\n");
+  const js=[...document.querySelectorAll("script")].map(el=>el.textContent||"").join("\n");
+  const c=countLines(css),j=countLines(js);
+  return {html,css:c,js:j,total:html+c+j};
+}
+function updateLines(){
+  const src=countSourceLines(),profileText=JSON.stringify(state.customProfile||{},null,2),p=countLines(profileText);
+  const a=src.html,b=src.css,c=src.js,d=src.total;
+  const el=$("#lineGrid");if(el)el.innerHTML=[[tr("html"),a],[tr("css"),b],[tr("js"),c],[tr("profileLines"),p],[tr("total"),d]].map(x=>`<div class="card live-line"><b>${x[0]}</b><h2>${x[1].toLocaleString()}</h2></div>`).join("");
+  const note=$("#lineLiveNote");if(note){note.textContent=tr("shareLineNote");note.setAttribute("data-i18n","shareLineNote");}
+}
+function renderHow(){
+  $("#app").innerHTML=`<section class="panel"><h2 ${mt("how")}>❔ ${tr("how")}</h2><p ${mt("howText")}>${tr("howText")}</p>
+  <div class="grid"><div class="card"><b>🖱️</b><p ${ma("howPC")}>${tr("howPC")}</p></div><div class="card"><b>👆</b><p ${ma("howTouch")}>${tr("howTouch")}</p></div><div class="card"><b>⏱️</b><p ${ma("howTime")}>${tr("howTime")}</p></div><div class="card"><b>💾</b><p ${ma("howSave")}>${tr("howSave")}</p></div></div></section>`;
+}
+function renderSettings(){
+  $("#app").innerHTML=`<section class="panel"><h2 ${mt("settings")}>⚙️ ${tr("settings")}</h2>
+  <div class="setting"><span ${mt("theme")}>${tr("theme")}</span><select id="themeSelect"><option value="dark" ${state.theme==="dark"?"selected":""}>🌙 ${tr("themeDark")}</option><option value="light" ${state.theme==="light"?"selected":""}>☀️ ${tr("themeLight")}</option><option value="auto" ${state.theme==="auto"?"selected":""}>🌓 ${tr("themeAuto")}</option></select></div>
+  <div class="setting"><span ${mt("seconds")}>${tr("seconds")}</span><input id="seconds" type="checkbox" ${state.seconds?"checked":""}></div>
+  <div class="setting"><span ${mt("milliseconds")}>${tr("milliseconds")}</span><input id="milliseconds" type="checkbox" ${state.milliseconds?"checked":""}></div>
+  <div class="setting"><span ${mt("stalker")}>${tr("stalker")}</span><select id="stalkerSelect"><option value="0" ${!state.stalker?"selected":""}>${tr("off")}</option><option value="1" ${state.stalker?"selected":""}>${tr("on")}</option></select></div><div class="setting"><span ${mt("stalkerShape")}>${tr("stalkerShape")}</span><select id="stalkerShape"><option value="circle" ${state.stalkerShape==="circle"?"selected":""}>${tr("circle")}</option><option value="star" ${state.stalkerShape==="star"?"selected":""}>${tr("star")}</option><option value="square" ${state.stalkerShape==="square"?"selected":""}>${tr("square")}</option><option value="custom" ${state.stalkerShape==="custom"?"selected":""}>${tr("customImage")}</option></select></div>
+  <div class="setting" id="stalkerImageRow" style="${state.stalkerShape==="custom"?"":"display:none"}"><span ${mt("chooseImage")}>${tr("chooseImage")}</span><input id="stalkerImageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" aria-label="${esc(tr("stalkerImage"))}"></div>
+  <div class="setting"><span ${state.header?mt("headerShown"):mt("headerHidden")}>${state.header?tr("headerShown"):tr("headerHidden")}</span><select id="headerSelect"><option value="1" ${state.header?"selected":""}>${tr("on")}</option><option value="0" ${!state.header?"selected":""}>${tr("off")}</option></select></div>
+  <div class="setting"><span ${mt("font")}>${tr("font")}</span><select id="fontSelect"><option value="noto" ${state.arabicFont==="noto"?"selected":""}>${tr("noto")}</option><option value="amiri" ${state.arabicFont==="amiri"?"selected":""}>${tr("amiri")}</option></select></div>
+  </section>
+  <section class="panel"><h2 ${mt("backup")}>🌐 ${tr("backup")}</h2><p class="muted" ${profileAttr("backupNote")}>${esc(localizedObject(PROFILE.backupNote))}</p>
+  <div class="row"><button class="primary" id="backup2" ${mt("backup")}>${tr("backup")}</button><button id="restore2" ${mt("restore")}>${tr("restore")}</button></div></section>
+  <section class="panel"><h2 ${mt("shareState")}>🔗 ${tr("shareState")}</h2>
+  <div class="row"><button class="primary" id="createShareUrl" ${mt("shareCreate")}>🔗 ${tr("shareCreate")}</button><button id="copyShareUrl" ${mt("shareCopy")} disabled>📋 ${tr("shareCopy")}</button></div>
+  <p id="shareStatus" class="muted"></p><p><b ${mt("shareId")}>${tr("shareId")}</b>: <span id="shareId" class="share-id">—</span></p><textarea id="shareUrl" class="share-url" readonly aria-label="${esc(tr("shareState"))}" placeholder="${esc(tr("shareCreate"))}"></textarea></section>
+  <section class="panel"><h2 ${mt("deleteData")}>🗑 ${tr("deleteData")}</h2><p class="muted" ${mt("deleteWarning")}>${tr("deleteWarning")}</p><button class="danger" id="delete2" ${mt("deleteData")}>🗑 ${tr("deleteData")}</button></section>`;
+  $("#themeSelect").onchange=async e=>{state.theme=e.target.value;applyTheme();await saveState();renderSettings()};
+  $("#seconds").onchange=e=>{state.seconds=e.target.checked;saveState();renderSettings()};
+  $("#milliseconds").onchange=e=>{state.milliseconds=e.target.checked;saveState();renderSettings()};
+  $("#stalkerSelect").onchange=e=>{state.stalker=e.target.value==="1";applyStalker();saveState()};
+  $("#stalkerShape").onchange=async e=>{state.stalkerShape=e.target.value;applyStalker();await saveState();renderSettings()};
+  $("#stalkerImageInput").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>2*1024*1024){modal(tr("exportFailed"),"Image must be 2 MB or smaller.");return}const r=new FileReader();r.onload=async()=>{state.stalkerImage=String(r.result||"");state.stalkerShape="custom";await saveState();applyStalker();renderSettings()};r.readAsDataURL(f)};
+  $("#headerSelect").onchange=e=>{state.header=e.target.value==="1";saveState();renderSettings();applyHeader()};
+  $("#fontSelect").onchange=e=>{state.arabicFont=e.target.value;saveState();setLanguage(state.lang)};
+  $("#backup2").onclick=downloadBackup;$("#restore2").onclick=()=>$("#restoreInput").click();$("#delete2").onclick=confirmDeleteSequence;
+  $("#createShareUrl").onclick=createShareUrl;$("#copyShareUrl").onclick=copyShareUrl;
+  const existing=getShareFromUrl();if(existing){$("#shareId").textContent=existing.id;$("#shareUrl").value=location.href;$("#copyShareUrl").disabled=false;}
+}
+function renderHistory(){
+  $("#app").innerHTML=`<section class="panel"><div class="between"><h2 ${mt("history")}>📝 ${tr("history")}</h2><div class="row"><button id="sortNew" ${mt("newest")}>${tr("newest")}</button><button id="sortOld" ${mt("oldest")}>${tr("oldest")}</button><button id="txt" ${mt("txt")}>${tr("txt")}</button><button id="copy" ${mt("copy")}>${tr("copy")}</button></div></div>
+  <input id="historySearch" type="text" data-i18n-placeholder="search" data-i18n-aria-label="search" placeholder="${esc(tr("search"))}" value="${esc(safeSessionGet("histSearch",""))}">
+  <div id="historyList" style="margin-top:12px"></div>
+  <div id="historyPagination" class="pagination" style="margin-top:12px"></div></section>`;
+
+  const draw=(order="new",requestedPage=null)=>{
+    const q=String($("#historySearch")?.value||"").trim().toLocaleLowerCase();
+    safeSessionSet("histSearch",q);
+    let arr=normalizeHistory(state.history).filter(x=>historySearchText(x).includes(q));
+    arr.sort((a,b)=>{
+      const ad=String(a.datetime||a.date||""),bd=String(b.datetime||b.date||"");
+      return order==="new" ? bd.localeCompare(ad) : ad.localeCompare(bd);
+    });
+
+    const perPage=10;
+    const pages=Math.max(1,Math.ceil(arr.length/perPage));
+    let page=requestedPage===null ? safePage(safeSessionGet("historyPage","1"),pages) : safePage(requestedPage,pages);
+    safeSessionSet("historyPage",page);
+
+    const slice=arr.slice((page-1)*perPage,page*perPage);
+    $("#historyList").innerHTML=slice.length?slice.map(x=>{
+      const title=localizedObject(x.title),description=localizedObject(x.description);
+      const dt=x.datetime||x.date||"";
+      return `<article class="card" style="margin-bottom:9px"><div class="between"><b>v${esc(x.version)} — ${esc(title)}</b><span class="muted">${esc(formatDate(dt))}</span></div><p>${esc(description)}</p></article>`;
+    }).join(""):`<p class="muted" ${mt("noHistory")}>${tr("noHistory")}</p>`;
+
+    const pg=$("#historyPagination");
+    pg.innerHTML=Array.from({length:pages},(_,i)=>`<button type="button" class="page ${i+1===page?"active":""}" data-hp="${i+1}" ${ma("page")}>${i+1}</button>`).join("");
+    pg.querySelectorAll("[data-hp]").forEach(b=>b.onclick=()=>draw(order,+b.dataset.hp));
+    window._histArr=arr;
+  };
+
+  draw(window._histOrder||"new");
+  $("#historySearch").oninput=()=>draw(window._histOrder||"new",1);
+  $("#sortNew").onclick=()=>{window._histOrder="new";draw("new",1)};
+  $("#sortOld").onclick=()=>{window._histOrder="old";draw("old",1)};
+  const historyText=()=>window._histArr.map(x=>`v${x.version} | ${x.datetime||x.date||""} | ${localizedObject(x.title)}\n${localizedObject(x.description)}`).join("\n\n");
+  $("#copy").onclick=async()=>{const text=historyText();try{await navigator.clipboard.writeText(text);toast(tr("copied"))}catch(e){fallbackCopy(text)}};
+  $("#txt").onclick=()=>{downloadBlob("\uFEFF"+historyText(),"3d-block-tap-changelog.txt","text/plain;charset=utf-8");toast(tr("downloaded"))};
+  applyI18nAttributes($("#app"));
+}
+
+function exportButtonHtml(kind){return [["png","png"],["avif","avif"],["webp","webp"],["jpg","jpg"],["gif","gif"],["htmlExport","html"]].map(([k,v])=>`<button type="button" data-export="${v}" ${mt(k)}>${tr(k)}</button>`).join("");}
+function exportScore(format){
+  normalizeScores();
+  const rows=state.scores.slice(0,100),title=tr("scores");
+  const headers=[tr("rank"),tr("name"),tr("score"),tr("selectedDifficulty"),tr("selectedDuration"),tr("date")];
+  if(format==="html"){
+    const html=`<!doctype html><html lang="${document.documentElement.lang}"><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:system-ui,sans-serif;margin:30px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:8px;text-align:left}</style><h1>${esc(title)}</h1><table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.name||"")}</td><td>${Number(x.score)||0}</td><td>${esc(difficultyLabel(x.difficulty))}</td><td>${esc(durationLabel(x.duration))}</td><td>${esc(formatDate(x.date))}</td></tr>`).join("")}</tbody></table></html>`;
+    downloadBlob(html,"3d-block-tap-scoreboard.html","text/html;charset=utf-8");return;
+  }
+  const c=document.createElement("canvas"),w=1800,rowH=58,h=150+Math.max(1,Math.min(rows.length,100))*rowH;c.width=w;c.height=h;const x=c.getContext("2d");
+  x.font="bold 34px system-ui";x.fillText(title,40,55);x.font="20px system-ui";x.fillText(headers.join(" / "),40,100);
+  rows.forEach((r,i)=>x.fillText(`${i+1}. ${(r.name||"").slice(0,20)}   ${Number(r.score)||0}   ${difficultyLabel(r.difficulty)}   ${durationLabel(r.duration)}   ${formatDate(r.date)}`,40,140+i*rowH));
+  exportCanvas(c,format,"3d-block-tap-scoreboard");
+}
+
+function exportProfile(format){const c=state.customProfile||{},title=c.name||state.playerName||tr("profileName");if(format==="html"){const labels=["profileName","profileBirth","profileGender","profileFrom","profileHobby","profileMotto","profileMessage"],keys=["name","birth","gender","from","hobby","motto","message"];const html=`<!doctype html><html lang="${document.documentElement.lang}"><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:system-ui,sans-serif;margin:30px}.card{border:1px solid #aaa;border-radius:12px;padding:14px;margin:10px 0}</style><h1>${esc(title)}</h1>${keys.map((k,i)=>`<div class="card"><b>${esc(tr(labels[i]))}</b><div>${esc(c[k]||"")}</div></div>`).join("")}</html>`;downloadBlob(html,"my-profile.html","text/html;charset=utf-8");return;}const fields=[[tr("profileName"),c.name],[tr("profileBirth"),c.birth],[tr("profileGender"),c.gender],[tr("profileFrom"),c.from],[tr("profileHobby"),c.hobby],[tr("profileMotto"),c.motto],[tr("profileMessage"),c.message]];const canvas=document.createElement("canvas");canvas.width=1200;canvas.height=180+fields.length*105;const x=canvas.getContext("2d");x.font="bold 40px system-ui";x.fillText(title,50,65);fields.forEach((f,i)=>{x.font="bold 22px system-ui";x.fillText(f[0],50,120+i*105);x.font="24px system-ui";x.fillText(String(f[1]||"").slice(0,70),50,155+i*105)});exportCanvas(canvas,format,"my-profile");}
+async function exportCanvas(canvas,format,base){if(format==="gif"){try{downloadBlob(encodeGIF(canvas),base+".gif","image/gif");toast(tr("saved"))}catch(e){toast(tr("exportFailed"))}return;}const mime={png:"image/png",avif:"image/avif",webp:"image/webp",jpg:"image/jpeg"}[format];if(!mime)return;const blob=await new Promise(resolve=>canvas.toBlob(resolve,mime,0.92));if(!blob||(format==="avif"&&blob.type!=="image/avif")){toast(tr("exportFailed"));return}downloadBlob(blob,base+"."+format,mime);toast(tr("saved"));}
+function encodeGIF(canvas){const w=Math.min(640,canvas.width),h=Math.min(640,Math.round(canvas.height*w/canvas.width)),tmp=document.createElement("canvas");tmp.width=w;tmp.height=h;const ctx=tmp.getContext("2d");ctx.drawImage(canvas,0,0,w,h);const d=ctx.getImageData(0,0,w,h).data,pal=new Uint8Array(256*3);for(let i=0;i<256;i++){pal[i*3]=((i>>5)&7)*255/7;pal[i*3+1]=((i>>2)&7)*255/7;pal[i*3+2]=(i&3)*255/3}const idx=new Uint8Array(w*h);for(let i=0,j=0;i<d.length;i+=4,j++)idx[j]=((d[i]*7/255)<<5)|((d[i+1]*7/255)<<2)|(d[i+2]*3/255);return gifBytes(w,h,pal,idx);}
+function gifBytes(w,h,pal,pixels){const out=[],put=v=>out.push(...v);put([...new TextEncoder().encode("GIF89a"),w&255,w>>8,h&255,h>>8,0xF7,0,0,...pal]);put([0x21,0xF9,4,0,0,0,0,0,0x2C,0,0,0,0,w&255,w>>8,h&255,h>>8,0,0]);const clear=256,end=257,codeSize=9,bitsPer=codeSize,bytes=[];let bits=0,cur=0;const emit=c=>{cur|=c<<bits;bits+=bitsPer;while(bits>=8){bytes.push(cur&255);cur>>=8;bits-=8}};emit(clear);for(const px of pixels)emit(px);emit(end);if(bits)bytes.push(cur&255);for(let i=0;i<bytes.length;i+=255){const n=Math.min(255,bytes.length-i);put([n,...bytes.slice(i,i+n)])}put([0,0x3B]);return new Uint8Array(out);}
+function fallbackCopy(text){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();toast(tr("copied"))}
+function randomShareId(){
+  const raw=(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}-${Math.random()}`).replace(/-/g,"");
+  return raw.slice(0,12).toUpperCase();
+}
+function bytesToBase64Url(bytes){
+  let bin="";for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/g,"");
+}
+function base64UrlToBytes(s){
+  const b64=s.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-s.length%4)%4);const bin=atob(b64),out=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out;
+}
+function textToBase64Url(text){return bytesToBase64Url(new TextEncoder().encode(text));}
+function base64UrlToText(s){return new TextDecoder().decode(base64UrlToBytes(s));}
+async function gzipText(text){
+  if(!window.CompressionStream)return null;
+  const cs=new CompressionStream("gzip"),w=cs.writable.getWriter();w.write(new TextEncoder().encode(text));w.close();return bytesToBase64Url(new Uint8Array(await new Response(cs.readable).arrayBuffer()));
+}
+async function gunzipText(s){
+  if(!window.DecompressionStream)return null;
+  const ds=new DecompressionStream("gzip"),w=ds.writable.getWriter();w.write(base64UrlToBytes(s));w.close();return new TextDecoder().decode(await new Response(ds.readable).arrayBuffer());
+}
+function shareSnapshot(){
+  const copy=JSON.parse(JSON.stringify(state));
+  // 履歴はアプリ本体の正本として別端末でも再構築できるため、URLを軽くする。
+  delete copy.history;
+  return {format:"blocker-tap-share",version:APP_VERSION,createdAt:new Date().toISOString(),tab:normalizeTab(location.hash),state:copy};
+}
+async function createShareUrl(){
+  try{
+    const id=randomShareId(),json=JSON.stringify(shareSnapshot());
+    let mode="r",payload=textToBase64Url(json);const gz=await gzipText(json);if(gz&&gz.length<payload.length){mode="g";payload=gz;}
+    const u=new URL(location.href);u.searchParams.set("share",`${id}.${mode}.${payload}`);u.hash="#"+normalizeTab(location.hash);
+    const url=u.toString();
+    if(url.length>16000){
+      // 画像などが巨大な場合でも、基本設定は共有できるように再生成。
+      const lite=shareSnapshot();lite.state.scores=[];lite.state.stalkerImage="";
+      const lj=JSON.stringify(lite),lg=await gzipText(lj);payload=lg||textToBase64Url(lj);mode=lg?"g":"r";u.searchParams.set("share",`${id}.${mode}.${payload}`);
+    }
+    $("#shareId").textContent=id;$("#shareUrl").value=u.toString();$("#copyShareUrl").disabled=false;history.replaceState(null,"",u.toString());toast(tr("shareReady"));
+  }catch(e){modal(tr("invalid"),tr("shareInvalid"));}
+}
+async function copyShareUrl(){const el=$("#shareUrl"),text=el?.value||"";if(!text)return;try{await navigator.clipboard.writeText(text);toast(tr("shareCopied"));}catch(e){fallbackCopy(text);}}
+function getShareFromUrl(){
+  try{const raw=new URL(location.href).searchParams.get("share");if(!raw)return null;const [id,mode,payload]=raw.split(".",3);if(!id||!mode||!payload)throw new Error("bad share");return {id,mode,payload};}catch(e){return null;}
+}
+async function importShareFromUrl(){
+  const info=getShareFromUrl();if(!info)return false;
+  try{
+    const text=info.mode==="g"?await gunzipText(info.payload):base64UrlToText(info.payload);if(!text)throw new Error("decode");
+    const data=JSON.parse(text);if(data.format!=="blocker-tap-share"||!data.state)throw new Error("format");
+    const d=migration({...data.state,version:data.version||APP_VERSION});Object.assign(state,d);state.history=normalizeHistory(DEFAULT_HISTORY);
+    importedShareTab=normalizeTab(data.tab||"game");
+    if(!LANGS.includes(state.lang))state.lang="ja";if(!DIFFICULTIES.some(x=>x.id===state.difficulty))state.difficulty="normal";if(!["dark","light","auto"].includes(state.theme))state.theme=DEFAULT_THEME;
+    if(!Array.isArray(state.colors))state.colors=[];if(!Array.isArray(state.scores))state.scores=[];normalizeScores();state.colors=state.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
+    await saveState();return true;
+  }catch(e){console.warn("share import failed",e);toast(tr("shareInvalid"));return false;}
+}
+
+function migration(data){
+  const v=String(data.version||"0.0.0"), nums=v.split(".").map(x=>parseInt(x,10)||0), cur=APP_VERSION.split(".").map(x=>parseInt(x,10)||0);
+  const newer=(nums[0]>cur[0])||(nums[0]===cur[0]&&nums[1]>cur[1])||(nums[0]===cur[0]&&nums[1]===cur[1]&&nums[2]>cur[2]);
+  if(newer)throw new Error("FUTURE");
+  const out={...data};
+  if(!out.settings)out.settings={};
+  if(!out.scores)out.scores=[];
+  if(!out.history)out.history=state.history;
+  out.history=normalizeHistory(out.history);
+  // Example migration chain: old top-level fields -> settings.
+  if(out.settings.seconds===undefined && out.seconds!==undefined)out.settings.seconds=!!out.seconds;
+  out.version=APP_VERSION;
+  return out;
+}
+function backupData(){
+  normalizeScores();
+  return {
+    format:"itsme",version:APP_VERSION,createdAt:new Date().toISOString(),
+    settings:{duration:state.duration,difficulty:state.difficulty,seconds:state.seconds,milliseconds:state.milliseconds,stalker:state.stalker,header:state.header,arabicFont:state.arabicFont,theme:state.theme},
+    language:{current:state.lang},fonts:{arabic:state.arabicFont},colors:state.colors,
+    scores:state.scores,history:state.history,playerName:state.playerName,customProfile:state.customProfile,
+    world:{},items:{},commands:{},game:{},appState:{}
+  };
+}
+function downloadBackup(){downloadBlob(JSON.stringify(backupData(),null,2),"3d-block-tap-backup.itsme","application/json");toast(tr("saved"))}
+function downloadBlob(data,name,type){const a=document.createElement("a"),url=URL.createObjectURL(new Blob([data],{type}));a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function restoreFile(file){
+  try{
+    const data=JSON.parse(await file.text());if(data.format!=="itsme")throw new Error("INVALID");
+    const d=migration(data),s=d.settings||{};
+    if(s.duration)state.duration=DURATIONS.includes(+s.duration)?+s.duration:60;
+    if(typeof s.difficulty==="string"&&DIFFICULTIES.some(d=>d.id===s.difficulty))state.difficulty=s.difficulty;
+    if(typeof s.seconds==="boolean")state.seconds=s.seconds;if(typeof s.milliseconds==="boolean")state.milliseconds=s.milliseconds;
+    if(typeof s.stalker==="boolean")state.stalker=s.stalker;if(typeof s.header==="boolean")state.header=s.header;
+    if(s.arabicFont)state.arabicFont=s.arabicFont;if(["dark","light","auto"].includes(s.theme))state.theme=s.theme;
+    if(d.language?.current)state.lang=LANGS.includes(d.language.current)?d.language.current:"ja";
+    if(Array.isArray(d.colors))state.colors=d.colors.filter(x=>/^#[0-9a-f]{6}$/i.test(x)).slice(0,10);
+    if(Array.isArray(d.scores))state.scores=d.scores.map(normalizeScoreEntry);
+    if(typeof d.playerName==="string")state.playerName=d.playerName.slice(0,40);
+    if(d.customProfile&&typeof d.customProfile==="object")state.customProfile={...state.customProfile,...Object.fromEntries(["name","birth","gender","from","hobby","motto","message"].map(k=>[k,String(d.customProfile[k]??"").slice(0,300)]))};
+    if(Array.isArray(d.history))state.history=normalizeHistory(d.history);
+    await saveState();applyTheme();applyStalker();setLanguage(state.lang);toast(tr("restored"));
+  }catch(e){modal(tr("invalid"),e.message==="FUTURE"?tr("future"):tr("invalid"))}
+}
+async function confirmDeleteSequence(){
+  for(let step=1;step<=5;step++){
+    const ok=await new Promise(resolve=>{
+      const m=$("#confirmModal"),yes=$("#confirmYes"),no=$("#confirmNo");
+      $("#confirmTitle").textContent=tr("confirmDelete");
+      $("#confirmText").textContent=tr("deleteStep").replace("%n",step)+"\n\n"+tr("deleteWarning")+"\n\n"+tr("confirmDelete");
+      yes.textContent=tr("yes"); no.textContent=tr("no");
+      m.classList.add("show");
+      const cleanup=()=>{m.classList.remove("show");yes.onclick=null;no.onclick=null};
+      yes.onclick=()=>{cleanup();resolve(true)}; no.onclick=()=>{cleanup();resolve(false)};
+    });
+    if(!ok)return;
+  }
+  await deleteAllAppData();
+}
+function deleteIndexedDB(){
+  return new Promise(resolve=>{
+    try{
+      if(db){try{db.close()}catch(e){}}
+      const req=indexedDB.deleteDatabase(DB_NAME);
+      req.onsuccess=()=>resolve(); req.onerror=()=>resolve(); req.onblocked=()=>setTimeout(resolve,500);
+    }catch(e){resolve()}
+  });
+}
+async function deleteAllAppData(){
+  const overlay=$("#deleteOverlay");
+  $("#deleteOverlayText").textContent=tr("deleteWorking")+"\n\n"+tr("deleteWait");
+  overlay.classList.add("show");
+  try{
+    await deleteIndexedDB();
+    try{localStorage.clear()}catch(e){}
+    safeSessionClear()
+    if("caches" in window){try{const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)))}catch(e){}}
+  }finally{
+    setTimeout(()=>location.reload(),4000);
+  }
+}
+let stalkerX=0,stalkerY=0,targetStalkerX=0,targetStalkerY=0,stalkerStarted=false;
+function applyStalker(){
+  const el=$("#stalker"); if(!el)return;
+  el.style.display=state.stalker?"flex":"none";
+  el.className="";
+  el.style.backgroundImage="none";
+  if(state.stalkerShape==="star"){el.classList.add("star");el.textContent="★";}
+  else if(state.stalkerShape==="square"){el.classList.add("square");el.textContent="";}
+  else if(state.stalkerShape==="custom" && state.stalkerImage){el.classList.add("custom");el.textContent="";el.style.backgroundImage=`url("${state.stalkerImage.replace(/"/g,"%22")}")`;}
+  else {el.classList.add("circle");el.textContent="";}
+}
+document.addEventListener("pointermove",e=>{targetStalkerX=e.clientX;targetStalkerY=e.clientY;if(!stalkerStarted){stalkerX=e.clientX;stalkerY=e.clientY;stalkerStarted=true;}});
+function animateStalker(){
+  if(state.stalker){stalkerX+=(targetStalkerX-stalkerX)*0.18;stalkerY+=(targetStalkerY-stalkerY)*0.18;const el=$("#stalker");if(el){el.style.left=stalkerX+"px";el.style.top=stalkerY+"px";}}
+  requestAnimationFrame(animateStalker);
+}
+animateStalker();
+
+$("#langSelect").onchange=e=>setLanguage(e.target.value);
+$("#backupBtn").onclick=downloadBackup;
+$("#restoreBtn").onclick=()=>$("#restoreInput").click();
+$("#restoreInput").onchange=e=>{if(e.target.files[0])restoreFile(e.target.files[0]);e.target.value=""};
+$("#headerToggle").onclick=()=>{state.header=false;saveState();applyHeader()};
+$("#headerShow").onclick=()=>{state.header=true;saveState();applyHeader()};
+$("#deleteBtn").onclick=confirmDeleteSequence;
+
+function updateClock(){
+  const d=new Date();
+  const locale=state.lang==="ja"?"ja-JP":state.lang==="ko"?"ko-KR":state.lang==="ch"?"zh-CN":state.lang==="ar"?"ar":state.lang==="eo"?"en-GB":"en-US";
+  const opts={hour:"2-digit",minute:"2-digit",timeZone:ipTimezone||undefined};
+  if(state.seconds)opts.second="2-digit";
+  if(state.milliseconds){
+    const base=new Intl.DateTimeFormat(locale,opts).format(d);
+    $("#clock").textContent=base+"."+String(d.getMilliseconds()).padStart(3,"0");
+  }else{
+    $("#clock").textContent=new Intl.DateTimeFormat(locale,opts).format(d);
+  }
+}
+clockTimer=setInterval(updateClock,100);
+async function resolveIPTimezone(){
+  if(!navigator.onLine){updateClock();return;}
+  try{
+    const ctl=new AbortController();const timeout=setTimeout(()=>ctl.abort(),2500);
+    const r=await fetch("https://ipapi.co/json/",{signal:ctl.signal,cache:"no-store"});
+    clearTimeout(timeout);
+    if(!r.ok)return;
+    const x=await r.json();
+    if(x.timezone){ipTimezone=x.timezone;state.ipTimezone=x.timezone;await saveState();updateClock();}
+  }catch(e){}
+}
+
+setInterval(()=>{if(location.hash.slice(1)==="profile"){updateAge();updateLines();}},100);
+window.addEventListener("hashchange",()=>{renderTabs();render()});
+(async()=>{
+  await loadState();
+  await importShareFromUrl();
+  applyTheme();
+  if(importedShareTab)location.hash="#"+importedShareTab;
+  else if(!location.hash)location.hash="game";
+  ipTimezone=state.ipTimezone||null;
+  setLanguage(state.lang);
+  applyStalker();
+  updateClock();
+  resolveIPTimezone();
+})();
+})();
